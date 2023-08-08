@@ -17,7 +17,7 @@ class CardView extends View {
         ${this.createStartDateHtml()}
         ${this.createTypeIconHtml()}
         ${this.createDestinationHtml()}
-        ${this.createTimeHtml()}
+        ${this.createScheduleHtml()}
         ${this.createPriceHtml()}
         ${this.createOfferListHtml()}
         ${this.createFavoriteButtonHtml()}
@@ -58,7 +58,7 @@ class CardView extends View {
   /**
    * @returns {string}
    */
-  createTimeHtml() {
+  createScheduleHtml() {
     return html`
       <div class="event__schedule">
         <p class="event__time">
