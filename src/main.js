@@ -47,5 +47,3 @@ filterView.render();
 addButton.render();
 sortButton.render();
 list.render();
-// card.render();
-// editor.render();
