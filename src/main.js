@@ -31,16 +31,6 @@ const sortButton = document.querySelector('sort-view');
  */
 const list = document.querySelector('list-view');
 
-/**
- * @type {import('./views/card-view').default}
- */
-const card = document.querySelector('card-view');
-
-/**
- * @type {import('./views/editor-view').default}
- */
-const editor = document.querySelector('editor-view');
-
 
 briefView.render();
 filterView.render();
