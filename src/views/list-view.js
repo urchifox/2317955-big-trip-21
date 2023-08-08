@@ -1,3 +1,4 @@
+import './list-view.css';
 import View from './view.js';
 import CardView from './card-view.js';
 import EditorView from './editor-view.js';
