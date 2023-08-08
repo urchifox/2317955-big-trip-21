@@ -1,0 +1,47 @@
+{
+  "class View": {
+    "scope": "javascript",
+    "prefix": "class View",
+    "body": [
+      "import View from './view.js';",
+      "import {html} from '../utilities.js';",
+      "",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends View {",
+      "  constructor() {",
+      "    super();",
+      "",
+      "    // this.classList.add('class1', 'class2');",
+      "  }",
+      "",
+      "  /**",
+      "   * @override",
+      "   */",
+      "  createHtml() {",
+      "    return html`",
+      "      $2",
+      "    `;",
+      "  }",
+      "}",
+      "",
+      "customElements.define('$TM_FILENAME_BASE', ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/});",
+      "",
+      "export default ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/};",
+      ""
+    ]
+  },
+
+  "createHtml()": {
+    "scope": "javascript",
+    "prefix": "createHtml()",
+    "body": [
+      "/**",
+      " * @returns {string}",
+      " */",
+      "create$1Html() {",
+      "  return html`",
+      "    $2",
+      "  `;",
+      "}"
+    ]
+  }
+}
