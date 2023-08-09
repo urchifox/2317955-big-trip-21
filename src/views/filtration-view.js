@@ -28,7 +28,7 @@ function createTemplate() {
   `;
 }
 
-export default class Filter extends View {
+export default class FiltrationView extends View {
 
   getTemplate() {
     return createTemplate();

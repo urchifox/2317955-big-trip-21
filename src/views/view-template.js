@@ -1,14 +1,14 @@
-import View from './view.js';
+// import View from './view.js';
 
-function createTemplate() {
-  return `
+// function createTemplate() {
+//   return `
 
-  `;
-}
+//   `;
+// }
 
-export default class  extends View {
+// export default class View extends View {
 
-  getTemplate() {
-    return createTemplate();
-  }
-}
+//   getTemplate() {
+//     return createTemplate();
+//   }
+// }

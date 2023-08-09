@@ -16,7 +16,7 @@ function createTemplate() {
   `;
 }
 
-export default class TripSummary extends View {
+export default class TripSummaryView extends View {
 
   getTemplate() {
     return createTemplate();
