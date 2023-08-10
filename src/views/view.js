@@ -2,7 +2,6 @@ import { createElement } from '../render.js';
 
 export default class View {
   getTemplate() {
-    // return createNewPointButtonTemplate();
   }
 
   getElement() {
