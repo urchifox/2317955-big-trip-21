@@ -7,6 +7,3 @@ export default class PointsModel {
     return this.points;
   }
 }
-
-// const pointsModel = new PointsModel();
-// console.log('PointsModel.getPoints() :>> ', pointsModel.getPoints());

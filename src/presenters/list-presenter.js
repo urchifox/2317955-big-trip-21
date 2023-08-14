@@ -7,9 +7,11 @@ export default class ListPresenter {
   listComponent = new ListView();
   editComponent = new EditingView();
 
-  constructor({listContainer, pointsModel}) {
+  constructor({listContainer, pointsModel, offersModel, destinationsModel}) {
     this.listContainer = listContainer;
     this.pointsModel = pointsModel;
+    this.offersModel = offersModel;
+    this.destinationsModel = destinationsModel;
   }
 
   init() {
@@ -18,7 +20,11 @@ export default class ListPresenter {
     render(this.listComponent, this.listContainer);
     render(this.editComponent, this.listComponent.getElement());
     for (let i = 0; i < this.listPoints.length; i++) {
-      render(new PointView({point: this.listPoints[i]}), this.listComponent.getElement());
+      render(new PointView({
+        point: this.listPoints[i],
+        offersModel: this.offersModel.offers,
+        destinationsModel: this.destinationsModel.destinations,
+      }), this.listComponent.getElement());
     }
   }
 }
