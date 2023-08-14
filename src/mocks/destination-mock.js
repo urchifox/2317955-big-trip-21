@@ -1,4 +1,4 @@
-import { CITIES, CITIES_DESCRIPTIONS, MAX_PICTRES_COUNT } from '../const.js';
+import { CITIES, CITIES_DESCRIPTIONS, MAX_PICTURES_COUNT } from '../const.js';
 import { getRandomArrayElement, getRandomPictures, makeNextArrayElementGenerator, makeNonRepeatingIdGenerator } from '../utils.js';
 
 const getNonRepeatingId = makeNonRepeatingIdGenerator(CITIES.length);
@@ -9,16 +9,14 @@ class DestinationMock {
     this.id = getNonRepeatingId();
     this.name = getNextName();
     this.description = getRandomArrayElement(CITIES_DESCRIPTIONS);
-    this.pictures = getRandomPictures(MAX_PICTRES_COUNT);
+    this.pictures = getRandomPictures(MAX_PICTURES_COUNT);
   }
 }
 
-const destionationsMocks = Array.from(
+const destinationsMocks = Array.from(
   {length: CITIES.length},
   () => new DestinationMock()
 );
 
-// console.log('destionationsMocks');
-// console.table(destionationsMocks);
 
-export {destionationsMocks};
+export {destinationsMocks};
