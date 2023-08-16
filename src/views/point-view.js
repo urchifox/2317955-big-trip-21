@@ -1,5 +1,5 @@
 import { getFormattedDate, getDuration } from '../utils.js';
-import View from './view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function getOffers(offersModel, chosenOffersIds) {
   const chosenOffers = [];
@@ -79,15 +79,19 @@ function createTemplate(point, offersModel, destinationsModel) {
   `;
 }
 
-export default class PointView extends View {
+export default class PointView extends AbstractView {
+  #point = null;
+  #offersModel = null;
+  #destinationsModel = null;
+
   constructor ({point, offersModel, destinationsModel}) {
     super();
-    this.point = point;
-    this.offersModel = offersModel;
-    this.destinationsModel = destinationsModel;
+    this.#point = point;
+    this.#offersModel = offersModel;
+    this.#destinationsModel = destinationsModel;
   }
 
-  getTemplate() {
-    return createTemplate(this.point, this.offersModel, this.destinationsModel);
+  get template() {
+    return createTemplate(this.#point, this.#offersModel, this.#destinationsModel);
   }
 }
