@@ -1,9 +1,9 @@
 import { offersMocks} from '../mocks/offer-mock.js';
 
 export default class OffersModel {
-  offers = offersMocks.slice();
+  #offers = offersMocks.slice();
 
-  getPoints() {
-    return this.offers;
+  get offers() {
+    return this.#offers;
   }
 }
