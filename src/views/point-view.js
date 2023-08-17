@@ -26,8 +26,8 @@ function getOffersTemplate(offers) {
   return markup;
 }
 
-function createTemplate(point, offersModel, destinationsModel) {
-  const {type, destinationId, periodStart, periodEnd, price, isFavorite, chosenOffers: chosenOffersIds} = point;
+function createTemplate(point, offersModel, destination) {
+  const {type, periodStart, periodEnd, price, isFavorite, chosenOffers: chosenOffersIds} = point;
 
   const dateStart = getFormattedDate(periodStart, 'MMM DD');
   const timeStart = getFormattedDate(periodStart, 'HH:mm');
@@ -36,7 +36,7 @@ function createTemplate(point, offersModel, destinationsModel) {
   const favoriteClass = (isFavorite) ? 'event__favorite-btn--active' : '';
   const pointType = type.toLowerCase();
 
-  const destinationName = destinationsModel.find((destination) => destination.id === destinationId).name;
+  const destinationName = destination.name;
 
   const chosenOffers = getOffers(offersModel, chosenOffersIds);
   const offersMarkup = getOffersTemplate(chosenOffers);
@@ -81,22 +81,22 @@ function createTemplate(point, offersModel, destinationsModel) {
 
 export default class PointView extends AbstractView {
   #point = null;
-  #offersModel = null;
-  #destinationsModel = null;
+  #offers = null;
+  #destination = null;
   #handleEditClick = null;
 
-  constructor ({point, offersModel, destinationsModel, onEditClick}) {
+  constructor ({point, offers, destination, onEditClick}) {
     super();
     this.#point = point;
-    this.#offersModel = offersModel;
-    this.#destinationsModel = destinationsModel;
+    this.#offers = offers;
+    this.#destination = destination;
     this.#handleEditClick = onEditClick;
 
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
 
   get template() {
-    return createTemplate(this.#point, this.#offersModel, this.#destinationsModel);
+    return createTemplate(this.#point, this.#offers, this.#destination);
   }
 
   #editClickHandler = (evt) => {
