@@ -1,5 +1,6 @@
 import { CITIES, MAX_POINT_PRICE, POINTS_COUNT, POINT_TYPES } from '../const.js';
-import { getRandomArrayElement, getRandomInteger, getMinDate, getMaxDate } from '../utils.js';
+import { getRandomArrayElement, getRandomInteger} from '../utils/random-elements.js';
+import { getMinDate, getMaxDate } from '../utils/dates.js';
 import { offersMocks } from './offer-mock.js';
 
 function getChosenOffersId(type) {

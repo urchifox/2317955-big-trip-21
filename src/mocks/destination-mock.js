@@ -1,5 +1,5 @@
 import { CITIES, CITIES_DESCRIPTIONS, MAX_PICTURES_COUNT } from '../const.js';
-import { getRandomArrayElement, getRandomPictures, makeNextArrayElementGenerator, makeNonRepeatingIdGenerator } from '../utils.js';
+import { getRandomArrayElement, getRandomPictures, makeNextArrayElementGenerator, makeNonRepeatingIdGenerator } from '../utils/random-elements.js';
 
 const getNonRepeatingId = makeNonRepeatingIdGenerator(CITIES.length);
 const getNextName = makeNextArrayElementGenerator(CITIES);

@@ -1,4 +1,4 @@
-import { getFormattedDate, getDuration } from '../utils.js';
+import { getFormattedDate, getDuration } from '../utils/dates.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function getOffers(offersModel, chosenOffersIds) {
