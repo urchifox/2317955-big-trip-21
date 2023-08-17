@@ -2,6 +2,7 @@ import {render, replace} from '../framework/render.js';
 import EditingView from '../views/editing-view.js';
 import ListView from '../views/list-view.js';
 import PointView from '../views/point-view.js';
+import NoPointsView from '../views/no-points-view.js';
 
 export default class ListPresenter {
   #listContainer = null;
@@ -61,6 +62,12 @@ export default class ListPresenter {
 
   #renderList() {
     render(this.#listComponent, this.#listContainer);
+
+    if (this.#listPoints.length === 0) {
+      render(new NoPointsView(), this.#listComponent.element);
+      return;
+    }
+
     for (let i = 0; i < this.#listPoints.length; i++) {
       this.#renderPoint(this.#listPoints[i]);
     }
