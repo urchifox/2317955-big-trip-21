@@ -1,4 +1,4 @@
-import {render} from '../framework/render.js';
+import {render, replace} from '../framework/render.js';
 import EditingView from '../views/editing-view.js';
 import ListView from '../views/list-view.js';
 import PointView from '../views/point-view.js';
@@ -7,7 +7,6 @@ export default class ListPresenter {
   #listContainer = null;
   #pointsModel = null;
   #listComponent = new ListView();
-  #editComponent = new EditingView();
   #listPoints = [];
 
   constructor({listContainer, pointsModel, offersModel, destinationsModel}) {
@@ -21,13 +20,46 @@ export default class ListPresenter {
     this.#listPoints = [...this.#pointsModel.points];
 
     render(this.#listComponent, this.#listContainer);
-    render(this.#editComponent, this.#listComponent.element);
     for (let i = 0; i < this.#listPoints.length; i++) {
-      render(new PointView({
-        point: this.#listPoints[i],
-        offersModel: this.offersModel.offers,
-        destinationsModel: this.destinationsModel.destinations,
-      }), this.#listComponent.element);
+      this.#renderPoint(this.#listPoints[i]);
     }
+  }
+
+  #renderPoint(point) {
+    const escKeyDownHandler = (evt) => {
+      if(evt.key === 'Escape') {
+        evt.preventDefault();
+        replaceFormToCard();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
+
+    const pointComponent = new PointView({
+      point,
+      offersModel: this.offersModel.offers,
+      destinationsModel: this.destinationsModel.destinations,
+      onEditClick:() => {
+        replaceCardToForm();
+        document.addEventListener('keydown', escKeyDownHandler);
+      },
+    });
+
+    const editComponent = new EditingView({
+      point,
+      onFormSubmit: () => {
+        replaceFormToCard();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    });
+
+    function replaceCardToForm() {
+      replace(editComponent, pointComponent);
+    }
+
+    function replaceFormToCard() {
+      replace(pointComponent, editComponent);
+    }
+
+    render(pointComponent, this.#listComponent.element);
   }
 }
