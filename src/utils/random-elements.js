@@ -40,10 +40,15 @@ function makeNonRepeatingIdGenerator(maxId) {
   };
 }
 
+function isEscapeKeydown(key) {
+  return key === 'Escape';
+}
+
 export {
   getRandomArrayElement,
   getRandomInteger,
   getRandomPictures,
   makeNonRepeatingIdGenerator,
   makeNextArrayElementGenerator,
+  isEscapeKeydown,
 };

@@ -3,7 +3,7 @@ import EditingView from '../views/editing-view.js';
 import ListView from '../views/list-view.js';
 import PointView from '../views/point-view.js';
 import NoPointsView from '../views/no-points-view.js';
-
+import { isEscapeKeydown } from '../utils/random-elements.js';
 export default class ListPresenter {
   #listContainer = null;
   #pointsModel = null;
@@ -44,7 +44,7 @@ export default class ListPresenter {
 
   #renderPoint(point) {
     const escKeyDownHandler = (evt) => {
-      if(evt.key === 'Escape') {
+      if(isEscapeKeydown(evt.key)) {
         evt.preventDefault();
         replaceFormToCard();
         document.removeEventListener('keydown', escKeyDownHandler);
@@ -68,7 +68,9 @@ export default class ListPresenter {
       onFormSubmit: () => {
         replaceFormToCard();
         document.removeEventListener('keydown', escKeyDownHandler);
-      }
+      },
+      offersModel: this.#offersModel,
+      destinationsModel: this.#destinationsModel,
     });
 
     function replaceCardToForm() {
