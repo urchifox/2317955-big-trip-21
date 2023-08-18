@@ -11,10 +11,3 @@ export default class DestinationsModel {
     return this.#destinations.map((destination) => destination.name);
   }
 }
-
-const destinationsModel = new DestinationsModel();
-console.log('destinationsModel :>> ', destinationsModel);
-console.log('destinationsModel.allDestinationsNames :>> ', destinationsModel.allDestinationsNames);
-// const allDestinations = destinationsModel.map((destination) => destination.name);
-
-// console.log('allDestinations :>> ', allDestinations);
