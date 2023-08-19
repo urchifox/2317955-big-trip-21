@@ -1,5 +1,5 @@
 import { POINT_TYPES, OFFERS_COUNT, MAX_OFFER_PRICE } from '../const.js';
-import { getRandomArrayElement, getRandomInteger, makeNonRepeatingIdGenerator } from '../utils.js';
+import { getRandomArrayElement, getRandomInteger, makeNonRepeatingIdGenerator } from '../utils/random-elements.js';
 
 const getNonRepeatingId = makeNonRepeatingIdGenerator(OFFERS_COUNT);
 

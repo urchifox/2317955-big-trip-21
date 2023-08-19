@@ -1,4 +1,4 @@
-import { RenderPosition, render } from './render.js';
+import {RenderPosition, render} from './framework/render.js';
 import TripSummaryView from './views/trip-summary-view.js';
 import FiltrationView from './views/filtration-view.js';
 import SortingView from './views/sorting-view.js';

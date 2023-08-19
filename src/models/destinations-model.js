@@ -1,9 +1,13 @@
 import { destinationsMocks} from '../mocks/destination-mock.js';
 
 export default class DestinationsModel {
-  destinations = destinationsMocks.slice();
+  #destinations = destinationsMocks.slice();
 
-  getPoints() {
-    return this.destinations;
+  get destinations() {
+    return this.#destinations;
+  }
+
+  get allDestinationsNames() {
+    return this.#destinations.map((destination) => destination.name);
   }
 }

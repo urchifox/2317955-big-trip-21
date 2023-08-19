@@ -1,5 +1,5 @@
-import { getFormattedDate, getDuration } from '../utils.js';
-import View from './view.js';
+import { getFormattedDate, getDuration } from '../utils/dates.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function getOffers(offersModel, chosenOffersIds) {
   const chosenOffers = [];
@@ -26,8 +26,8 @@ function getOffersTemplate(offers) {
   return markup;
 }
 
-function createTemplate(point, offersModel, destinationsModel) {
-  const {type, destinationId, periodStart, periodEnd, price, isFavorite, chosenOffers: chosenOffersIds} = point;
+function createTemplate(point, offersModel, destination) {
+  const {type, periodStart, periodEnd, price, isFavorite, chosenOffers: chosenOffersIds} = point;
 
   const dateStart = getFormattedDate(periodStart, 'MMM DD');
   const timeStart = getFormattedDate(periodStart, 'HH:mm');
@@ -36,7 +36,7 @@ function createTemplate(point, offersModel, destinationsModel) {
   const favoriteClass = (isFavorite) ? 'event__favorite-btn--active' : '';
   const pointType = type.toLowerCase();
 
-  const destinationName = destinationsModel.find((destination) => destination.id === destinationId).name;
+  const destinationName = destination.name;
 
   const chosenOffers = getOffers(offersModel, chosenOffersIds);
   const offersMarkup = getOffersTemplate(chosenOffers);
@@ -79,15 +79,28 @@ function createTemplate(point, offersModel, destinationsModel) {
   `;
 }
 
-export default class PointView extends View {
-  constructor ({point, offersModel, destinationsModel}) {
+export default class PointView extends AbstractView {
+  #point = null;
+  #offers = null;
+  #destination = null;
+  #handleEditClick = null;
+
+  constructor ({point, offers, destination, onEditClick}) {
     super();
-    this.point = point;
-    this.offersModel = offersModel;
-    this.destinationsModel = destinationsModel;
+    this.#point = point;
+    this.#offers = offers;
+    this.#destination = destination;
+    this.#handleEditClick = onEditClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
 
-  getTemplate() {
-    return createTemplate(this.point, this.offersModel, this.destinationsModel);
+  get template() {
+    return createTemplate(this.#point, this.#offers, this.#destination);
   }
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
 }

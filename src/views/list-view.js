@@ -1,4 +1,4 @@
-import View from './view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createTemplate() {
   return `
@@ -7,9 +7,9 @@ function createTemplate() {
   `;
 }
 
-export default class ListView extends View {
+export default class ListView extends AbstractView {
 
-  getTemplate() {
+  get template() {
     return createTemplate();
   }
 }
