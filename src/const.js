@@ -23,4 +23,12 @@ export const MAX_PICTURES_COUNT = 10;
 
 export const FILTRATION_NAMES = ['EVERYTHING', 'FUTURE', 'PRESENT', 'PAST'];
 
-export const SORTING_NAMES = ['DAY', 'EVENT', 'TIME', 'PRICE', 'OFFERS'];
+export const SORTING_ABILITY = [
+  {'DAY': true},
+  {'EVENT': false},
+  {'TIME': true},
+  {'PRICE': true},
+  {'OFFERS': false},
+];
+
+export const DEFAULT_SORTING_INDEX = 0;
