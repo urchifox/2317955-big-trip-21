@@ -28,11 +28,23 @@ function getDuration(date1, date2) {
 
 function getMinDate(date1, date2) {
   dayjs.extend(minMax);
-  return dayjs.min(dayjs(), dayjs(date1), dayjs(date2));
+  return dayjs.min(dayjs(date1), dayjs(date2));
 }
 function getMaxDate(date1, date2) {
   dayjs.extend(minMax);
-  return dayjs.max(dayjs(), dayjs(date1), dayjs(date2));
+  return dayjs.max(dayjs(date1), dayjs(date2));
+}
+
+function isFutureDate(date) {
+  return date && dayjs(date).isAfter(dayjs(), 'D');
+}
+
+function isTodayDate(date) {
+  return date && dayjs(date).isSame(dayjs(), 'D');
+}
+
+function isPastDate(date) {
+  return date && dayjs(date).isBefore(dayjs(), 'D');
 }
 
 export {
@@ -40,4 +52,7 @@ export {
   getDuration,
   getMinDate,
   getMaxDate,
+  isFutureDate,
+  isTodayDate,
+  isPastDate,
 };

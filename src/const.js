@@ -21,3 +21,6 @@ export const CITIES_DESCRIPTIONS = [
 
 export const MAX_PICTURES_COUNT = 10;
 
+export const FILTERS = ['EVERYTHING', 'FUTURE', 'PRESENT', 'PAST'];
+
+export const SORTING_NAMES = ['DAY', 'EVENT', 'TIME', 'PRICE', 'OFFERS'];
