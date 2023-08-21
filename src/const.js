@@ -32,7 +32,7 @@ export const FILTRATION_OPTIONS = [
 
 export const DEFAULT_FILTRATION_INDEX = 0;
 
-export const SORTING_ABILITY = [
+export const SORTING_ABILITIES = [
   {'DAY': true},
   {'EVENT': false},
   {'TIME': true},
