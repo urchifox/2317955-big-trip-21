@@ -4,9 +4,11 @@ import { getFormattedDate } from '../utils/dates.js';
 
 function createOffersSection(point, offersModel) {
   const offers = offersModel.offers.filter((offer) => offer.type === point.type);
+
   if (offers.length === 0) {
     return '';
   }
+
   const offersMarkup = offers.map((offer) => /*html*/`
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${point.id}${offer.id}" type="checkbox" name="event-offer-luggage" ${point.chosenOffers.includes(offer.id) ? 'checked="' : ''} ">
@@ -17,12 +19,34 @@ function createOffersSection(point, offersModel) {
       </label>
     </div>
   `).join(' ');
-  return `
+
+  return /*html*/`
     <section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
       <div class="event__available-offers">
         ${offersMarkup}
+      </div>
+    </section>
+  `;
+}
+
+function createDestinationSection(destination) {
+  if (!destination.description && !destination.pictures) {
+    return '';
+  }
+
+  const picturesMarkup = destination.pictures.map((picture) => `<img class="event__photo" src="${picture}" alt="Event photo"></img>`).join(' ');
+
+  return /*html*/`
+    <section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${destination.description}</p>
+
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${picturesMarkup}
+        </div>
       </div>
     </section>
   `;
@@ -39,8 +63,6 @@ function createTemplate(point, offers, destination, offersModel, destinationsMod
         <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${point.id}">${type}</label>
       </div>
     `).join(' ');
-
-  const picturesMarkup = destination.pictures.map((picture) => `<img class="event__photo" src="${picture}" alt="Event photo"></img>`).join(' ');
 
   const destinationsNamesMarkup = destinationsModel.allDestinationsNames.map((destinationName) => `<option value="${destinationName}"></option>`).join(' ');
 
@@ -96,17 +118,7 @@ function createTemplate(point, offers, destination, offersModel, destinationsMod
         </header>
         <section class="event__details">
           ${ createOffersSection(point, offersModel)}
-
-          <section class="event__section  event__section--destination">
-            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${destination.description}</p>
-
-            <div class="event__photos-container">
-              <div class="event__photos-tape">
-                ${picturesMarkup}
-              </div>
-            </div>
-          </section>
+          ${createDestinationSection(destination)}
         </section>
       </form>
     </li>
