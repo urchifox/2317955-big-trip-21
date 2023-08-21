@@ -1,6 +1,6 @@
-import {filterOption} from '../utils/filters.js';
+import {FilterOption} from '../utils/filters.js';
 
-// function generateFilter(points) {
+// function calculateFilters(points) {
 //   return Object.entries(filterOption).map(
 //     ([filterType, filterPoints]) => ({
 //       type: filterType,
@@ -9,12 +9,12 @@ import {filterOption} from '../utils/filters.js';
 //   );
 // }
 
-function generateFilter(points) {
-  const calculatedFilters = {};
-  for (const option in filterOption) {
-    calculatedFilters[option] = filterOption[option](points).length;
-  }
-  return calculatedFilters;
-}
+// function calculateFilters(points) {
+//   const calculatedFilters = {};
+//   for (const option in FilterOption) {
+//     calculatedFilters[option] = FilterOption[option](points).length;
+//   }
+//   return calculatedFilters;
+// }
 
-export {generateFilter};
+// export {calculateFilters};
