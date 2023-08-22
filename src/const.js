@@ -1,3 +1,5 @@
+import { showAll, showFuture, showPast, showPresent } from './utils/filters';
+
 export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
 export const POINTS_COUNT = 5;
@@ -21,3 +23,21 @@ export const CITIES_DESCRIPTIONS = [
 
 export const MAX_PICTURES_COUNT = 10;
 
+export const FILTRATION_OPTIONS = [
+  {'EVERYTHING': showAll},
+  {'FUTURE'    : showFuture},
+  {'PRESENT'   : showPresent},
+  {'PAST'      : showPast},
+];
+
+export const DEFAULT_FILTRATION_INDEX = 0;
+
+export const SORTING_ABILITIES = [
+  {'DAY': true},
+  {'EVENT': false},
+  {'TIME': true},
+  {'PRICE': true},
+  {'OFFERS': false},
+];
+
+export const DEFAULT_SORTING_INDEX = 0;

@@ -2,6 +2,56 @@ import { POINT_TYPES } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { getFormattedDate } from '../utils/dates.js';
 
+function createOffersSection(point, offersModel) {
+  const offers = offersModel.offers.filter((offer) => offer.type === point.type);
+
+  if (offers.length === 0) {
+    return '';
+  }
+
+  const offersMarkup = offers.map((offer) => /*html*/`
+    <div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${point.id}${offer.id}" type="checkbox" name="event-offer-luggage" ${point.chosenOffers.includes(offer.id) ? 'checked="' : ''} ">
+      <label class="event__offer-label" for="event-offer-luggage-${point.id}${offer.id}">
+        <span class="event__offer-title">${offer.name}</span>
+        +€&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
+      </label>
+    </div>
+  `).join(' ');
+
+  return /*html*/`
+    <section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+      <div class="event__available-offers">
+        ${offersMarkup}
+      </div>
+    </section>
+  `;
+}
+
+function createDestinationSection(destination) {
+  if (!destination.description && !destination.pictures) {
+    return '';
+  }
+
+  const picturesMarkup = destination.pictures.map((picture) => `<img class="event__photo" src="${picture}" alt="Event photo"></img>`).join(' ');
+
+  return /*html*/`
+    <section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${destination.description}</p>
+
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${picturesMarkup}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
 function createTemplate(point, offers, destination, offersModel, destinationsModel) {
 
   const dateStart = getFormattedDate(point.periodStart, 'DD/MM/YY HH:mm');
@@ -14,20 +64,7 @@ function createTemplate(point, offers, destination, offersModel, destinationsMod
       </div>
     `).join(' ');
 
-  const picturesMarkup = destination.pictures.map((picture) => `<img class="event__photo" src="${picture}" alt="Event photo"></img>`).join(' ');
-
   const destinationsNamesMarkup = destinationsModel.allDestinationsNames.map((destinationName) => `<option value="${destinationName}"></option>`).join(' ');
-
-  const offersMarkup = offersModel.offers.map((offer) => (offer.type === point.type) ? `
-      <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${point.id}${offer.id}" type="checkbox" name="event-offer-luggage" ${point.chosenOffers.includes(offer.id) ? 'checked="' : ''} ">
-        <label class="event__offer-label" for="event-offer-luggage-${point.id}${offer.id}">
-          <span class="event__offer-title">${offer.name}</span>
-          +€&nbsp;
-          <span class="event__offer-price">${offer.price}</span>
-        </label>
-      </div>
-    ` : '').join(' ');
 
   return /*html*/`
     <li class="trip-events__item">
@@ -80,24 +117,8 @@ function createTemplate(point, offers, destination, offersModel, destinationsMod
           <button class="event__reset-btn" type="reset">Cancel</button>
         </header>
         <section class="event__details">
-          <section class="event__section  event__section--offers">
-            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-            <div class="event__available-offers">
-              ${offersMarkup}
-            </div>
-          </section>
-
-          <section class="event__section  event__section--destination">
-            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${destination.description}</p>
-
-            <div class="event__photos-container">
-              <div class="event__photos-tape">
-                ${picturesMarkup}
-              </div>
-            </div>
-          </section>
+          ${ createOffersSection(point, offersModel)}
+          ${createDestinationSection(destination)}
         </section>
       </form>
     </li>
