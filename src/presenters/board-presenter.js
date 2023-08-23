@@ -5,6 +5,7 @@ import PointView from '../views/point-view.js';
 import NoPointsView from '../views/no-points-view.js';
 import { isEscapeKeydown } from '../utils/random-elements.js';
 import SortingView from '../views/sorting-view.js';
+import PointPresenter from './point-presenter.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -58,62 +59,12 @@ export default class BoardPresenter {
   }
 
   #renderPoint(point) {
-    const escKeyDownHandler = (evt) => {
-      if(isEscapeKeydown(evt.key)) {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
-
-    const pointComponent = new PointView({
-      point,
-      offers: this.#getOffers(this.#offersModel.offers, point.chosenOffers),
-      destination: this.#getDestination(point.destinationId),
-      onEditClick:() => {
-        replaceCardToForm();
-        document.addEventListener('keydown', escKeyDownHandler);
-      },
-    });
-
-    const editComponent = new EditingView({
-      point,
-      offers: this.#getOffers(this.#offersModel.offers, point.chosenOffers),
-      destination: this.#getDestination(point.destinationId),
-      onFormSubmit: () => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      },
+    const pointPresenter = new PointPresenter({
+      pointListContainer: this.#listComponent.element,
       offersModel: this.#offersModel,
       destinationsModel: this.#destinationsModel,
     });
-
-    function replaceCardToForm() {
-      replace(editComponent, pointComponent);
-    }
-
-    function replaceFormToCard() {
-      replace(pointComponent, editComponent);
-    }
-
-    render(pointComponent, this.#listComponent.element);
+    pointPresenter.init(point);
   }
 
-  #getOffers(offersModel, chosenOffersIds) {
-    const chosenOffers = [];
-    if (!chosenOffersIds) {
-      return;
-    }
-    chosenOffersIds.forEach((chosenId) => {
-      const chosenOffer = offersModel.find((offer) => offer.id === chosenId);
-      if (chosenOffer) {
-        chosenOffers.push(chosenOffer);
-      }
-    });
-    return chosenOffers;
-  }
-
-  #getDestination(destinationId) {
-    return this.#destinationsModel.destinations.find((destination) => destination.id === destinationId);
-  }
 }
