@@ -4,16 +4,23 @@ import ListView from '../views/list-view.js';
 import PointView from '../views/point-view.js';
 import NoPointsView from '../views/no-points-view.js';
 import { isEscapeKeydown } from '../utils/random-elements.js';
-export default class ListPresenter {
-  #listContainer = null;
+import SortingView from '../views/sorting-view.js';
+
+export default class BoardPresenter {
+  #boardContainer = null;
+
   #pointsModel = null;
   #offersModel = null;
   #destinationsModel = null;
+
   #listComponent = new ListView();
+  #noPointsComponent = new NoPointsView();
+  #sortingComponent = new SortingView();
+
   #listPoints = [];
 
-  constructor({listContainer, pointsModel, offersModel, destinationsModel}) {
-    this.#listContainer = listContainer;
+  constructor({boardContainer: boardContainer, pointsModel, offersModel, destinationsModel}) {
+    this.#boardContainer = boardContainer;
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
@@ -21,25 +28,33 @@ export default class ListPresenter {
 
   init() {
     this.#listPoints = [...this.#pointsModel.points];
-    this.#renderList();
+    this.#renderBoard();
   }
 
-  #getOffers(offersModel, chosenOffersIds) {
-    const chosenOffers = [];
-    if (!chosenOffersIds) {
+  #renderBoard() {
+    if (this.#listPoints.length === 0) {
+      this.#renderNoPoints();
       return;
     }
-    chosenOffersIds.forEach((chosenId) => {
-      const chosenOffer = offersModel.find((offer) => offer.id === chosenId);
-      if (chosenOffer) {
-        chosenOffers.push(chosenOffer);
-      }
-    });
-    return chosenOffers;
+
+    this.#renderSorting();
+    this.#renderPointsList();
   }
 
-  #getDestination(destinationId) {
-    return this.#destinationsModel.destinations.find((destination) => destination.id === destinationId);
+  #renderNoPoints() {
+    render(this.#noPointsComponent, this.#boardContainer);
+  }
+
+  #renderSorting() {
+    render(this.#sortingComponent, this.#boardContainer);
+  }
+
+  #renderPointsList() {
+    render(this.#listComponent, this.#boardContainer);
+
+    for (let i = 0; i < this.#listPoints.length; i++) {
+      this.#renderPoint(this.#listPoints[i]);
+    }
   }
 
   #renderPoint(point) {
@@ -84,16 +99,21 @@ export default class ListPresenter {
     render(pointComponent, this.#listComponent.element);
   }
 
-  #renderList() {
-    render(this.#listComponent, this.#listContainer);
-
-    if (this.#listPoints.length === 0) {
-      render(new NoPointsView(), this.#listComponent.element);
+  #getOffers(offersModel, chosenOffersIds) {
+    const chosenOffers = [];
+    if (!chosenOffersIds) {
       return;
     }
+    chosenOffersIds.forEach((chosenId) => {
+      const chosenOffer = offersModel.find((offer) => offer.id === chosenId);
+      if (chosenOffer) {
+        chosenOffers.push(chosenOffer);
+      }
+    });
+    return chosenOffers;
+  }
 
-    for (let i = 0; i < this.#listPoints.length; i++) {
-      this.#renderPoint(this.#listPoints[i]);
-    }
+  #getDestination(destinationId) {
+    return this.#destinationsModel.destinations.find((destination) => destination.id === destinationId);
   }
 }
