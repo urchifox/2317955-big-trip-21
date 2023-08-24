@@ -16,6 +16,7 @@ export default class BoardPresenter {
   #sortingComponent = new SortingView();
 
   #points = [];
+  #pointsPresenters = new Map();
 
   constructor({boardContainer: boardContainer, pointsModel, offersModel, destinationsModel}) {
     this.#boardContainer = boardContainer;
@@ -62,5 +63,11 @@ export default class BoardPresenter {
       destinationsModel: this.#destinationsModel,
     });
     pointPresenter.init(point);
+    this.#pointsPresenters.set(point.id, pointPresenter);
+  }
+
+  #clearPointsList() {
+    this.#pointsPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointsPresenters.clear();
   }
 }
