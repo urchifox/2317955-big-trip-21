@@ -62,13 +62,15 @@ export default class BoardPresenter {
       pointListContainer: this.#listComponent.element,
       offersModel: this.#offersModel,
       destinationsModel: this.#destinationsModel,
+      onDataChange: this.#handlePointChange,
     });
     pointPresenter.init(point);
     this.#pointsPresenters.set(point.id, pointPresenter);
   }
 
   #handlePointChange = (updatedPoint) => {
-    this.#pointsPresenters = updateItem(this.#points, updatedPoint);
+    debugger;
+    this.#points = updateItem(this.#points, updatedPoint);
     this.#pointsPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
