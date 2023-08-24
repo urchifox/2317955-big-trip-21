@@ -52,7 +52,7 @@ export default class PointPresenter {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (this.#pointsListContainer.contains(prevPointEditComponent.elementt)) {
+    if (this.#pointsListContainer.contains(prevPointEditComponent.element)) {
       replace(this.#pointEditComponent, prevPointEditComponent);
     }
 
