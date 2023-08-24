@@ -5,11 +5,10 @@ import PointView from '../views/point-view';
 
 export default class PointPresenter {
   #pointsListContainer = null;
-
+  #point = null;
   #pointComponent = null;
   #pointEditComponent = null;
 
-  #point = null;
   #offersModel = null;
   #destinationsModel = null;
 
@@ -24,17 +23,17 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointView({
       point: this.#point,
-      offers: this.#getOffers(this.#offersModel, point.chosenOffers),
-      destination: this.#getDestination(point.destinationId),
+      offers: this.#offersModel.getOffersByIds(this.#point.chosenOffers),
+      destination: this.#destinationsModel.getDestinationById(this.#point.destinationId),
       onEditClick: this.#handleEditClick,
     });
+
     this.#pointEditComponent = new EditingView({
       point: this.#point,
-      offers: this.#getOffers(this.#offersModel.offers, point.chosenOffers),
-      destination: this.#getDestination(point.destinationId),
+      pointDestination: this.#destinationsModel.getDestinationById(this.#point.destinationId),
       onFormSubmit: this.#handleFormSubmit,
-      offersModel: this.#offersModel,
-      destinationsModel: this.#destinationsModel,
+      allOffersThisType: this.#offersModel.getOffersByType(this.#point.type),
+      allDestinationsNames: this.#destinationsModel.allDestinationsNames,
     });
 
     render(this.#pointComponent, this.#pointsListContainer);
@@ -48,25 +47,12 @@ export default class PointPresenter {
     this.#replaceFormToCard();
   };
 
-  #getOffers(offersModel, chosenOffersIds) {
-    const chosenOffers = [];
-    if (!chosenOffersIds) {
-      return;
+  #escKeyDownHandler = (evt) => {
+    if(isEscapeKeydown(evt.key)) {
+      evt.preventDefault();
+      this.#replaceFormToCard();
     }
-
-    chosenOffersIds.forEach((chosenId) => {
-      const chosenOffer = offersModel.offers.find((offer) => offer.id === chosenId);
-      if (chosenOffer) {
-        chosenOffers.push(chosenOffer);
-      }
-    });
-    return chosenOffers;
-  }
-
-  #getDestination(destinationId) {
-
-    return this.#destinationsModel.destinations.find((destination) => destination.id === destinationId);
-  }
+  };
 
   #replaceCardToForm() {
     replace(this.#pointEditComponent, this.#pointComponent);
@@ -77,11 +63,4 @@ export default class PointPresenter {
     replace(this.#pointComponent, this.#pointEditComponent);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
-
-  #escKeyDownHandler = (evt) => {
-    if(isEscapeKeydown(evt.key)) {
-      evt.preventDefault();
-      this.#replaceFormToCard();
-    }
-  };
 }
