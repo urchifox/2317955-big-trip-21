@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Катерина Евтухова](https://up.htmlacademy.ru/ecmascript/21/user/2317955).
-* Наставник: [Евгений Лепёшкин](https://htmlacademy.ru/profile/spearance).
+* Наставник: [Сергей Андреев](https://htmlacademy.ru/profile/id812127).
 
 ---
 
