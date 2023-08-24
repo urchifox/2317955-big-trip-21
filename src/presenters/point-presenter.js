@@ -1,4 +1,4 @@
-import { render, replace } from '../framework/render';
+import { remove, render, replace } from '../framework/render';
 import { isEscapeKeydown } from '../utils/random-elements';
 import EditingView from '../views/editing-view';
 import PointView from '../views/point-view';
@@ -21,6 +21,9 @@ export default class PointPresenter {
   init(point) {
     this.#point = point;
 
+    const prevPointComponent = this.#pointComponent;
+    const prevPointEditComponent = this.#pointEditComponent;
+
     this.#pointComponent = new PointView({
       point: this.#point,
       offers: this.#offersModel.getOffersByIds(this.#point.chosenOffers),
@@ -36,7 +39,27 @@ export default class PointPresenter {
       allDestinationsNames: this.#destinationsModel.allDestinationsNames,
     });
 
-    render(this.#pointComponent, this.#pointsListContainer);
+    if (prevPointComponent === null || prevPointEditComponent === null) {
+      render(this.#pointComponent, this.#pointsListContainer);
+      return;
+    }
+
+    if (this.#pointsListContainer.contains(prevPointComponent.element)) {
+      replace(this.#pointComponent, prevPointComponent);
+    }
+
+    if (this.#pointsListContainer.contains(prevPointEditComponent)) {
+      replace(this.#pointEditComponent, prevPointEditComponent);
+    }
+
+    // ВОПРОС: а зачем мы это делаем?..
+    remove (prevPointComponent);
+    remove(prevPointEditComponent);
+  }
+
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
   }
 
   #handleEditClick = () => {
