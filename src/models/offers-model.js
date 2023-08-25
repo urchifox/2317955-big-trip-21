@@ -7,11 +7,13 @@ export default class OffersModel {
     return this.#offers;
   }
 
+  // TODO попробовать переписать этот код на reduce
   getOffersByIds(offersIds) {
-    const chosenOffers = [];
     if (offersIds.length === 0) {
       return;
     }
+
+    const chosenOffers = [];
 
     offersIds.forEach((offerId) => {
       const chosenOffer = this.#offers.find((offer) => offer.id === offerId);
@@ -19,6 +21,7 @@ export default class OffersModel {
         chosenOffers.push(chosenOffer);
       }
     });
+    
     return chosenOffers;
   }
 

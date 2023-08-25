@@ -26,6 +26,7 @@ function getOffersTemplate(offers) {
   return markup;
 }
 
+//TODO сюда не модель должна приходить
 function createTemplate(point, offersModel, destination) {
   const {type, periodStart, periodEnd, price, isFavorite, chosenOffers: chosenOffersIds} = point;
 

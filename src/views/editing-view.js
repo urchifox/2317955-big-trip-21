@@ -2,12 +2,12 @@ import { POINT_TYPES } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { getFormattedDate } from '../utils/dates.js';
 
-function createOffersSection(point, allOffersThisType) {
-  if (allOffersThisType.length === 0) {
+function createOffersTemplate(point, offersByType) {
+  if (offersByType.length === 0) {
     return '';
   }
 
-  const offersMarkup = allOffersThisType.map((offer) => /*html*/`
+  const offersTemplate = offersByType.map((offer) => /*html*/`
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" type="checkbox" name="event-offer-luggage"
         id="event-offer-luggage-${point.id}${offer.id}"
@@ -25,48 +25,56 @@ function createOffersSection(point, allOffersThisType) {
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
       <div class="event__available-offers">
-        ${offersMarkup}
+        ${offersTemplate}
       </div>
     </section>
   `;
 }
-
-function createDestinationSection(pointDestination) {
-  if (!pointDestination.description && !pointDestination.pictures) {
-    return '';
-  }
-
-  const picturesMarkup = pointDestination.pictures.map((picture) => /*html*/`
+function createPicturesTemplate(pointDestination) {
+  const picturesTemplate = pointDestination.pictures.map((picture) => /*html*/`
     <img class="event__photo" src="${picture}" alt="Event photo"></img>
   `).join(' ');
 
   return /*html*/`
+    <div class="event__photos-container">
+      <div class="event__photos-tape">
+        ${picturesTemplate}
+      </div>
+    </div>`;
+}
+
+function createDestinationTemplate(pointDestination) {
+  if (!pointDestination.description && !pointDestination.pictures) {
+    return '';
+  }
+
+  const descriptionTemplate = pointDestination.description ?
+    `<p class="event__destination-description">
+      ${pointDestination.description}
+    </p>`
+    : '';
+
+  return /*html*/`
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">
-        ${pointDestination.description}
-      </p>
-      <div class="event__photos-container">
-        <div class="event__photos-tape">
-          ${picturesMarkup}
-        </div>
-      </div>
+      ${descriptionTemplate}
+      ${pointDestination.pictures.length > 0 ? createPicturesTemplate(pointDestination) : ''}
     </section>
   `;
 }
 
-function createTemplate(point, pointDestination, allOffersThisType, allDestinationsNames) {
+function createTemplate(point, pointDestination, offersByType, allDestinationsNames) {
   const dateStart = getFormattedDate(point.periodStart, 'DD/MM/YY HH:mm');
   const dateEnd = getFormattedDate(point.periodEnd, 'DD/MM/YY HH:mm');
 
-  const pointIconMarkup = POINT_TYPES.map((type) => /*html*/`
+  const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
       <div class="event__type-item">
         <input id="event-type-${type.toLowerCase()}-${point.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}">
         <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${point.id}">${type}</label>
       </div>
     `).join(' ');
 
-  const destinationsNamesMarkup = allDestinationsNames.map((destinationName) => /*html*/`
+  const destinationsNamesTemplate = allDestinationsNames.map((destinationName) => /*html*/`
     <option value="${destinationName}"></option>
     `).join(' ');
 
@@ -84,7 +92,7 @@ function createTemplate(point, pointDestination, allOffersThisType, allDestinati
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${pointIconMarkup}
+                ${pointIconTemplate}
               </fieldset>
             </div>
           </div>
@@ -95,7 +103,7 @@ function createTemplate(point, pointDestination, allOffersThisType, allDestinati
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination.name}" list="destination-list-1">
             <datalist id="destination-list-1">
-              ${destinationsNamesMarkup}
+              ${destinationsNamesTemplate}
             </datalist>
           </div>
 
@@ -119,8 +127,8 @@ function createTemplate(point, pointDestination, allOffersThisType, allDestinati
           <button class="event__reset-btn" type="reset">Cancel</button>
         </header>
         <section class="event__details">
-          ${createOffersSection(point, allOffersThisType)}
-          ${createDestinationSection(pointDestination)}
+          ${createOffersTemplate(point, offersByType)}
+          ${createDestinationTemplate(pointDestination)}
         </section>
       </form>
     </li>
@@ -130,23 +138,23 @@ function createTemplate(point, pointDestination, allOffersThisType, allDestinati
 export default class EditingView extends AbstractView {
   #point = null;
   #pointDestination = null;
-  #allOffersThisType = null;
+  #offersByType = null;
   #allDestinationsNames = null;
   #handleFormSubmit = null;
 
-  constructor({point, pointDestination, onFormSubmit, allOffersThisType, allDestinationsNames}) {
+  constructor({point, pointDestination, onFormSubmit, offersByType, allDestinationsNames}) {
     super();
     this.#point = point;
     this.#pointDestination = pointDestination;
     this.#handleFormSubmit = onFormSubmit;
-    this.#allOffersThisType = allOffersThisType;
+    this.#offersByType = offersByType;
     this.#allDestinationsNames = allDestinationsNames;
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
 
   }
 
   get template() {
-    return createTemplate(this.#point, this.#pointDestination, this.#allOffersThisType, this.#allDestinationsNames);
+    return createTemplate(this.#point, this.#pointDestination, this.#offersByType, this.#allDestinationsNames);
   }
 
   #formSubmitHandler = (evt) => {

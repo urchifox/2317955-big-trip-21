@@ -52,9 +52,12 @@ export default class BoardPresenter {
   #renderPointsList() {
     render(this.#listComponent, this.#boardContainer);
 
-    for (let i = 0; i < this.#points.length; i++) {
-      this.#renderPoint(this.#points[i]);
+    for (const point of this.#points) {
+      this.#renderPoint(point);
     }
+    // for (let i = 0; i < this.#points.length; i++) {
+    //   this.#renderPoint(this.#points[i]);
+    // }
   }
 
   #renderPoint(point) {

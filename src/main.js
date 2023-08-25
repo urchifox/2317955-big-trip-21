@@ -7,15 +7,15 @@ import OffersModel from './models/offers-model.js';
 import DestinationsModel from './models/destinations-model.js';
 import { calculateFilters } from './utils/filters.js';
 
-const tripSummaryRoot = document.querySelector('.trip-controls');
-const filtrationRoot = document.querySelector('.trip-controls__filters');
-const boardRoot = document.querySelector('.trip-events');
+const tripSummaryContainer = document.querySelector('.trip-controls');
+const filtrationContainer = document.querySelector('.trip-controls__filters');
+const boardContainer = document.querySelector('.trip-events');
 const pointsModel = new PointsModel();
 const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
 
 const boardPresenter = new BoardPresenter({
-  boardContainer: boardRoot,
+  boardContainer: boardContainer,
   pointsModel,
   offersModel,
   destinationsModel
@@ -23,7 +23,7 @@ const boardPresenter = new BoardPresenter({
 
 const filtersInformation = calculateFilters(pointsModel.points);
 
-render(new TripSummaryView(), tripSummaryRoot, RenderPosition.BEFOREBEGIN);
-render(new FiltrationView({filtersInformation}), filtrationRoot);
+render(new TripSummaryView(), tripSummaryContainer, RenderPosition.BEFOREBEGIN);
+render(new FiltrationView({filtersInformation}), filtrationContainer);
 
 boardPresenter.init();

@@ -39,7 +39,7 @@ export default class PointPresenter {
       point: this.#point,
       pointDestination: this.#destinationsModel.getDestinationById(this.#point.destinationId),
       onFormSubmit: this.#handleFormSubmit,
-      allOffersThisType: this.#offersModel.getOffersByType(this.#point.type),
+      offersByType: this.#offersModel.getOffersByType(this.#point.type),
       allDestinationsNames: this.#destinationsModel.allDestinationsNames,
     });
 
@@ -56,8 +56,7 @@ export default class PointPresenter {
       replace(this.#pointEditComponent, prevPointEditComponent);
     }
 
-    // ВОПРОС: а зачем мы это делаем?..
-    remove (prevPointComponent);
+    remove(prevPointComponent);
     remove(prevPointEditComponent);
   }
 
@@ -76,10 +75,11 @@ export default class PointPresenter {
   };
 
   #escKeyDownHandler = (evt) => {
-    if(isEscapeKeydown(evt.key)) {
-      evt.preventDefault();
-      this.#replaceFormToCard();
+    if(!isEscapeKeydown(evt.key)) {
+      return;
     }
+    evt.preventDefault();
+    this.#replaceFormToCard();
   };
 
   #replaceCardToForm() {
