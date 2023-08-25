@@ -55,9 +55,6 @@ export default class BoardPresenter {
     for (const point of this.#points) {
       this.#renderPoint(point);
     }
-    // for (let i = 0; i < this.#points.length; i++) {
-    //   this.#renderPoint(this.#points[i]);
-    // }
   }
 
   #renderPoint(point) {
@@ -66,6 +63,7 @@ export default class BoardPresenter {
       offersModel: this.#offersModel,
       destinationsModel: this.#destinationsModel,
       onDataChange: this.#handlePointChange,
+      onModeChange: this.#handleModeChange,
     });
     pointPresenter.init(point);
     this.#pointsPresenters.set(point.id, pointPresenter);
@@ -74,6 +72,10 @@ export default class BoardPresenter {
   #handlePointChange = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
     this.#pointsPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
+
+  #handleModeChange = () => {
+    this.#pointsPresenters.forEach((presenter) => presenter.resetView());
   };
 
   #clearPointsList() {

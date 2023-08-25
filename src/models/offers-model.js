@@ -21,7 +21,7 @@ export default class OffersModel {
         chosenOffers.push(chosenOffer);
       }
     });
-    
+
     return chosenOffers;
   }
 
