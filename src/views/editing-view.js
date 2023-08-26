@@ -2,16 +2,16 @@ import { POINT_TYPES } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { getFormattedDate } from '../utils/dates.js';
 
-function createOffersSection(point, offersModel) {
-  const offers = offersModel.offers.filter((offer) => offer.type === point.type);
-
-  if (offers.length === 0) {
+function createOffersTemplate(point, offersByType) {
+  if (offersByType.length === 0) {
     return '';
   }
 
-  const offersMarkup = offers.map((offer) => /*html*/`
+  const offersTemplate = offersByType.map((offer) => /*html*/`
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${point.id}${offer.id}" type="checkbox" name="event-offer-luggage" ${point.chosenOffers.includes(offer.id) ? 'checked="' : ''} ">
+      <input class="event__offer-checkbox  visually-hidden" type="checkbox" name="event-offer-luggage"
+        id="event-offer-luggage-${point.id}${offer.id}"
+        ${point.chosenOffers.includes(offer.id) ? 'checked="' : ''} ">
       <label class="event__offer-label" for="event-offer-luggage-${point.id}${offer.id}">
         <span class="event__offer-title">${offer.name}</span>
         +€&nbsp;
@@ -25,46 +25,58 @@ function createOffersSection(point, offersModel) {
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
       <div class="event__available-offers">
-        ${offersMarkup}
+        ${offersTemplate}
       </div>
     </section>
   `;
 }
+function createPicturesTemplate(pointDestination) {
+  const picturesTemplate = pointDestination.pictures.map((picture) => /*html*/`
+    <img class="event__photo" src="${picture}" alt="Event photo"></img>
+  `).join(' ');
 
-function createDestinationSection(destination) {
-  if (!destination.description && !destination.pictures) {
+  return /*html*/`
+    <div class="event__photos-container">
+      <div class="event__photos-tape">
+        ${picturesTemplate}
+      </div>
+    </div>`;
+}
+
+function createDestinationTemplate(pointDestination) {
+  if (!pointDestination.description && !pointDestination.pictures) {
     return '';
   }
 
-  const picturesMarkup = destination.pictures.map((picture) => `<img class="event__photo" src="${picture}" alt="Event photo"></img>`).join(' ');
+  const descriptionTemplate = pointDestination.description ?
+    `<p class="event__destination-description">
+      ${pointDestination.description}
+    </p>`
+    : '';
 
   return /*html*/`
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${destination.description}</p>
-
-      <div class="event__photos-container">
-        <div class="event__photos-tape">
-          ${picturesMarkup}
-        </div>
-      </div>
+      ${descriptionTemplate}
+      ${pointDestination.pictures.length > 0 ? createPicturesTemplate(pointDestination) : ''}
     </section>
   `;
 }
 
-function createTemplate(point, offers, destination, offersModel, destinationsModel) {
-
+function createTemplate(point, pointDestination, offersByType, allDestinationsNames) {
   const dateStart = getFormattedDate(point.periodStart, 'DD/MM/YY HH:mm');
   const dateEnd = getFormattedDate(point.periodEnd, 'DD/MM/YY HH:mm');
 
-  const pointIconMarkup = POINT_TYPES.map((type) => `
+  const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
       <div class="event__type-item">
         <input id="event-type-${type.toLowerCase()}-${point.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}">
         <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${point.id}">${type}</label>
       </div>
     `).join(' ');
 
-  const destinationsNamesMarkup = destinationsModel.allDestinationsNames.map((destinationName) => `<option value="${destinationName}"></option>`).join(' ');
+  const destinationsNamesTemplate = allDestinationsNames.map((destinationName) => /*html*/`
+    <option value="${destinationName}"></option>
+    `).join(' ');
 
   return /*html*/`
     <li class="trip-events__item">
@@ -80,9 +92,7 @@ function createTemplate(point, offers, destination, offersModel, destinationsMod
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-
-                ${pointIconMarkup}
-
+                ${pointIconTemplate}
               </fieldset>
             </div>
           </div>
@@ -91,9 +101,9 @@ function createTemplate(point, offers, destination, offersModel, destinationsMod
             <label class="event__label  event__type-output" for="event-destination-1">
               ${point.type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination.name}" list="destination-list-1">
             <datalist id="destination-list-1">
-              ${destinationsNamesMarkup}
+              ${destinationsNamesTemplate}
             </datalist>
           </div>
 
@@ -117,8 +127,8 @@ function createTemplate(point, offers, destination, offersModel, destinationsMod
           <button class="event__reset-btn" type="reset">Cancel</button>
         </header>
         <section class="event__details">
-          ${ createOffersSection(point, offersModel)}
-          ${createDestinationSection(destination)}
+          ${createOffersTemplate(point, offersByType)}
+          ${createDestinationTemplate(pointDestination)}
         </section>
       </form>
     </li>
@@ -127,30 +137,28 @@ function createTemplate(point, offers, destination, offersModel, destinationsMod
 
 export default class EditingView extends AbstractView {
   #point = null;
-  #offers = null;
-  #destination = null;
-  #offersModel = null;
-  #destinationsModel = null;
+  #pointDestination = null;
+  #offersByType = null;
+  #allDestinationsNames = null;
   #handleFormSubmit = null;
 
-  constructor({point, offers, destination, onFormSubmit, offersModel, destinationsModel}) {
+  constructor({point, pointDestination, onFormSubmit, offersByType, allDestinationsNames}) {
     super();
     this.#point = point;
-    this.#offers = offers;
-    this.#destination = destination;
+    this.#pointDestination = pointDestination;
     this.#handleFormSubmit = onFormSubmit;
-    this.#offersModel = offersModel;
-    this.#destinationsModel = destinationsModel;
-
+    this.#offersByType = offersByType;
+    this.#allDestinationsNames = allDestinationsNames;
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+
   }
 
   get template() {
-    return createTemplate(this.#point, this.#offers, this.#destination, this.#offersModel, this.#destinationsModel);
+    return createTemplate(this.#point, this.#pointDestination, this.#offersByType, this.#allDestinationsNames);
   }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit();
+    this.#handleFormSubmit(this.#point);
   };
 }

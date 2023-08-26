@@ -1,8 +1,8 @@
 import { DEFAULT_SORTING_INDEX, SORTING_ABILITIES } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createSortingButtons() {
-  return SORTING_ABILITIES.map((option, index) => {
+function createTemplate() {
+  const buttonsTemplate = SORTING_ABILITIES.map((option, index) => {
     const [[sortingName, sortingAbility]] = Object.entries(option);
     return /*html*/`
       <div class="trip-sort__item  trip-sort__item--${sortingName.toLowerCase()}">
@@ -17,12 +17,10 @@ function createSortingButtons() {
       </div>
     `;
   }).join('');
-}
 
-function createTemplate() {
   return /*html*/`
     <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-      ${createSortingButtons()}
+      ${buttonsTemplate}
     </form>
   `;
 }
