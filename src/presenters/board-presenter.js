@@ -18,6 +18,7 @@ export default class BoardPresenter {
 
   #points = [];
   #pointsPresenters = new Map();
+  #pointEditingId = null;
 
   constructor({boardContainer: boardContainer, pointsModel, offersModel, destinationsModel}) {
     this.#boardContainer = boardContainer;
@@ -74,8 +75,11 @@ export default class BoardPresenter {
     this.#pointsPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
-  #handleModeChange = () => {
-    this.#pointsPresenters.forEach((presenter) => presenter.resetView());
+  #handleModeChange = (id) => {
+    if (this.#pointEditingId !== null && this.#pointEditingId !== id) {
+      this.#pointsPresenters.get(this.#pointEditingId).resetView();
+    }
+    this.#pointEditingId = id;
   };
 
   #clearPointsList() {
