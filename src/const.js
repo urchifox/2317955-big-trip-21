@@ -41,3 +41,33 @@ export const SORTING_ABILITIES = [
 ];
 
 export const DEFAULT_SORTING_INDEX = 0;
+
+export const SORTING_OPTIONS = {
+  DAY: {
+    orderIndex: 0,
+    isAble: true,
+    name: 'DAY',
+  },
+  EVENT: {
+    orderIndex: 1,
+    isAble: false,
+    name: 'EVENT',
+  },
+  TIME: {
+    orderIndex: 2,
+    isAble: true,
+    name: 'TIME',
+  },
+  PRICE: {
+    orderIndex: 3,
+    isAble: true,
+    name: 'PRICE',
+  },
+  OFFERS: {
+    orderIndex: 4,
+    isAble: false,
+    name: 'OFFERS',
+  },
+};
+
+export const DEFAULT_SORTING = SORTING_OPTIONS.DAY;

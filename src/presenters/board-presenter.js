@@ -14,7 +14,7 @@ export default class BoardPresenter {
 
   #listComponent = new ListView();
   #noPointsComponent = new NoPointsView();
-  #sortingComponent = new SortingView();
+  #sortingComponent = null;
 
   #points = [];
   #pointsPresenters = new Map();
@@ -47,6 +47,7 @@ export default class BoardPresenter {
   }
 
   #renderSorting() {
+    this.#sortingComponent = new SortingView({onSortTypeChange: this.#handleSortTypeChange});
     render(this.#sortingComponent, this.#boardContainer);
   }
 
@@ -80,6 +81,10 @@ export default class BoardPresenter {
       this.#pointsPresenters.get(this.#pointEditingId).resetView();
     }
     this.#pointEditingId = id;
+  };
+
+  #handleSortTypeChange = (sortType) => {
+    console.log('sortType :>> ', sortType);
   };
 
   #clearPointsList() {
