@@ -5,13 +5,13 @@ function createTemplate() {
   // const buttonsTemplate = SORTING_ABILITIES.map((option, index) => {
   //   const [[sortingName, sortingAbility]] = Object.entries(option);
   //   return /*html*/`
-  //     <div class="trip-sort__item  trip-sort__item--${sortingName.toLowerCase()}">
+  //     <div class="trip-sort__item  trip-sort__item--${sortingname}">
   //       <input class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
-  //         id="sort-${sortingName.toLowerCase()}"
-  //         value="sort-${sortingName.toLowerCase()}"
+  //         id="sort-${sortingname}"
+  //         value="sort-${sortingname}"
   //         ${sortingAbility ? '' : 'disabled'}
   //         ${index === DEFAULT_SORTING_INDEX ? 'checked=""' : ''}>
-  //       <label class="trip-sort__btn" for="sort-${sortingName.toLowerCase()}">
+  //       <label class="trip-sort__btn" for="sort-${sortingname}">
   //         ${sortingName}
   //       </label>
   //     </div>
@@ -20,16 +20,16 @@ function createTemplate() {
 
   const sortingOptions = Object.values(SORTING_OPTIONS).sort((optionA, optionB) => optionA.orderIndex - optionB.orderIndex);
   const buttonsTemplate = sortingOptions.map((option) => {
-    const {isAble, name} = option;
+    const {isDisable, name} = option;
     return /*html*/`
-      <div class="trip-sort__item  trip-sort__item--${name.toLowerCase()}">
+      <div class="trip-sort__item  trip-sort__item--${name}">
         <input class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
-          id="sort-${name.toLowerCase()}"
-          value="sort-${name.toLowerCase()}"
-          data-sort-type="${name.toLowerCase()}"
-          ${isAble ? '' : 'disabled'}
+          id="sort-${name}"
+          value="sort-${name}"
+          data-sort-type="${name}"
+          ${isDisable ? 'disabled' : ''}
           ${option === DEFAULT_SORTING ? 'checked=""' : ''}>
-        <label class="trip-sort__btn" for="sort-${name.toLowerCase()}">
+        <label class="trip-sort__btn" for="sort-${name}">
           ${name}
         </label>
       </div>

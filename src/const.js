@@ -45,28 +45,28 @@ export const DEFAULT_SORTING_INDEX = 0;
 export const SORTING_OPTIONS = {
   DAY: {
     orderIndex: 0,
-    isAble: true,
-    name: 'DAY',
+    isDisable: false,
+    name: 'day',
   },
   EVENT: {
     orderIndex: 1,
-    isAble: false,
-    name: 'EVENT',
+    isDisable: true,
+    name: 'event',
   },
   TIME: {
     orderIndex: 2,
-    isAble: true,
-    name: 'TIME',
+    isDisable: false,
+    name: 'time',
   },
   PRICE: {
     orderIndex: 3,
-    isAble: true,
-    name: 'PRICE',
+    isDisable: false,
+    name: 'price',
   },
   OFFERS: {
     orderIndex: 4,
-    isAble: false,
-    name: 'OFFERS',
+    isDisable: true,
+    name: 'offers',
   },
 };
 
