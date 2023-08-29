@@ -95,8 +95,8 @@ export default class BoardPresenter {
   };
 
   #sortPoints(sortType) {
-    const sortingMethod = SORTING_OPTIONS[sortType.toUpperCase()].method;
-    this.#points.sort(sortingMethod);
+    const sortingOption = SORTING_OPTIONS.find((option) => option.name === sortType);
+    this.#points.sort(sortingOption.method);
 
     this.#currentSortType = sortType;
   }

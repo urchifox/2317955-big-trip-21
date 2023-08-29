@@ -2,9 +2,8 @@ import { SORTING_OPTIONS, DEFAULT_SORTING } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createTemplate() {
-  const sortingOptions = Object.values(SORTING_OPTIONS).sort((optionA, optionB) => optionA.orderIndex - optionB.orderIndex);
-  const buttonsTemplate = sortingOptions.map((option) => {
-    const {isDisable, name} = option;
+  const buttonsTemplate = SORTING_OPTIONS.map((option) => {
+    const {name, isDisable} = option;
     return /*html*/`
       <div class="trip-sort__item  trip-sort__item--${name}">
         <input class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"

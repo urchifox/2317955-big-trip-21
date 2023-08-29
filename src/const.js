@@ -33,37 +33,32 @@ export const FILTRATION_OPTIONS = [
 
 export const DEFAULT_FILTRATION_INDEX = 0;
 
-export const SORTING_OPTIONS = {
-  DAY: {
-    orderIndex: 0,
-    isDisable: false,
+export const SORTING_OPTIONS = [
+  {
     name: 'day',
     method: sortByDay,
+    isDisable: false,
   },
-  EVENT: {
-    orderIndex: 1,
-    isDisable: true,
+  {
     name: 'event',
     method: null,
+    isDisable: true,
   },
-  TIME: {
-    orderIndex: 2,
-    isDisable: false,
+  {
     name: 'time',
     method: sortByTime,
-  },
-  PRICE: {
-    orderIndex: 3,
     isDisable: false,
+  },
+  {
     name: 'price',
     method: sortByPrice,
+    isDisable: false,
   },
-  OFFERS: {
-    orderIndex: 4,
-    isDisable: true,
+  {
     name: 'offers',
     method: null,
+    isDisable: true,
   },
-};
+];
 
-export const DEFAULT_SORTING = SORTING_OPTIONS.DAY;
+export const DEFAULT_SORTING = SORTING_OPTIONS[0];
