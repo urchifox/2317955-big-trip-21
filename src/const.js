@@ -1,4 +1,5 @@
 import { showAll, showFuture, showPast, showPresent } from './utils/filters';
+import { sortByDay, sortByPrice, sortByTime } from './utils/sorting';
 
 export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
@@ -32,41 +33,36 @@ export const FILTRATION_OPTIONS = [
 
 export const DEFAULT_FILTRATION_INDEX = 0;
 
-export const SORTING_ABILITIES = [
-  {'DAY': true},
-  {'EVENT': false},
-  {'TIME': true},
-  {'PRICE': true},
-  {'OFFERS': false},
-];
-
-export const DEFAULT_SORTING_INDEX = 0;
-
 export const SORTING_OPTIONS = {
   DAY: {
     orderIndex: 0,
     isDisable: false,
     name: 'day',
+    method: sortByDay,
   },
   EVENT: {
     orderIndex: 1,
     isDisable: true,
     name: 'event',
+    method: null,
   },
   TIME: {
     orderIndex: 2,
     isDisable: false,
     name: 'time',
+    method: sortByTime,
   },
   PRICE: {
     orderIndex: 3,
     isDisable: false,
     name: 'price',
+    method: sortByPrice,
   },
   OFFERS: {
     orderIndex: 4,
     isDisable: true,
     name: 'offers',
+    method: null,
   },
 };
 

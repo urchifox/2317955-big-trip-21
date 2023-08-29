@@ -4,6 +4,7 @@ import NoPointsView from '../views/no-points-view.js';
 import SortingView from '../views/sorting-view.js';
 import PointPresenter from './point-presenter.js';
 import { updateItem } from '../utils/common.js';
+import { DEFAULT_SORTING, SORTING_OPTIONS } from '../const.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -19,6 +20,7 @@ export default class BoardPresenter {
   #points = [];
   #pointsPresenters = new Map();
   #pointEditingId = null;
+  #currentSortType = DEFAULT_SORTING;
 
   constructor({boardContainer: boardContainer, pointsModel, offersModel, destinationsModel}) {
     this.#boardContainer = boardContainer;
@@ -84,8 +86,20 @@ export default class BoardPresenter {
   };
 
   #handleSortTypeChange = (sortType) => {
-    console.log('sortType :>> ', sortType);
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortPoints(sortType);
+    this.#clearPointsList();
+    this.#renderPointsList();
   };
+
+  #sortPoints(sortType) {
+    const sortingMethod = SORTING_OPTIONS[sortType.toUpperCase()].method;
+    this.#points.sort(sortingMethod);
+
+    this.#currentSortType = sortType;
+  }
 
   #clearPointsList() {
     this.#pointsPresenters.forEach((presenter) => presenter.destroy());
