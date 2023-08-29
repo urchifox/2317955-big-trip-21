@@ -25,13 +25,25 @@ export const CITIES_DESCRIPTIONS = [
 export const MAX_PICTURES_COUNT = 10;
 
 export const FILTRATION_OPTIONS = [
-  {'EVERYTHING': showAll},
-  {'FUTURE'    : showFuture},
-  {'PRESENT'   : showPresent},
-  {'PAST'      : showPast},
+  {
+    name: 'EVERYTHING',
+    method: showAll,
+  },
+  {
+    name: 'FUTURE',
+    method: showFuture,
+  },
+  {
+    name: 'PRESENT',
+    method: showPresent,
+  },
+  {
+    name: 'PAST',
+    method: showPast,
+  },
 ];
 
-export const DEFAULT_FILTRATION_INDEX = 0;
+export const DEFAULT_FILTRATION = FILTRATION_OPTIONS[0];
 
 export const SORTING_OPTIONS = [
   {
