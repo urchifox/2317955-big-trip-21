@@ -24,11 +24,13 @@ class PointMock {
     this.id = getNonRepeatingId();
     this.type = getRandomArrayElement(POINT_TYPES);
     this.destinationId = getRandomInteger(CITIES.length);
-    this.periodStart = getMinDate(date1, date2);
-    this.periodEnd = getMaxDate(date1, date2);
+    this.periodStart = new Date(getMinDate(date1, date2));
+    this.periodEnd = new Date(getMaxDate(date1, date2));
     this.price = getRandomInteger(MAX_POINT_PRICE);
     this.isFavorite = Boolean(getRandomInteger(2));
     this.chosenOffers = getChosenOffersId(this.type);
+
+    // console.log('this.periodStart :>> ', this.periodStart);
   }
 }
 

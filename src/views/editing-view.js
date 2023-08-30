@@ -1,5 +1,5 @@
 import { POINT_TYPES } from '../const.js';
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { getFormattedDate } from '../utils/dates.js';
 
 function createOffersTemplate(point, offersByType) {
@@ -66,7 +66,9 @@ function createDestinationTemplate(pointDestination) {
 }
 
 function createTemplate(point, pointDestination, offersByType, allDestinationsNames) {
+  // console.log('point :>> ',  point);
   const dateStart = getFormattedDate(point.periodStart, 'DD/MM/YY HH:mm');
+  // console.log('dateStart :>> ', dateStart);
   const dateEnd = getFormattedDate(point.periodEnd, 'DD/MM/YY HH:mm');
 
   const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
@@ -137,8 +139,7 @@ function createTemplate(point, pointDestination, offersByType, allDestinationsNa
   `;
 }
 
-export default class EditingView extends AbstractView {
-  #point = null;
+export default class EditingView extends AbstractStatefulView {
   #pointDestination = null;
   #offersByType = null;
   #allDestinationsNames = null;
@@ -146,21 +147,31 @@ export default class EditingView extends AbstractView {
 
   constructor({point, pointDestination, onFormSubmit, offersByType, allDestinationsNames}) {
     super();
-    this.#point = point;
+    this._setState(EditingView.pastePointToState(point));
     this.#pointDestination = pointDestination;
     this.#handleFormSubmit = onFormSubmit;
     this.#offersByType = offersByType;
     this.#allDestinationsNames = allDestinationsNames;
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
-
   }
 
   get template() {
-    return createTemplate(this.#point, this.#pointDestination, this.#offersByType, this.#allDestinationsNames);
+    return createTemplate(this._state, this.#pointDestination, this.#offersByType, this.#allDestinationsNames);
+  }
+
+  static pastePointToState(point) {
+    return {...point,
+    };
+  }
+
+  static pasteStateToPoint(state) {
+    const point = {...state};
+
+    return point;
   }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(this.#point);
+    this.#handleFormSubmit(EditingView.pasteStateToPoint(this._state));
   };
 }
