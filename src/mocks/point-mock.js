@@ -29,8 +29,6 @@ class PointMock {
     this.price = getRandomInteger(MAX_POINT_PRICE);
     this.isFavorite = Boolean(getRandomInteger(2));
     this.chosenOffers = getChosenOffersId(this.type);
-
-    // console.log('this.periodStart :>> ', this.periodStart);
   }
 }
 
