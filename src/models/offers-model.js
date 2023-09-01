@@ -14,9 +14,12 @@ export default class OffersModel {
 
     return offersIds.reduce((accumulator, offerId) => {
       const chosenOffer = this.#offers.find((offer) => offer.id === offerId);
+
       if (chosenOffer) {
         return [...accumulator, chosenOffer];
       }
+
+      return accumulator;
     }, []);
   }
 

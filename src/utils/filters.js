@@ -18,11 +18,10 @@ function showPast(points) {
 }
 
 function calculateFilters(points) {
-  const calculatedFilters = {};
-  FILTRATION_OPTIONS.map((option) => {
-    calculatedFilters[option.name] = option.method(points).length;
-  });
-  return calculatedFilters;
+  return FILTRATION_OPTIONS.reduce((accumulator, option) => {
+    accumulator[option.name] = option.method(points).length;
+    return accumulator;
+  }, {});
 }
 
 export {calculateFilters, showAll, showFuture, showPresent, showPast};

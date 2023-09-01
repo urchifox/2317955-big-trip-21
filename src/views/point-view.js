@@ -10,7 +10,7 @@ function createTemplate(point, offers, destination) {
   const duration = getDuration(periodStart, periodEnd);
   const favoriteClass = (isFavorite) ? 'event__favorite-btn--active' : '';
 
-  const offersMarkup = offers.reduce((markup, offer) => `${markup}
+  const offersTemplate = offers.reduce((markup, offer) => `${markup}
       <li class="event__offer">
         <span class="event__offer-title">${offer.name}</span>
         +€&nbsp;
@@ -39,7 +39,7 @@ function createTemplate(point, offers, destination) {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${offersMarkup}
+          ${offersTemplate}
         </ul>
         <button class="event__favorite-btn ${favoriteClass}" type="button">
           <span class="visually-hidden">Add to favorite</span>
@@ -56,9 +56,9 @@ function createTemplate(point, offers, destination) {
 }
 
 export default class PointView extends AbstractView {
-  #point = null;
-  #offers = null;
-  #destination = null;
+  #point = {};
+  #offers = [];
+  #destination = {};
   #handleEditClick = null;
   #handleFavoriteClick = null;
 

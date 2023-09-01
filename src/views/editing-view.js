@@ -153,8 +153,8 @@ function createTemplate(point, allOffers, allDestinations) {
 }
 
 export default class EditingView extends AbstractStatefulView {
-  #offersByType = null;
-  #allDestinations = null;
+  #offersByType = [];
+  #allDestinations = [];
   #handleFormSubmit = null;
 
   constructor({point, onFormSubmit, offersByType, allDestinations}) {

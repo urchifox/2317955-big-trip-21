@@ -10,7 +10,7 @@ const Mode = {
 
 export default class PointPresenter {
   #pointsListContainer = null;
-  #point = null;
+  #point = {};
   #pointComponent = null;
   #pointEditComponent = null;
 

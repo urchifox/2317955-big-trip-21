@@ -9,7 +9,7 @@ function createTemplate() {
         <input class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
           id="sort-${name}"
           value="sort-${name}"
-          data-sort-type="${name}"
+          data-sort-name="${name}"
           ${isDisable ? 'disabled' : ''}
           ${option === DEFAULT_SORTING ? 'checked' : ''}
           >
@@ -46,6 +46,6 @@ export default class SortingView extends AbstractView {
       return;
     }
 
-    this.#handleSortTypeChange(evt.target.dataset.sortType);
+    this.#handleSortTypeChange(evt.target.dataset.sortName);
   };
 }

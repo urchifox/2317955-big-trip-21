@@ -26,19 +26,19 @@ export const MAX_PICTURES_COUNT = 10;
 
 export const FILTRATION_OPTIONS = [
   {
-    name: 'EVERYTHING',
+    name: 'everything',
     method: showAll,
   },
   {
-    name: 'FUTURE',
+    name: 'future',
     method: showFuture,
   },
   {
-    name: 'PRESENT',
+    name: 'present',
     method: showPresent,
   },
   {
-    name: 'PAST',
+    name: 'past',
     method: showPast,
   },
 ];
