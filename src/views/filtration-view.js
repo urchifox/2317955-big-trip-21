@@ -1,16 +1,16 @@
-import { DEFAULT_FILTRATION_INDEX, FILTRATION_OPTIONS } from '../const.js';
+import {DEFAULT_FILTRATION, FILTRATION_OPTIONS } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createTemplate(filterItems) {
-  const filtrationTemplate = FILTRATION_OPTIONS.map((option, index) => {
-    const [[filterName]] = Object.entries(option);
+function createTemplate(filtersInformation) {
+  const filtrationTemplate = FILTRATION_OPTIONS.map((option) => {
+    const filterName = option.name;
     return /*html*/`
       <div class="trip-filters__filter">
         <input class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter"
           id="filter-${filterName.toLowerCase()}"
           value="${filterName.toLowerCase()}"
-          ${filterItems[filterName] === 0 ? 'disabled' : ''}
-          ${index === DEFAULT_FILTRATION_INDEX ? 'checked=""' : ''}>
+          ${filtersInformation[filterName] === 0 ? 'disabled' : ''}
+          ${option === DEFAULT_FILTRATION ? 'checked=""' : ''}>
         <label class="trip-filters__filter-label" for="filter-${filterName.toLowerCase()}">
           ${filterName}
         </label>

@@ -30,8 +30,11 @@ function createOffersTemplate(point, offersByType) {
     </section>
   `;
 }
-function createPicturesTemplate(pointDestination) {
-  const picturesTemplate = pointDestination.pictures.map((picture) => /*html*/`
+function createPicturesTemplate(pictures) {
+  if (pictures.length === 0) {
+    return '';
+  }
+  const picturesTemplate = pictures.map((picture) => /*html*/`
     <img class="event__photo" src="${picture}" alt="Event photo"></img>
   `).join(' ');
 
@@ -48,17 +51,16 @@ function createDestinationTemplate(pointDestination) {
     return '';
   }
 
-  const descriptionTemplate = pointDestination.description ?
+  const descriptionTemplate = pointDestination.description.length === 0 ? '' :
     `<p class="event__destination-description">
       ${pointDestination.description}
-    </p>`
-    : '';
+    </p>`;
 
   return /*html*/`
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       ${descriptionTemplate}
-      ${pointDestination.pictures.length > 0 ? createPicturesTemplate(pointDestination) : ''}
+      ${createPicturesTemplate(pointDestination.pictures)}
     </section>
   `;
 }

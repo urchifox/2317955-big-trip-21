@@ -1,18 +1,20 @@
-import { DEFAULT_SORTING_INDEX, SORTING_ABILITIES } from '../const.js';
+import { SORTING_OPTIONS, DEFAULT_SORTING } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createTemplate() {
-  const buttonsTemplate = SORTING_ABILITIES.map((option, index) => {
-    const [[sortingName, sortingAbility]] = Object.entries(option);
+  const buttonsTemplate = SORTING_OPTIONS.map((option) => {
+    const {name, isDisable} = option;
     return /*html*/`
-      <div class="trip-sort__item  trip-sort__item--${sortingName.toLowerCase()}">
+      <div class="trip-sort__item  trip-sort__item--${name}">
         <input class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
-          id="sort-${sortingName.toLowerCase()}"
-          value="sort-${sortingName.toLowerCase()}"
-          ${sortingAbility ? '' : 'disabled'}
-          ${index === DEFAULT_SORTING_INDEX ? 'checked=""' : ''}>
-        <label class="trip-sort__btn" for="sort-${sortingName.toLowerCase()}">
-          ${sortingName}
+          id="sort-${name}"
+          value="sort-${name}"
+          data-sort-type="${name}"
+          ${isDisable ? 'disabled' : ''}
+          ${option === DEFAULT_SORTING ? 'checked' : ''}
+          >
+        <label class="trip-sort__btn" for="sort-${name}">
+          ${name}
         </label>
       </div>
     `;
@@ -26,8 +28,24 @@ function createTemplate() {
 }
 
 export default class SortingView extends AbstractView {
+  #handleSortTypeChange = null;
+
+  constructor({onSortTypeChange}) {
+    super();
+    this.#handleSortTypeChange = onSortTypeChange;
+
+    this.element.addEventListener('click', this.#sortTypeChangeHandler);
+  }
 
   get template() {
     return createTemplate();
   }
+
+  #sortTypeChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'INPUT') {
+      return;
+    }
+
+    this.#handleSortTypeChange(evt.target.dataset.sortType);
+  };
 }

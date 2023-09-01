@@ -20,8 +20,7 @@ function showPast(points) {
 function calculateFilters(points) {
   const calculatedFilters = {};
   FILTRATION_OPTIONS.map((option) => {
-    const [[filterName, filterCallback]] = Object.entries(option);
-    calculatedFilters[filterName] = filterCallback(points).length;
+    calculatedFilters[option.name] = option.method(points).length;
   });
   return calculatedFilters;
 }

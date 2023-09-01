@@ -1,4 +1,5 @@
 import { showAll, showFuture, showPast, showPresent } from './utils/filters';
+import { sortByDay, sortByPrice, sortByTime } from './utils/sorting';
 
 export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
@@ -24,20 +25,52 @@ export const CITIES_DESCRIPTIONS = [
 export const MAX_PICTURES_COUNT = 10;
 
 export const FILTRATION_OPTIONS = [
-  {'EVERYTHING': showAll},
-  {'FUTURE'    : showFuture},
-  {'PRESENT'   : showPresent},
-  {'PAST'      : showPast},
+  {
+    name: 'EVERYTHING',
+    method: showAll,
+  },
+  {
+    name: 'FUTURE',
+    method: showFuture,
+  },
+  {
+    name: 'PRESENT',
+    method: showPresent,
+  },
+  {
+    name: 'PAST',
+    method: showPast,
+  },
 ];
 
-export const DEFAULT_FILTRATION_INDEX = 0;
+export const DEFAULT_FILTRATION = FILTRATION_OPTIONS[0];
 
-export const SORTING_ABILITIES = [
-  {'DAY': true},
-  {'EVENT': false},
-  {'TIME': true},
-  {'PRICE': true},
-  {'OFFERS': false},
+export const SORTING_OPTIONS = [
+  {
+    name: 'day',
+    method: sortByDay,
+    isDisable: false,
+  },
+  {
+    name: 'event',
+    method: null,
+    isDisable: true,
+  },
+  {
+    name: 'time',
+    method: sortByTime,
+    isDisable: false,
+  },
+  {
+    name: 'price',
+    method: sortByPrice,
+    isDisable: false,
+  },
+  {
+    name: 'offers',
+    method: null,
+    isDisable: true,
+  },
 ];
 
-export const DEFAULT_SORTING_INDEX = 0;
+export const DEFAULT_SORTING = SORTING_OPTIONS[0];

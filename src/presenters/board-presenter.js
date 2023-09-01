@@ -4,6 +4,7 @@ import NoPointsView from '../views/no-points-view.js';
 import SortingView from '../views/sorting-view.js';
 import PointPresenter from './point-presenter.js';
 import { updateItem } from '../utils/common.js';
+import { DEFAULT_SORTING, SORTING_OPTIONS } from '../const.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -14,10 +15,12 @@ export default class BoardPresenter {
 
   #listComponent = new ListView();
   #noPointsComponent = new NoPointsView();
-  #sortingComponent = new SortingView();
+  #sortingComponent = null;
 
   #points = [];
   #pointsPresenters = new Map();
+  #pointEditingId = null;
+  #currentSortType = DEFAULT_SORTING;
 
   constructor({boardContainer: boardContainer, pointsModel, offersModel, destinationsModel}) {
     this.#boardContainer = boardContainer;
@@ -36,7 +39,7 @@ export default class BoardPresenter {
       this.#renderNoPoints();
       return;
     }
-
+    this.#sortPoints(this.#currentSortType.name);
     this.#renderSorting();
     this.#renderPointsList();
   }
@@ -46,6 +49,7 @@ export default class BoardPresenter {
   }
 
   #renderSorting() {
+    this.#sortingComponent = new SortingView({onSortTypeChange: this.#handleSortTypeChange});
     render(this.#sortingComponent, this.#boardContainer);
   }
 
@@ -74,9 +78,28 @@ export default class BoardPresenter {
     this.#pointsPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
-  #handleModeChange = () => {
-    this.#pointsPresenters.forEach((presenter) => presenter.resetView());
+  #handleModeChange = (id) => {
+    if (this.#pointEditingId !== null && this.#pointEditingId !== id) {
+      this.#pointsPresenters.get(this.#pointEditingId).resetView();
+    }
+    this.#pointEditingId = id;
   };
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortPoints(sortType);
+    this.#clearPointsList();
+    this.#renderPointsList();
+  };
+
+  #sortPoints(sortType) {
+    const sortingOption = SORTING_OPTIONS.find((option) => option.name === sortType);
+    this.#points.sort(sortingOption.method);
+
+    this.#currentSortType = sortType;
+  }
 
   #clearPointsList() {
     this.#pointsPresenters.forEach((presenter) => presenter.destroy());

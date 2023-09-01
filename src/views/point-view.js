@@ -1,56 +1,31 @@
 import { getFormattedDate, getDuration } from '../utils/dates.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function getOffers(offersModel, chosenOffersIds) {
-  const chosenOffers = [];
-  chosenOffersIds.forEach((chosenId) => {
-    const chosenOffer = offersModel.find((offer) => offer.id === chosenId);
-    if (chosenOffer) {
-      chosenOffers.push(chosenOffer);
-    }
-  });
-  return chosenOffers;
-}
-
-function getOffersTemplate(offers) {
-  let markup = '';
-  offers.forEach((offer) => {
-    markup += `
-      <li class="event__offer">
-        <span class="event__offer-title">${offer.name}</span>
-        +€&nbsp;
-        <span class="event__offer-price">${offer.price}</span>
-      </li>
-    `;
-  });
-  return markup;
-}
-
-//TODO сюда не модель должна приходить
-function createTemplate(point, offersModel, destination) {
-  const {type, periodStart, periodEnd, price, isFavorite, chosenOffers: chosenOffersIds} = point;
+function createTemplate(point, offers, destination) {
+  const {type, periodStart, periodEnd, price, isFavorite} = point;
 
   const dateStart = getFormattedDate(periodStart, 'MMM DD');
   const timeStart = getFormattedDate(periodStart, 'HH:mm');
   const timeEnd = getFormattedDate(periodEnd, 'HH:mm');
   const duration = getDuration(periodStart, periodEnd);
   const favoriteClass = (isFavorite) ? 'event__favorite-btn--active' : '';
-  const pointType = type.toLowerCase();
 
-  const destinationName = destination.name;
-
-  const chosenOffers = getOffers(offersModel, chosenOffersIds);
-  const offersMarkup = getOffersTemplate(chosenOffers);
-
+  const offersMarkup = offers.reduce((markup, offer) => `${markup}
+      <li class="event__offer">
+        <span class="event__offer-title">${offer.name}</span>
+        +€&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
+      </li>
+    `, '');
 
   return /*html*/`
     <li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime="2019-03-18">${dateStart}</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${pointType}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} ${destinationName}</h3>
+        <h3 class="event__title">${type} ${destination.name}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="2019-03-18T10:30">${timeStart}</time>
