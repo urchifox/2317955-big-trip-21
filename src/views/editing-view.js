@@ -14,7 +14,7 @@ function createOffersTemplate(point, allOffers) {
       <input class="event__offer-checkbox  visually-hidden" type="checkbox" name="event-offer-luggage"
         id="event-offer-${point.id}-${offer.id}"
         value="${offer.id}"
-        ${point.chosenOffers.includes(offer.id) ? 'checked="' : ''} ">
+        ${point.offers.includes(offer.id) ? 'checked="' : ''} ">
       <label class="event__offer-label" for="event-offer-${point.id}-${offer.id}">
         <span class="event__offer-title">${offer.name}</span>
         +€&nbsp;
@@ -70,10 +70,10 @@ function createDestinationTemplate(pointDestination) {
 }
 
 function createTemplate(point, allOffers, allDestinations) {
-  const dateStart = getFormattedDate(point.periodStart, 'DD/MM/YY HH:mm');
-  const dateEnd = getFormattedDate(point.periodEnd, 'DD/MM/YY HH:mm');
+  const dateStart = getFormattedDate(point.dateFrom, 'DD/MM/YY HH:mm');
+  const dateEnd = getFormattedDate(point.dateTo, 'DD/MM/YY HH:mm');
 
-  const pointDestination = allDestinations.find((destination) => destination.id === point.destinationId);
+  const pointDestination = allDestinations.find((destination) => destination.id === point.destination);
 
   const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
       <div class="event__type-item">
@@ -134,7 +134,7 @@ function createTemplate(point, allOffers, allDestinations) {
               <span class="visually-hidden">Price</span>
               €
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.price}">
+            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.basePrice}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -200,16 +200,16 @@ export default class EditingView extends AbstractStatefulView {
 
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
-    this.updateElement({type: evt.target.value, chosenOffers: []});
+    this.updateElement({type: evt.target.value, offers: []});
   };
 
   #destinationChangeHandler = (evt) => {
     const chosenDestination = this.#allDestinations.find((destination) => destination.name === evt.target.value);
-    this.updateElement({destinationId: chosenDestination.id});
+    this.updateElement({destination: chosenDestination.id});
   };
 
   #priceChangeHandler = (evt) => {
-    this.updateElement({price: evt.target.value});
+    this.updateElement({basePrice: evt.target.value});
   };
 
   #offersChangeHandler = (evt) => {
@@ -217,7 +217,7 @@ export default class EditingView extends AbstractStatefulView {
       return;
     }
 
-    const chosenOffers = this._state.chosenOffers;
+    const chosenOffers = this._state.offers;
     const offerId = parseInt(evt.target.value, 10);
     const offerIndex = chosenOffers.indexOf(offerId);
 
@@ -228,6 +228,6 @@ export default class EditingView extends AbstractStatefulView {
       chosenOffers.push(offerId);
     }
 
-    this.updateElement({chosenOffers: chosenOffers});
+    this.updateElement({offers: chosenOffers});
   };
 }

@@ -6,15 +6,15 @@ function showAll(points) {
 }
 
 function showFuture(points) {
-  return points.filter((point) => isFutureDate(point.periodStart));
+  return points.filter((point) => isFutureDate(point.dateFrom));
 }
 
 function showPresent(points) {
-  return points.filter((point) => (isPastDate(point.periodStart) || isTodayDate(point.periodStart)) && (isFutureDate(point.periodEnd) || isTodayDate(point.periodEnd)));
+  return points.filter((point) => (isPastDate(point.dateFrom) || isTodayDate(point.dateFrom)) && (isFutureDate(point.dateTo) || isTodayDate(point.dateTo)));
 }
 
 function showPast(points) {
-  return points.filter((point) => isPastDate(point.periodEnd));
+  return points.filter((point) => isPastDate(point.dateTo));
 }
 
 function calculateFilters(points) {

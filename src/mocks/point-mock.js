@@ -22,13 +22,13 @@ class PointMock {
     const date1 = `${getRandomInteger(12) + 1}/${getRandomInteger(31) + 1}/2023 ${getRandomInteger(24)}:${getRandomInteger(59)}`;
     const date2 = `${getRandomInteger(12) + 1}/${getRandomInteger(31) + 1}/2023 ${getRandomInteger(24)}:${getRandomInteger(59)}`;
     this.id = getNonRepeatingId();
-    this.type = getRandomArrayElement(POINT_TYPES);
-    this.destinationId = getRandomInteger(CITIES.length);
-    this.periodStart = new Date(getMinDate(date1, date2));
-    this.periodEnd = new Date(getMaxDate(date1, date2));
-    this.price = getRandomInteger(MAX_POINT_PRICE);
+    this.basePrice = getRandomInteger(MAX_POINT_PRICE);
+    this.dateFrom = new Date(getMinDate(date1, date2));
+    this.dateTo = new Date(getMaxDate(date1, date2));
+    this.destination = getRandomInteger(CITIES.length);
     this.isFavorite = Boolean(getRandomInteger(2));
-    this.chosenOffers = getChosenOffersId(this.type);
+    this.type = getRandomArrayElement(POINT_TYPES);
+    this.offers = getChosenOffersId(this.type);
   }
 }
 
