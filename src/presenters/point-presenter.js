@@ -46,10 +46,9 @@ export default class PointPresenter {
 
     this.#pointEditComponent = new EditingView({
       point: this.#point,
-      pointDestination: this.#destinationsModel.getDestinationById(this.#point.destinationId),
       onFormSubmit: this.#handleFormSubmit,
-      offersByType: this.#offersModel.getOffersByType(this.#point.type),
-      allDestinationsNames: this.#destinationsModel.allDestinationsNames,
+      offersByType: this.#offersModel.offers,
+      allDestinations: this.#destinationsModel.destinations,
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -77,6 +76,7 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
   }
@@ -99,6 +99,7 @@ export default class PointPresenter {
       return;
     }
     evt.preventDefault();
+    this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToCard();
   };
 
