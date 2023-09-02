@@ -38,8 +38,8 @@ function createPicturesTemplate(pictures) {
   if (pictures.length === 0) {
     return '';
   }
-  const picturesTemplate = pictures.map((picture) => /*html*/`
-    <img class="event__photo" src="${picture}" alt="Event photo"></img>
+  const picturesTemplate = pictures.map(({src, description}) => /*html*/`
+    <img class="event__photo" src="${src}" alt="${description}"></img>
   `).join(' ');
 
   return /*html*/`

@@ -16,10 +16,15 @@ function makeNextArrayElementGenerator(items) {
 }
 
 function getRandomPictures(maxCount) {
-  return Array.from(
-    {length: getRandomInteger(maxCount)},
-    () => `https://loremflickr.com/248/152?random=${getRandomInteger(100)}`
-  );
+  const array = [];
+  for(let i = 0; i < maxCount; i++) {
+    array.push({
+      src: `https://loremflickr.com/248/152?random=${getRandomInteger(100)}`,
+      description: 'some picture description',
+    });
+  }
+
+  return array;
 }
 
 function makeNonRepeatingIdGenerator(maxId) {
