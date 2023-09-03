@@ -2,8 +2,8 @@ import { POINT_TYPES } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { getFormattedDate } from '../utils/dates.js';
 
-function createOffersTemplate(point, allOffers) {
-  const offersByType = allOffers.filter((offer) => offer.type === point.type);
+function createOffersTemplate(point, offers) {
+  const offersByType = offers.find((offer) => offer.type === point.type).offers;
 
   if (offersByType.length === 0) {
     return '';
@@ -16,7 +16,7 @@ function createOffersTemplate(point, allOffers) {
         value="${offer.id}"
         ${point.offers.includes(offer.id) ? 'checked="' : ''} ">
       <label class="event__offer-label" for="event-offer-${point.id}-${offer.id}">
-        <span class="event__offer-title">${offer.name}</span>
+        <span class="event__offer-title">${offer.title}</span>
         +€&nbsp;
         <span class="event__offer-price">${offer.price}</span>
       </label>
@@ -153,21 +153,21 @@ function createTemplate(point, allOffers, allDestinations) {
 }
 
 export default class EditingView extends AbstractStatefulView {
-  #offersByType = [];
+  offers = [];
   #allDestinations = [];
   #handleFormSubmit = null;
 
-  constructor({point, onFormSubmit, offersByType, allDestinations}) {
+  constructor({point, onFormSubmit, offersByType: offers, allDestinations}) {
     super();
     this._setState(EditingView.pastePointToState(point));
     this.#handleFormSubmit = onFormSubmit;
-    this.#offersByType = offersByType;
+    this.offers = offers;
     this.#allDestinations = allDestinations;
     this._restoreHandlers();
   }
 
   get template() {
-    return createTemplate(this._state, this.#offersByType, this.#allDestinations);
+    return createTemplate(this._state, this.offers, this.#allDestinations);
   }
 
   _restoreHandlers() {

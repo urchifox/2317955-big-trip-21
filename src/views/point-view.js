@@ -12,7 +12,7 @@ function createTemplate(point, offers, destination) {
 
   const offersTemplate = offers.reduce((markup, offer) => `${markup}
       <li class="event__offer">
-        <span class="event__offer-title">${offer.name}</span>
+        <span class="event__offer-title">${offer.title}</span>
         +€&nbsp;
         <span class="event__offer-price">${offer.price}</span>
       </li>

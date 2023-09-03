@@ -4,11 +4,12 @@ import { getMinDate, getMaxDate } from '../utils/dates.js';
 import { offersMocks } from './offer-mock.js';
 
 function getChosenOffersId(type) {
-  const allOffers = offersMocks.filter((offer) => offer.type === type);
+  const offersByType = offersMocks.find((offer) => offer.type === type).offers;
+
   const offersId = [];
-  allOffers.forEach((offer) => offersId.push(offer.id));
+  offersByType.forEach((offer) => offersId.push(offer.id));
   const randomIds = Array.from(
-    {length: getRandomInteger(allOffers.length)},
+    {length: getRandomInteger(offersByType.length)},
     () => getRandomArrayElement(offersId)
   );
 

@@ -7,7 +7,7 @@ export const POINTS_COUNT = 5;
 
 export const MAX_POINT_PRICE = 5000;
 
-export const OFFERS_COUNT = 20;
+export const MAX_OFFERS_COUNT = 7;
 
 export const MAX_OFFER_PRICE = 1000;
 
