@@ -30,14 +30,16 @@ function getRandomPictures(maxCount) {
 function makeNonRepeatingIdGenerator(maxId) {
   const ids = [];
   return () => {
-    let newId = getRandomInteger(maxId);
+    // TOFIX из-за перевода в строковый формат не работают чекбоксы офферов
+    let newId = getRandomInteger(maxId).toString();
 
     if (ids.length >= maxId) {
       return null;
     }
 
     while (ids.includes(newId)) {
-      newId = getRandomInteger(maxId);
+      // TOFIX из-за перевода в строковый формат не работают чекбоксы офферов
+      newId = getRandomInteger(maxId).toString();
     }
 
     ids.push(newId);
