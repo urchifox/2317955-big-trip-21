@@ -3,6 +3,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
+import { isFormValid } from '../utils/common.js';
 
 function createOffersTemplate(point, offers) {
   const offersByType = offers.find((offer) => offer.type === point.type).offers;
@@ -53,6 +54,10 @@ function createPicturesTemplate(pictures) {
 }
 
 function createDestinationTemplate(pointDestination) {
+  if (!pointDestination) {
+    return '';
+  }
+
   if (!pointDestination.description && !pointDestination.pictures) {
     return '';
   }
@@ -72,9 +77,6 @@ function createDestinationTemplate(pointDestination) {
 }
 
 function createTemplate(point, allOffers, allDestinations) {
-  const dateStart = point.dateFrom;
-  const dateEnd = point.dateTo;
-
   const pointDestination = allDestinations.find((destination) => destination.id === point.destination);
 
   const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
@@ -116,7 +118,7 @@ function createTemplate(point, allOffers, allDestinations) {
               ${point.type}
             </label>
             <input required class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" list="destination-list-1"
-              value="${pointDestination.name}"
+              value="${pointDestination?.name ?? ''}"
             >
             <datalist id="destination-list-1">
               ${destinationsNamesTemplate}
@@ -125,10 +127,14 @@ function createTemplate(point, allOffers, allDestinations) {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateStart}">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time"
+              value="${point.dateFrom ?? ''}"
+            >
             —
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateEnd}">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time"
+              value="${point.dateTo ?? ''}"
+            >
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -140,7 +146,7 @@ function createTemplate(point, allOffers, allDestinations) {
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit"
-            ${(point.dateFrom === undefined || point.dateTo === undefined) ? 'disabled' : ''}
+            ${isFormValid(point) ? '' : 'disabled'}
           >Save</button>
           <button class="event__reset-btn" type="reset">Delete</button>
           <button class="event__rollup-btn" type="button">
@@ -225,12 +231,17 @@ export default class EditingView extends AbstractStatefulView {
   };
 
   #destinationChangeHandler = (evt) => {
+    if (evt.target.value === '') {
+      this.updateElement({destination: ''});
+      return;
+    }
     const chosenDestination = this.#allDestinations.find((destination) => destination.name === evt.target.value);
     this.updateElement({destination: chosenDestination.id});
   };
 
   #priceChangeHandler = (evt) => {
-    this.updateElement({basePrice: evt.target.value});
+    const newPrice = parseInt(evt.target.value, 10);
+    this.updateElement({basePrice: (Number.isNaN(newPrice) ? 0 : newPrice) });
   };
 
   #offersChangeHandler = (evt) => {
