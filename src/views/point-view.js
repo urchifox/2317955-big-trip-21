@@ -2,17 +2,17 @@ import { getFormattedDate, getDuration } from '../utils/dates.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createTemplate(point, offers, destination) {
-  const {type, periodStart, periodEnd, price, isFavorite} = point;
+  const {type, dateFrom, dateTo, basePrice, isFavorite} = point;
 
-  const dateStart = getFormattedDate(periodStart, 'MMM DD');
-  const timeStart = getFormattedDate(periodStart, 'HH:mm');
-  const timeEnd = getFormattedDate(periodEnd, 'HH:mm');
-  const duration = getDuration(periodStart, periodEnd);
+  const dateStart = getFormattedDate(dateFrom, 'MMM DD');
+  const timeStart = getFormattedDate(dateFrom, 'HH:mm');
+  const timeEnd = getFormattedDate(dateTo, 'HH:mm');
+  const duration = getDuration(dateFrom, dateTo);
   const favoriteClass = (isFavorite) ? 'event__favorite-btn--active' : '';
 
-  const offersMarkup = offers.reduce((markup, offer) => `${markup}
+  const offersTemplate = offers.reduce((markup, offer) => `${markup}
       <li class="event__offer">
-        <span class="event__offer-title">${offer.name}</span>
+        <span class="event__offer-title">${offer.title}</span>
         +€&nbsp;
         <span class="event__offer-price">${offer.price}</span>
       </li>
@@ -35,11 +35,11 @@ function createTemplate(point, offers, destination) {
           <p class="event__duration">${duration}</p>
         </div>
         <p class="event__price">
-          €&nbsp;<span class="event__price-value">${price}</span>
+          €&nbsp;<span class="event__price-value">${basePrice}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${offersMarkup}
+          ${offersTemplate}
         </ul>
         <button class="event__favorite-btn ${favoriteClass}" type="button">
           <span class="visually-hidden">Add to favorite</span>
@@ -56,9 +56,9 @@ function createTemplate(point, offers, destination) {
 }
 
 export default class PointView extends AbstractView {
-  #point = null;
-  #offers = null;
-  #destination = null;
+  #point = {};
+  #offers = [];
+  #destination = {};
   #handleEditClick = null;
   #handleFavoriteClick = null;
 

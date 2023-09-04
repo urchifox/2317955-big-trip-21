@@ -7,11 +7,11 @@ function createTemplate(filtersInformation) {
     return /*html*/`
       <div class="trip-filters__filter">
         <input class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter"
-          id="filter-${filterName.toLowerCase()}"
-          value="${filterName.toLowerCase()}"
+          id="filter-${filterName}"
+          value="${filterName}"
           ${filtersInformation[filterName] === 0 ? 'disabled' : ''}
-          ${option === DEFAULT_FILTRATION ? 'checked=""' : ''}>
-        <label class="trip-filters__filter-label" for="filter-${filterName.toLowerCase()}">
+          ${option === DEFAULT_FILTRATION ? 'checked' : ''}>
+        <label class="trip-filters__filter-label" for="filter-${filterName}">
           ${filterName}
         </label>
       </div>
@@ -27,7 +27,7 @@ function createTemplate(filtersInformation) {
 }
 
 export default class FiltrationView extends AbstractView {
-  #filtersInformation = null;
+  #filtersInformation = {};
 
   constructor ({filtersInformation}) {
     super();

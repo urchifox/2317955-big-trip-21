@@ -10,7 +10,7 @@ const Mode = {
 
 export default class PointPresenter {
   #pointsListContainer = null;
-  #point = null;
+  #point = {};
   #pointComponent = null;
   #pointEditComponent = null;
 
@@ -38,8 +38,8 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointView({
       point: this.#point,
-      offers: this.#offersModel.getOffersByIds(this.#point.chosenOffers),
-      destination: this.#destinationsModel.getDestinationById(this.#point.destinationId),
+      offers: this.#offersModel.getOffersByIds(this.#point.offers),
+      destination: this.#destinationsModel.getDestinationById(this.#point.destination),
       onEditClick: this.#handleEditClick,
       onFavoriteClick: this.#handleFavoriteClick,
     });

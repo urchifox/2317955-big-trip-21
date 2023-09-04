@@ -7,7 +7,7 @@ export const POINTS_COUNT = 5;
 
 export const MAX_POINT_PRICE = 5000;
 
-export const OFFERS_COUNT = 20;
+export const MAX_OFFERS_COUNT = 7;
 
 export const MAX_OFFER_PRICE = 1000;
 
@@ -26,19 +26,19 @@ export const MAX_PICTURES_COUNT = 10;
 
 export const FILTRATION_OPTIONS = [
   {
-    name: 'EVERYTHING',
+    name: 'everything',
     method: showAll,
   },
   {
-    name: 'FUTURE',
+    name: 'future',
     method: showFuture,
   },
   {
-    name: 'PRESENT',
+    name: 'present',
     method: showPresent,
   },
   {
-    name: 'PAST',
+    name: 'past',
     method: showPast,
   },
 ];
