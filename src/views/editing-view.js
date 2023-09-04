@@ -1,6 +1,8 @@
 import { POINT_TYPES } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import { getFormattedDate } from '../utils/dates.js';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 function createOffersTemplate(point, offers) {
   const offersByType = offers.find((offer) => offer.type === point.type).offers;
@@ -70,8 +72,8 @@ function createDestinationTemplate(pointDestination) {
 }
 
 function createTemplate(point, allOffers, allDestinations) {
-  const dateStart = getFormattedDate(point.dateFrom, 'DD/MM/YY HH:mm');
-  const dateEnd = getFormattedDate(point.dateTo, 'DD/MM/YY HH:mm');
+  const dateStart = point.dateFrom;
+  const dateEnd = point.dateTo;
 
   const pointDestination = allDestinations.find((destination) => destination.id === point.destination);
 
@@ -137,7 +139,9 @@ function createTemplate(point, allOffers, allDestinations) {
             <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.basePrice}">
           </div>
 
-          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+          <button class="event__save-btn  btn  btn--blue" type="submit"
+            ${(point.dateFrom === undefined || point.dateTo === undefined) ? 'disabled' : ''}
+          >Save</button>
           <button class="event__reset-btn" type="reset">Delete</button>
           <button class="event__rollup-btn" type="button">
             <span class="visually-hidden">Open event</span>
@@ -156,6 +160,8 @@ export default class EditingView extends AbstractStatefulView {
   offers = [];
   #allDestinations = [];
   #handleFormSubmit = null;
+  #datepickerTo = null;
+  #datepickerFrom = null;
 
   constructor({point, onFormSubmit, offersByType: offers, allDestinations}) {
     super();
@@ -170,12 +176,27 @@ export default class EditingView extends AbstractStatefulView {
     return createTemplate(this._state, this.offers, this.#allDestinations);
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if(this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+
+    if(this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
+  }
+
   _restoreHandlers() {
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
     this.element.querySelector('.event__details').addEventListener('click', this.#offersChangeHandler);
+    this.#setDatePicker();
   }
 
   reset(point) {
@@ -230,4 +251,38 @@ export default class EditingView extends AbstractStatefulView {
 
     this.updateElement({offers: chosenOffers});
   };
+
+  #fromDateChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate,
+    });
+  };
+
+  #toDateChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateTo: userDate,
+    });
+  };
+
+  #setDatePicker() {
+    this.#datepickerFrom = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        dateFormat: 'd/m/y H:i',
+        enableTime: true,
+        defaultDate: this._state.dateFrom,
+        onChange: this.#fromDateChangeHandler,
+      },
+    );
+
+    this.#datepickerTo = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        dateFormat: 'd/m/y H:i',
+        enableTime: true,
+        defaultDate: this._state.dateTo,
+        onChange: this.#toDateChangeHandler,
+      },
+    );
+  }
 }
