@@ -14,10 +14,6 @@ const pointsModel = new PointsModel();
 const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
 
-console.log('pointsModel :>> ', pointsModel.points);
-console.log('offersModel :>> ', offersModel.allOffers);
-console.log('destinationsModel :>> ', destinationsModel.destinations);
-
 const boardPresenter = new BoardPresenter({
   boardContainer: boardContainer,
   pointsModel,
