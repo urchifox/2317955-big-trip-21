@@ -17,7 +17,7 @@ function createOffersTemplate(point, offers) {
       <input class="event__offer-checkbox  visually-hidden" type="checkbox" name="event-offer-luggage"
         id="event-offer-${point.id}-${offer.id}"
         value="${offer.id}"
-        ${point.offers.includes(offer.id) ? 'checked="' : ''} ">
+        ${point.offers.includes(offer.id) ? 'checked' : ''} ">
       <label class="event__offer-label" for="event-offer-${point.id}-${offer.id}">
         <span class="event__offer-title">${offer.title}</span>
         +€&nbsp;
@@ -250,9 +250,8 @@ export default class EditingView extends AbstractStatefulView {
     }
 
     const chosenOffers = this._state.offers;
-    const offerId = parseInt(evt.target.value, 10);
+    const offerId = evt.target.value;
     const offerIndex = chosenOffers.indexOf(offerId);
-
 
     if (offerIndex >= 0) {
       chosenOffers.splice(offerIndex, 1);

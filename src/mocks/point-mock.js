@@ -26,7 +26,6 @@ class PointMock {
     this.basePrice = getRandomInteger(MAX_POINT_PRICE);
     this.dateFrom = new Date(getMinDate(date1, date2));
     this.dateTo = new Date(getMaxDate(date1, date2));
-    // TOFIX из-за перевода в строковый формат не работают чекбоксы офферов
     this.destination = getRandomInteger(CITIES.length).toString();
     this.isFavorite = Boolean(getRandomInteger(2));
     this.type = getRandomArrayElement(POINT_TYPES);
