@@ -20,7 +20,7 @@ export default class BoardPresenter {
   #points = [];
   #pointsPresenters = new Map();
   #pointEditingId = null;
-  #currentSortName = DEFAULT_SORTING.name;
+  #currentSortOption = DEFAULT_SORTING;
 
   constructor({boardContainer: boardContainer, pointsModel, offersModel, destinationsModel}) {
     this.#boardContainer = boardContainer;
@@ -44,7 +44,7 @@ export default class BoardPresenter {
       return;
     }
 
-    this.#sortPoints(this.#currentSortName);
+    this.#sortPoints(this.#currentSortOption);
     this.#renderSorting();
     this.#renderPointsList();
   }
@@ -92,20 +92,20 @@ export default class BoardPresenter {
   };
 
   #handleSortTypeChange = (sortName) => {
-    if (this.#currentSortName === sortName) {
+    const sortingOption = SORTING_OPTIONS.find((option) => option.name === sortName);
+
+    if (this.#currentSortOption === sortingOption) {
       return;
     }
 
-    this.#sortPoints(sortName);
+    this.#sortPoints(sortingOption);
     this.#clearPointsList();
     this.#renderPointsList();
   };
 
-  #sortPoints(sortName) {
-    this.#currentSortName = sortName;
-
-    const sortingOption = SORTING_OPTIONS.find((option) => option.name === this.#currentSortName);
-    this.#points.sort(sortingOption.method);
+  #sortPoints(newSortOption) {
+    this.#currentSortOption = newSortOption;
+    this.#points.sort(this.#currentSortOption.method);
   }
 
   #clearPointsList() {
