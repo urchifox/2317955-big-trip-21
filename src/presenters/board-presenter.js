@@ -39,6 +39,7 @@ export default class BoardPresenter {
       this.#renderNoPoints();
       return;
     }
+
     this.#sortPoints(this.#currentSortName);
     this.#renderSorting();
     this.#renderPointsList();
@@ -82,6 +83,7 @@ export default class BoardPresenter {
     if (this.#pointEditingId !== null && this.#pointEditingId !== id) {
       this.#pointsPresenters.get(this.#pointEditingId).resetView();
     }
+
     this.#pointEditingId = id;
   };
 
@@ -89,6 +91,7 @@ export default class BoardPresenter {
     if (this.#currentSortName === sortName) {
       return;
     }
+
     this.#sortPoints(sortName);
     this.#clearPointsList();
     this.#renderPointsList();

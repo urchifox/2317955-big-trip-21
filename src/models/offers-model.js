@@ -8,11 +8,7 @@ export default class OffersModel {
   }
 
   get allOffers() {
-    const allOffers = [];
-    for(const offer of this.#offers) {
-      allOffers.push(...offer.offers);
-    }
-    return allOffers;
+    return this.#offers.reduce((accumulator, offersByType) => [...accumulator, ...offersByType.offers], []);
   }
 
   getOffersByIds(offersIds) {

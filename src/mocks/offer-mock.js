@@ -11,15 +11,12 @@ class OfferMock {
   }
 }
 
-const offersMocks = [];
-for(const type of POINT_TYPES) {
-  offersMocks.push({
-    type: type,
-    offers: Array.from(
-      {length: getRandomInteger(MAX_OFFERS_COUNT)},
-      () => new OfferMock(type)
-    ),
-  });
-}
+const offersMocks = POINT_TYPES.map((type) => ({
+  type: type,
+  offers: Array.from(
+    {length: getRandomInteger(MAX_OFFERS_COUNT)},
+    () => new OfferMock(type)
+  )
+}));
 
 export {offersMocks};
