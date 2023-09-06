@@ -1,7 +1,3 @@
-function updateItem(items, update) {
-  return items.map((item) => item.id === update.id ? update : item);
-}
-
 function isFormValid(point) {
   return point.destination !== ''
     && point.basePrice !== ''
@@ -12,6 +8,5 @@ function isFormValid(point) {
 }
 
 export {
-  updateItem,
   isFormValid
 };

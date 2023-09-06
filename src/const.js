@@ -73,4 +73,16 @@ export const SORTING_OPTIONS = [
   },
 ];
 
+export const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
 export const DEFAULT_SORTING = SORTING_OPTIONS[0];

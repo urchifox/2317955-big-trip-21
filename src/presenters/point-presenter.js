@@ -2,6 +2,7 @@ import { remove, render, replace } from '../framework/render';
 import { isEscapeKeydown } from '../utils/random-elements';
 import EditingView from '../views/editing-view';
 import PointView from '../views/point-view';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -46,9 +47,10 @@ export default class PointPresenter {
 
     this.#pointEditComponent = new EditingView({
       point: this.#point,
-      onFormSubmit: this.#handleFormSubmit,
       offersByType: this.#offersModel.offers,
       allDestinations: this.#destinationsModel.destinations,
+      onFormSubmit: this.#handleFormSubmit,
+      onDeleteClick: this.#handleDeleteClick,
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -86,12 +88,35 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = (point) => {
-    this.#handleDataChange(point);
+    // Проверяем, поменялись ли в задаче данные, которые попадают под фильтрацию,
+    // а значит требуют перерисовки списка - если таких нет, это PATCH-обновление
+    // const isMinorUpdate =
+    //   !isDatesEqual(this.#task.dueDate, update.dueDate) ||
+    //   isTaskRepeating(this.#task.repeating) !== isTaskRepeating(update.repeating);
+
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      // isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      point,
+    );
     this.#replaceFormToCard();
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      {...this.#point, isFavorite: !this.#point.isFavorite},
+    );
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
   };
 
   #escKeyDownHandler = (evt) => {
