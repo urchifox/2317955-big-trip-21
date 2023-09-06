@@ -3,7 +3,7 @@ import ListView from '../views/list-view.js';
 import NoPointsView from '../views/no-points-view.js';
 import SortingView from '../views/sorting-view.js';
 import PointPresenter from './point-presenter.js';
-import { DEFAULT_SORTING, SORTING_OPTIONS, UpdateType, UserAction } from '../const.js';
+import { DEFAULT_SORTING, FILTRATION_OPTIONS, SORTING_OPTIONS, UpdateType, UserAction } from '../const.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -11,6 +11,7 @@ export default class BoardPresenter {
   #pointsModel = null;
   #offersModel = null;
   #destinationsModel = null;
+  #filtrationModel = null;
 
   #listComponent = new ListView();
   #noPointsComponent = new NoPointsView();
@@ -20,17 +21,26 @@ export default class BoardPresenter {
   #pointEditingId = null;
   #currentSortOption = DEFAULT_SORTING;
 
-  constructor({boardContainer: boardContainer, pointsModel, offersModel, destinationsModel}) {
+  constructor({boardContainer, pointsModel, offersModel, destinationsModel, filtrationModel}) {
     this.#boardContainer = boardContainer;
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
+    this.#filtrationModel = filtrationModel;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filtrationModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
-    return [...this.#pointsModel.points].sort(this.#currentSortOption.method);
+    const points = [...this.#pointsModel.points];
+    console.log('points :>> ', points);
+    const filterType = this.#filtrationModel.currentFilter;
+    console.log('filterType :>> ', filterType);
+    console.log('filterType.method :>> ', filterType.method);
+    const filteredPoints = filterType.method(points);
+
+    return filteredPoints.sort(this.#currentSortOption.method);
   }
 
   init() {
