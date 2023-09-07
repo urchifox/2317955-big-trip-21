@@ -148,10 +148,12 @@ function createTemplate(point, allOffers, allDestinations) {
           <button class="event__save-btn  btn  btn--blue" type="submit"
             ${isFormValid(point) ? '' : 'disabled'}
           >Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
-          <button class="event__rollup-btn" type="button">
-            <span class="visually-hidden">Open event</span>
-          </button>
+          <button class="event__reset-btn" type="reset">
+            ${point.id === '' ? 'Cancel' : 'Delete'}
+           </button>
+           ${point.id === 'template' ? '' : `<button class="event__rollup-btn" type="button">
+              <span class="visually-hidden">Open event</span>
+            </button>`}
         </header>
         <section class="event__details">
           ${createOffersTemplate(point, allOffers)}

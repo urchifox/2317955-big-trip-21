@@ -86,7 +86,7 @@ export const UpdateType = {
 };
 
 export const BLANK_POINT = {
-  id: 'template',
+  id: '',
   basePrice: 0,
   dateFrom: '',
   dateTo: '',
