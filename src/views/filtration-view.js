@@ -1,4 +1,4 @@
-import {DEFAULT_FILTRATION, FILTRATION_OPTIONS } from '../const.js';
+import {FILTRATION_OPTIONS } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createTemplate(filtersInformation, currentFilterType) {
