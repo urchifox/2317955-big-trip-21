@@ -1,4 +1,4 @@
-import { POINT_TYPES } from '../const.js';
+import { BLANK_POINT, POINT_TYPES } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
 
@@ -170,7 +170,7 @@ export default class EditingView extends AbstractStatefulView {
   #datepickerFrom = null;
   #handleDeleteClick = null;
 
-  constructor({point, onFormSubmit, offersByType, allDestinations, onDeleteClick}) {
+  constructor({point = BLANK_POINT, onFormSubmit, offersByType, allDestinations, onDeleteClick}) {
     super();
     this._setState(EditingView.pastePointToState(point));
     this.offers = offersByType;

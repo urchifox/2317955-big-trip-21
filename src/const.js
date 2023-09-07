@@ -85,4 +85,15 @@ export const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
+export const BLANK_POINT = {
+  id: 'template',
+  basePrice: 0,
+  dateFrom: '',
+  dateTo: '',
+  destination: '',
+  isFavorite: false,
+  offers: [],
+  type: 'Flight'
+};
+
 export const DEFAULT_SORTING = SORTING_OPTIONS[0];

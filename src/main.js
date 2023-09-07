@@ -6,10 +6,14 @@ import OffersModel from './models/offers-model.js';
 import DestinationsModel from './models/destinations-model.js';
 import FiltrationModel from './models/filtration-model.js';
 import FiltrationPresenter from './presenters/filtration-presenter.js';
+import NewPointButtonView from './views/new-point-button-view.js';
 
-const tripSummaryContainer = document.querySelector('.trip-controls');
-const filtrationContainer = document.querySelector('.trip-controls__filters');
+const headerContainer = document.querySelector('.trip-main');
+const tripSummaryContainer = headerContainer.querySelector('.trip-controls');
+const filtrationContainer = headerContainer.querySelector('.trip-controls__filters');
 const boardContainer = document.querySelector('.trip-events');
+
+
 const pointsModel = new PointsModel();
 const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
@@ -20,7 +24,8 @@ const boardPresenter = new BoardPresenter({
   pointsModel,
   offersModel,
   destinationsModel,
-  filtrationModel
+  filtrationModel,
+  onNewPointDestroy: handleNewPointFormClose,
 });
 
 const filterPresenter = new FiltrationPresenter({
@@ -29,6 +34,18 @@ const filterPresenter = new FiltrationPresenter({
   pointsModel
 });
 
+const newPointButton = new NewPointButtonView({onClick: handleNewTaskButtonClick});
+
+function handleNewPointFormClose() {
+  newPointButton.element.disabled = false;
+}
+
+function handleNewTaskButtonClick() {
+  boardPresenter.createPoint();
+  newPointButton.element.disabled = true;
+}
+
+render(newPointButton, headerContainer);
 render(new TripSummaryView(), tripSummaryContainer, RenderPosition.BEFOREBEGIN);
 
 filterPresenter.init();
