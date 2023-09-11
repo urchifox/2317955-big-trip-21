@@ -73,4 +73,27 @@ export const SORTING_OPTIONS = [
   },
 ];
 
+export const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+export const BLANK_POINT = {
+  id: '',
+  basePrice: 0,
+  dateFrom: '',
+  dateTo: '',
+  destination: '',
+  isFavorite: false,
+  offers: [],
+  type: 'Flight'
+};
+
 export const DEFAULT_SORTING = SORTING_OPTIONS[0];

@@ -1,7 +1,7 @@
-import {DEFAULT_FILTRATION, FILTRATION_OPTIONS } from '../const.js';
+import {FILTRATION_OPTIONS } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createTemplate(filtersInformation) {
+function createTemplate(filtersInformation, currentFilterType) {
   const filtrationTemplate = FILTRATION_OPTIONS.map((option) => {
     const filterName = option.name;
     return /*html*/`
@@ -10,7 +10,7 @@ function createTemplate(filtersInformation) {
           id="filter-${filterName}"
           value="${filterName}"
           ${filtersInformation[filterName] === 0 ? 'disabled' : ''}
-          ${option === DEFAULT_FILTRATION ? 'checked' : ''}>
+          ${option.name === currentFilterType ? 'checked' : ''}>
         <label class="trip-filters__filter-label" for="filter-${filterName}">
           ${filterName}
         </label>
@@ -27,14 +27,25 @@ function createTemplate(filtersInformation) {
 }
 
 export default class FiltrationView extends AbstractView {
-  #filtersInformation = {};
+  #filtersInformation = null;
+  #currentFilterName = null;
+  #handleFilterTypeChange = null;
 
-  constructor ({filtersInformation}) {
+  constructor ({filtersInformation, currentFilterType, onFilterTypeChange}) {
     super();
     this.#filtersInformation = filtersInformation;
+    this.#currentFilterName = currentFilterType;
+    this.#handleFilterTypeChange = onFilterTypeChange;
+
+    this.element.addEventListener('change', this.#filterTypeChangeHandler);
   }
 
   get template() {
-    return createTemplate(this.#filtersInformation);
+    return createTemplate(this.#filtersInformation, this.#currentFilterName);
   }
+
+  #filterTypeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFilterTypeChange(evt.target.value);
+  };
 }

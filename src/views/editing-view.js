@@ -1,4 +1,4 @@
-import { POINT_TYPES } from '../const.js';
+import { BLANK_POINT, POINT_TYPES } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
 
@@ -148,10 +148,12 @@ function createTemplate(point, allOffers, allDestinations) {
           <button class="event__save-btn  btn  btn--blue" type="submit"
             ${isFormValid(point) ? '' : 'disabled'}
           >Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
-          <button class="event__rollup-btn" type="button">
-            <span class="visually-hidden">Open event</span>
-          </button>
+          <button class="event__reset-btn" type="reset">
+            ${point.id === '' ? 'Cancel' : 'Delete'}
+           </button>
+           ${point.id === 'template' ? '' : `<button class="event__rollup-btn" type="button">
+              <span class="visually-hidden">Open event</span>
+            </button>`}
         </header>
         <section class="event__details">
           ${createOffersTemplate(point, allOffers)}
@@ -168,13 +170,15 @@ export default class EditingView extends AbstractStatefulView {
   #handleFormSubmit = null;
   #datepickerTo = null;
   #datepickerFrom = null;
+  #handleDeleteClick = null;
 
-  constructor({point, onFormSubmit, offersByType: offers, allDestinations}) {
+  constructor({point = BLANK_POINT, onFormSubmit, offersByType, allDestinations, onDeleteClick}) {
     super();
     this._setState(EditingView.pastePointToState(point));
-    this.#handleFormSubmit = onFormSubmit;
-    this.offers = offers;
+    this.offers = offersByType;
     this.#allDestinations = allDestinations;
+    this.#handleFormSubmit = onFormSubmit;
+    this.#handleDeleteClick = onDeleteClick;
     this._restoreHandlers();
   }
 
@@ -202,6 +206,7 @@ export default class EditingView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
     this.element.querySelector('.event__details').addEventListener('click', this.#offersChangeHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
     this.#setDatePicker();
   }
 
@@ -223,6 +228,11 @@ export default class EditingView extends AbstractStatefulView {
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this.#handleFormSubmit(EditingView.pasteStateToPoint(this._state));
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(EditingView.pasteStateToPoint(this._state));
   };
 
   #typeChangeHandler = (evt) => {

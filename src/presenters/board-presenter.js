@@ -1,10 +1,10 @@
-import {render} from '../framework/render.js';
+import {remove, render} from '../framework/render.js';
 import ListView from '../views/list-view.js';
 import NoPointsView from '../views/no-points-view.js';
 import SortingView from '../views/sorting-view.js';
 import PointPresenter from './point-presenter.js';
-import { updateItem } from '../utils/common.js';
-import { DEFAULT_SORTING, SORTING_OPTIONS } from '../const.js';
+import { DEFAULT_FILTRATION, DEFAULT_SORTING, SORTING_OPTIONS, UpdateType, UserAction } from '../const.js';
+import NewPointPresenter from './new-point-presenter.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -12,36 +12,63 @@ export default class BoardPresenter {
   #pointsModel = null;
   #offersModel = null;
   #destinationsModel = null;
+  #filtrationModel = null;
 
   #listComponent = new ListView();
   #noPointsComponent = new NoPointsView();
   #sortingComponent = null;
 
-  #points = [];
   #pointsPresenters = new Map();
+  #newPointPresenter = null;
   #pointEditingId = null;
-  #currentSortName = DEFAULT_SORTING.name;
+  #currentSortOption = DEFAULT_SORTING;
 
-  constructor({boardContainer: boardContainer, pointsModel, offersModel, destinationsModel}) {
+  constructor({boardContainer, pointsModel, offersModel, destinationsModel, filtrationModel, onNewPointDestroy}) {
     this.#boardContainer = boardContainer;
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
+    this.#filtrationModel = filtrationModel;
+
+    this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filtrationModel.addObserver(this.#handleModelEvent);
+
+    this.#newPointPresenter = new NewPointPresenter({
+      pointListContainer: this.#listComponent.element,
+      offersByType: this.#offersModel.offers,
+      allDestinations: this.#destinationsModel.destinations,
+      onDataChange: this.#handleViewAction,
+      onDestroy: onNewPointDestroy,
+    });
+  }
+
+  get points() {
+    const points = [...this.#pointsModel.points];
+    const filterType = this.#filtrationModel.currentFilter;
+    const filteredPoints = filterType.method(points);
+
+    return filteredPoints.sort(this.#currentSortOption.method);
   }
 
   init() {
-    this.#points = [...this.#pointsModel.points];
     this.#renderBoard();
   }
 
+  createPoint() {
+    this.#handleSortTypeChange();
+    this.#filtrationModel. setFilter(UpdateType.MAJOR, DEFAULT_FILTRATION.name);
+    this.#newPointPresenter.init();
+  }
+
   #renderBoard() {
-    if (this.#points.length === 0) {
+    if (this.points.length === 0) {
       this.#renderNoPoints();
       return;
     }
-    this.#sortPoints(this.#currentSortName);
+
     this.#renderSorting();
-    this.#renderPointsList();
+    render(this.#listComponent, this.#boardContainer);
+    this.points.forEach((point) => this.#renderPoint(point));
   }
 
   #renderNoPoints() {
@@ -49,16 +76,11 @@ export default class BoardPresenter {
   }
 
   #renderSorting() {
-    this.#sortingComponent = new SortingView({onSortTypeChange: this.#handleSortTypeChange});
+    this.#sortingComponent = new SortingView({
+      currentSortType: this.#currentSortOption.name,
+      onSortTypeChange: this.#handleSortTypeChange
+    });
     render(this.#sortingComponent, this.#boardContainer);
-  }
-
-  #renderPointsList() {
-    render(this.#listComponent, this.#boardContainer);
-
-    for (const point of this.#points) {
-      this.#renderPoint(point);
-    }
   }
 
   #renderPoint(point) {
@@ -66,43 +88,76 @@ export default class BoardPresenter {
       pointListContainer: this.#listComponent.element,
       offersModel: this.#offersModel,
       destinationsModel: this.#destinationsModel,
-      onDataChange: this.#handlePointChange,
+      onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange,
     });
     pointPresenter.init(point);
     this.#pointsPresenters.set(point.id, pointPresenter);
   }
 
-  #handlePointChange = (updatedPoint) => {
-    this.#points = updateItem(this.#points, updatedPoint);
-    this.#pointsPresenters.get(updatedPoint.id).init(updatedPoint);
+  #handleViewAction = (actionType, updateType, update) => {
+    switch (actionType) {
+      case UserAction.UPDATE_POINT:
+        this.#pointsModel.updatePoint(updateType, update);
+        break;
+      case UserAction.ADD_POINT:
+        this.#pointsModel.addPoint(updateType, update);
+        break;
+      case UserAction.DELETE_POINT:
+        this.#pointsModel.deletePoint(updateType, update);
+        break;
+    }
+  };
+
+  #handleModelEvent = (updateType, data) => {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        // - обновить часть списка (например, когда поменялось описание)
+        this.#pointsPresenters.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+        // - обновить список (например, когда задача ушла в архив)
+        this.#clearBoard();
+        this.#renderBoard();
+        break;
+      case UpdateType.MAJOR:
+        // - обновить всю доску (например, при переключении фильтра)
+        this.#clearBoard({resetSortType: true});
+        this.#renderBoard();
+        break;
+    }
   };
 
   #handleModeChange = (id) => {
+    this.#newPointPresenter.destroy();
     if (this.#pointEditingId !== null && this.#pointEditingId !== id) {
-      this.#pointsPresenters.get(this.#pointEditingId).resetView();
+      this.#pointsPresenters.get(this.#pointEditingId)?.resetView();
     }
+
     this.#pointEditingId = id;
   };
 
-  #handleSortTypeChange = (sortName) => {
-    if (this.#currentSortName === sortName) {
+  #handleSortTypeChange = (sortName = DEFAULT_SORTING.name) => {
+    const sortingOption = SORTING_OPTIONS.find((option) => option.name === sortName);
+
+    if (this.#currentSortOption === sortingOption) {
       return;
     }
-    this.#sortPoints(sortName);
-    this.#clearPointsList();
-    this.#renderPointsList();
+    this.#currentSortOption = sortingOption;
+    this.#clearBoard({resetRenderedTaskCount: true});
+    this.#renderBoard();
   };
 
-  #sortPoints(sortName) {
-    this.#currentSortName = sortName;
-
-    const sortingOption = SORTING_OPTIONS.find((option) => option.name === this.#currentSortName);
-    this.#points.sort(sortingOption.method);
-  }
-
-  #clearPointsList() {
+  #clearBoard({resetSortType = false} = {}) {
+    this.#newPointPresenter.destroy();
     this.#pointsPresenters.forEach((presenter) => presenter.destroy());
     this.#pointsPresenters.clear();
+
+    remove(this.#sortingComponent);
+    remove(this.#noPointsComponent);
+
+    if (resetSortType) {
+      this.#currentSortOption = DEFAULT_SORTING;
+    }
   }
 }

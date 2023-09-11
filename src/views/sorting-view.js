@@ -1,7 +1,7 @@
-import { SORTING_OPTIONS, DEFAULT_SORTING } from '../const.js';
+import {SORTING_OPTIONS} from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createTemplate() {
+function createTemplate(currentSortType) {
   const buttonsTemplate = SORTING_OPTIONS.map((option) => {
     const {name, isDisable} = option;
     return /*html*/`
@@ -11,7 +11,7 @@ function createTemplate() {
           value="sort-${name}"
           data-sort-name="${name}"
           ${isDisable ? 'disabled' : ''}
-          ${option === DEFAULT_SORTING ? 'checked' : ''}
+          ${option.name === currentSortType ? 'checked' : ''}
           >
         <label class="trip-sort__btn" for="sort-${name}">
           ${name}
@@ -29,16 +29,18 @@ function createTemplate() {
 
 export default class SortingView extends AbstractView {
   #handleSortTypeChange = null;
+  #currentSortType = null;
 
-  constructor({onSortTypeChange}) {
+  constructor({onSortTypeChange, currentSortType}) {
     super();
+    this.#currentSortType = currentSortType;
     this.#handleSortTypeChange = onSortTypeChange;
 
     this.element.addEventListener('click', this.#sortTypeChangeHandler);
   }
 
   get template() {
-    return createTemplate();
+    return createTemplate(this.#currentSortType);
   }
 
   #sortTypeChangeHandler = (evt) => {
