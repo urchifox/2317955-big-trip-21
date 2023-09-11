@@ -252,7 +252,7 @@ export default class FormView extends AbstractStatefulView {
       this.updateElement({destination: ''});
       return;
     }
-    
+
     this.updateElement({destination: chosenDestination.id});
   };
 
