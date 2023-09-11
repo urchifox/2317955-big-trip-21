@@ -27,19 +27,19 @@ export const MAX_PICTURES_COUNT = 10;
 export const FILTRATION_OPTIONS = [
   {
     name: 'everything',
-    method: showAll,
+    filter: showAll,
   },
   {
     name: 'future',
-    method: showFuture,
+    filter: showFuture,
   },
   {
     name: 'present',
-    method: showPresent,
+    filter: showPresent,
   },
   {
     name: 'past',
-    method: showPast,
+    filter: showPast,
   },
 ];
 
@@ -48,27 +48,27 @@ export const DEFAULT_FILTRATION = FILTRATION_OPTIONS[0];
 export const SORTING_OPTIONS = [
   {
     name: 'day',
-    method: sortByDay,
+    sortingMethod: sortByDay,
     isDisable: false,
   },
   {
     name: 'event',
-    method: null,
+    sortingMethod: null,
     isDisable: true,
   },
   {
     name: 'time',
-    method: sortByTime,
+    sortingMethod: sortByTime,
     isDisable: false,
   },
   {
     name: 'price',
-    method: sortByPrice,
+    sortingMethod: sortByPrice,
     isDisable: false,
   },
   {
     name: 'offers',
-    method: null,
+    sortingMethod: null,
     isDisable: true,
   },
 ];

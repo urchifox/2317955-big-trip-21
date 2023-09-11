@@ -1,7 +1,7 @@
 import { BLANK_POINT, POINT_TYPES } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
-
+import he from 'he';
 import 'flatpickr/dist/flatpickr.min.css';
 import { isFormValid } from '../utils/common.js';
 
@@ -118,7 +118,7 @@ function createTemplate(point, allOffers, allDestinations) {
               ${point.type}
             </label>
             <input required class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" list="destination-list-1"
-              value="${pointDestination?.name ?? ''}"
+              value="${he.encode(pointDestination?.name ?? '')}"
             >
             <datalist id="destination-list-1">
               ${destinationsNamesTemplate}
@@ -164,7 +164,7 @@ function createTemplate(point, allOffers, allDestinations) {
   `;
 }
 
-export default class EditingView extends AbstractStatefulView {
+export default class FormView extends AbstractStatefulView {
   offers = [];
   #allDestinations = [];
   #handleFormSubmit = null;
@@ -174,7 +174,7 @@ export default class EditingView extends AbstractStatefulView {
 
   constructor({point = BLANK_POINT, onFormSubmit, offersByType, allDestinations, onDeleteClick}) {
     super();
-    this._setState(EditingView.pastePointToState(point));
+    this._setState(FormView.pastePointToState(point));
     this.offers = offersByType;
     this.#allDestinations = allDestinations;
     this.#handleFormSubmit = onFormSubmit;
@@ -211,7 +211,7 @@ export default class EditingView extends AbstractStatefulView {
   }
 
   reset(point) {
-    this.updateElement(EditingView.pastePointToState(point),);
+    this.updateElement(FormView.pastePointToState(point),);
   }
 
   static pastePointToState(point) {
@@ -227,12 +227,12 @@ export default class EditingView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(EditingView.pasteStateToPoint(this._state));
+    this.#handleFormSubmit(FormView.pasteStateToPoint(this._state));
   };
 
   #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleDeleteClick(EditingView.pasteStateToPoint(this._state));
+    this.#handleDeleteClick(FormView.pasteStateToPoint(this._state));
   };
 
   #typeChangeHandler = (evt) => {
@@ -245,7 +245,14 @@ export default class EditingView extends AbstractStatefulView {
       this.updateElement({destination: ''});
       return;
     }
+
     const chosenDestination = this.#allDestinations.find((destination) => destination.name === evt.target.value);
+
+    if (!chosenDestination) {
+      this.updateElement({destination: ''});
+      return;
+    }
+    
     this.updateElement({destination: chosenDestination.id});
   };
 

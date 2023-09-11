@@ -2,14 +2,14 @@ import Observable from '../framework/observable.js';
 import {DEFAULT_FILTRATION, FILTRATION_OPTIONS} from '../const.js';
 
 export default class FiltrationModel extends Observable {
-  #currentFilterOption = DEFAULT_FILTRATION;
+  #currentFiltration = DEFAULT_FILTRATION;
 
-  get currentFilter() {
-    return this.#currentFilterOption;
+  get currentFiltration() {
+    return this.#currentFiltration;
   }
 
-  setFilter(updateType, filterName) {
-    this.#currentFilterOption = FILTRATION_OPTIONS.find((option) => option.name === filterName);
-    this._notify(updateType, filterName);
+  setFiltration(updateType, filtrationName) {
+    this.#currentFiltration = FILTRATION_OPTIONS.find((option) => option.name === filtrationName);
+    this._notify(updateType, filtrationName);
   }
 }

@@ -44,10 +44,10 @@ export default class BoardPresenter {
 
   get points() {
     const points = [...this.#pointsModel.points];
-    const filterType = this.#filtrationModel.currentFilter;
-    const filteredPoints = filterType.method(points);
+    const filtrationType = this.#filtrationModel.currentFiltration;
+    const filteredPoints = filtrationType.filter(points);
 
-    return filteredPoints.sort(this.#currentSortOption.method);
+    return filteredPoints.sort(this.#currentSortOption.sortingMethod);
   }
 
   init() {
@@ -56,7 +56,7 @@ export default class BoardPresenter {
 
   createPoint() {
     this.#handleSortTypeChange();
-    this.#filtrationModel. setFilter(UpdateType.MAJOR, DEFAULT_FILTRATION.name);
+    this.#filtrationModel. setFiltration(UpdateType.MAJOR, DEFAULT_FILTRATION.name);
     this.#newPointPresenter.init();
   }
 
@@ -106,6 +106,8 @@ export default class BoardPresenter {
       case UserAction.DELETE_POINT:
         this.#pointsModel.deletePoint(updateType, update);
         break;
+      default:
+        throw new Error('There are no such actionType');
     }
   };
 
@@ -125,6 +127,8 @@ export default class BoardPresenter {
         this.#clearBoard({resetSortType: true});
         this.#renderBoard();
         break;
+      default:
+        throw new Error('There are no such updateType');
     }
   };
 
