@@ -7,6 +7,11 @@ function isFormValid(point) {
     && point.dateFrom < point.dateTo;
 }
 
+function isEscapeKeydown(key) {
+  return key === 'Escape';
+}
+
 export {
-  isFormValid
+  isFormValid,
+  isEscapeKeydown
 };

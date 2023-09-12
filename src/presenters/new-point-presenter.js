@@ -1,6 +1,6 @@
 import { UpdateType, UserAction } from '../const';
 import { RenderPosition, remove, render } from '../framework/render';
-import { isEscapeKeydown } from '../utils/random-elements';
+import { isEscapeKeydown } from '../utils/common.js';
 import FormView from '../views/form-view';
 import { nanoid } from 'nanoid';
 

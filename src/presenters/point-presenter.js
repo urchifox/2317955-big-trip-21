@@ -1,5 +1,5 @@
 import { remove, render, replace } from '../framework/render';
-import { isEscapeKeydown } from '../utils/random-elements';
+import { isEscapeKeydown } from '../utils/common.js';
 import FormView from '../views/form-view';
 import PointView from '../views/point-view';
 import {UserAction, UpdateType} from '../const.js';
@@ -91,7 +91,6 @@ export default class PointPresenter {
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
-      // isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       point,
     );
     this.#replaceFormToCard();

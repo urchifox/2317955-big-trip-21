@@ -1,10 +1,11 @@
-import {remove, render} from '../framework/render.js';
+import {RenderPosition, remove, render} from '../framework/render.js';
 import ListView from '../views/list-view.js';
 import NoPointsView from '../views/no-points-view.js';
 import SortingView from '../views/sorting-view.js';
 import PointPresenter from './point-presenter.js';
 import { DEFAULT_FILTRATION, DEFAULT_SORTING, SORTING_OPTIONS, UpdateType, UserAction } from '../const.js';
 import NewPointPresenter from './new-point-presenter.js';
+import LoadingView from '../views/loading-view.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -17,11 +18,13 @@ export default class BoardPresenter {
   #listComponent = new ListView();
   #noPointsComponent = new NoPointsView();
   #sortingComponent = null;
+  #loadingComponent = new LoadingView();
 
   #pointsPresenters = new Map();
   #newPointPresenter = null;
   #pointEditingId = null;
   #currentSortOption = DEFAULT_SORTING;
+  #isLoading = true;
 
   constructor({boardContainer, pointsModel, offersModel, destinationsModel, filtrationModel, onNewPointDestroy}) {
     this.#boardContainer = boardContainer;
@@ -61,6 +64,12 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
+
     if (this.points.length === 0) {
       this.#renderNoPoints();
       return;
@@ -81,6 +90,10 @@ export default class BoardPresenter {
       onSortTypeChange: this.#handleSortTypeChange
     });
     render(this.#sortingComponent, this.#boardContainer);
+  }
+
+  #renderLoading() {
+    render(this.#loadingComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
   }
 
   #renderPoint(point) {
@@ -127,6 +140,11 @@ export default class BoardPresenter {
         this.#clearBoard({resetSortType: true});
         this.#renderBoard();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
       default:
         throw new Error('There are no such updateType');
     }
@@ -159,6 +177,7 @@ export default class BoardPresenter {
 
     remove(this.#sortingComponent);
     remove(this.#noPointsComponent);
+    remove(this.#loadingComponent);
 
     if (resetSortType) {
       this.#currentSortOption = DEFAULT_SORTING;

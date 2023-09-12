@@ -241,15 +241,15 @@ export default class FormView extends AbstractStatefulView {
   };
 
   #destinationChangeHandler = (evt) => {
-    const chosenDestination = this.#allDestinations.find((destination) => destination.name === evt.target.value);
+    const chosenDestination = this.#allDestinations.find((destination) => destination.name === he.encode(evt.target.value));
     const chosenDestinationId = chosenDestination ? chosenDestination.id : '';
 
     this.updateElement({destination: chosenDestinationId});
   };
 
   #priceChangeHandler = (evt) => {
-    const newPrice = parseInt(evt.target.value, 10);
-    this._setState({basePrice: (Number.isNaN(newPrice) ? 0 : newPrice) });
+    const newPrice = parseInt(he.encode(evt.target.value), 10);
+    this.updateElement({basePrice: (Number.isNaN(newPrice) ? 0 : newPrice) });
   };
 
   #offersChangeHandler = (evt) => {
