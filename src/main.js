@@ -56,10 +56,8 @@ render(new TripSummaryView(), tripSummaryContainer, RenderPosition.BEFOREBEGIN);
 
 filterPresenter.init();
 boardPresenter.init();
-offersModel.init();
-destinationsModel.init();
-pointsModel.init()
-  .finally(() => {
-    render(newPointButton, headerContainer);
-  });
+offersModel.init()
+  .then(() => destinationsModel.init())
+  .then(() => pointsModel.init())
+  .finally(() => render(newPointButton, headerContainer));
 

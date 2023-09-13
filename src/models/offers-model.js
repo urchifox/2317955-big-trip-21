@@ -4,7 +4,6 @@ export default class OffersModel {
 
   constructor({offersApiService}) {
     this.#offersApiService = offersApiService;
-
   }
 
   get offers() {

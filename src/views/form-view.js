@@ -237,7 +237,7 @@ export default class FormView extends AbstractStatefulView {
 
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
-    this.updateElement({type: evt.target.value, offers: []});
+    this.updateElement({type: evt.target.value.toLowerCase(), offers: []});
   };
 
   #destinationChangeHandler = (evt) => {
