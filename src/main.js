@@ -51,13 +51,13 @@ function handleNewTaskButtonClick() {
   newPointButton.element.disabled = true;
 }
 
-
 render(new TripSummaryView(), tripSummaryContainer, RenderPosition.BEFOREBEGIN);
 
 filterPresenter.init();
 boardPresenter.init();
-offersModel.init()
-  .then(() => destinationsModel.init())
-  .then(() => pointsModel.init())
-  .finally(() => render(newPointButton, headerContainer));
 
+Promise.all([
+  offersModel.init(),
+  destinationsModel.init(),
+]).then(() => pointsModel.init())
+  .finally(() => render(newPointButton, headerContainer));

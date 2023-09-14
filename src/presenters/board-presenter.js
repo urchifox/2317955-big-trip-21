@@ -25,6 +25,7 @@ export default class BoardPresenter {
   #pointEditingId = null;
   #currentSortOption = DEFAULT_SORTING;
   #isLoading = true;
+  #onNewPointDestroy = null;
 
   constructor({boardContainer, pointsModel, offersModel, destinationsModel, filtrationModel, onNewPointDestroy}) {
     this.#boardContainer = boardContainer;
@@ -35,14 +36,7 @@ export default class BoardPresenter {
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filtrationModel.addObserver(this.#handleModelEvent);
-
-    this.#newPointPresenter = new NewPointPresenter({
-      pointListContainer: this.#listComponent.element,
-      offersByType: this.#offersModel.offers,
-      allDestinations: this.#destinationsModel.destinations,
-      onDataChange: this.#handleViewAction,
-      onDestroy: onNewPointDestroy,
-    });
+    this.#onNewPointDestroy = onNewPointDestroy;
   }
 
   get points() {
@@ -69,6 +63,13 @@ export default class BoardPresenter {
       return;
     }
 
+    this.#newPointPresenter = new NewPointPresenter({
+      pointListContainer: this.#listComponent.element,
+      offersByType: this.#offersModel.offers,
+      allDestinations: this.#destinationsModel.destinations,
+      onDataChange: this.#handleViewAction,
+      onDestroy: this.#onNewPointDestroy,
+    });
 
     if (this.points.length === 0) {
       this.#renderNoPoints();
@@ -111,12 +112,15 @@ export default class BoardPresenter {
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
+        this.#pointsPresenters.get(update.id).setSaving();
         this.#pointsModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
+        this.#newPointPresenter.setSaving();
         this.#pointsModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
+        this.#pointsPresenters.get(update.id).setDeleting();
         this.#pointsModel.deletePoint(updateType, update);
         break;
       default:

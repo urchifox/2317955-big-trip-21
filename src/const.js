@@ -2,14 +2,13 @@ import { showAll, showFuture, showPast, showPresent } from './utils/filters';
 import { sortByDay, sortByPrice, sortByTime } from './utils/sorting';
 
 export const BLANK_POINT = {
-  id: '',
   basePrice: 0,
   dateFrom: '',
   dateTo: '',
   destination: '',
   isFavorite: false,
   offers: [],
-  type: 'Flight'
+  type: 'flight'
 };
 
 export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
@@ -81,4 +80,12 @@ export const UpdateType = {
 export const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+export const ServerUrl = {
+  POINTS: 'points',
+  OFFERS: 'offers',
+  DESTINATIONS: 'destinations',
 };
