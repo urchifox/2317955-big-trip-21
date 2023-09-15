@@ -51,7 +51,7 @@ export default class BoardPresenter {
     const filtrationType = this.#filtrationModel.currentFiltration;
     const filteredPoints = points.filter(filtrationType.filterCb);
 
-    return filteredPoints.sort(this.#currentSortOption.sortingMethod);
+    return filteredPoints.sort(this.#currentSortOption.sortCb);
   }
 
   init() {

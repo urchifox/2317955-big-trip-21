@@ -38,27 +38,27 @@ export const DEFAULT_FILTRATION = FILTRATION_OPTIONS[0];
 export const SORTING_OPTIONS = [
   {
     name: 'day',
-    sortingMethod: sortByDay,
+    sortCb: sortByDay,
     isDisable: false,
   },
   {
     name: 'event',
-    sortingMethod: null,
+    sortCb: null,
     isDisable: true,
   },
   {
     name: 'time',
-    sortingMethod: sortByTime,
+    sortCb: sortByTime,
     isDisable: false,
   },
   {
     name: 'price',
-    sortingMethod: sortByPrice,
+    sortCb: sortByPrice,
     isDisable: false,
   },
   {
     name: 'offers',
-    sortingMethod: null,
+    sortCb: null,
     isDisable: true,
   },
 ];
