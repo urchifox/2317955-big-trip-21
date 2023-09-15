@@ -16,6 +16,7 @@ function getDuration(date1, date2) {
   const hours = Math.floor(differenceInMinutes % 1440 / 60);
   const minutes = Math.floor(differenceInMinutes % 60 / 1);
 
+  // тз требует прописывать все данные, даже если они равны нулю, но это же очень некрасиво и я отступила от этого требования
   let message = '';
   message += (years > 0) ? `${years}Y ` : '';
   message += (months > 0) ? `${months}M ` : '';

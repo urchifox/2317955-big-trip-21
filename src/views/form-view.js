@@ -58,7 +58,7 @@ function createDestinationTemplate(pointDestination) {
     return '';
   }
 
-  if (!pointDestination.description && !pointDestination.pictures) {
+  if (pointDestination.description.length === 0 && pointDestination.pictures.length === 0) {
     return '';
   }
 
@@ -185,7 +185,7 @@ export default class FormView extends AbstractStatefulView {
   #handleDeleteClick = null;
   #handleCloseClick = null;
 
-  constructor({point = BLANK_POINT, onFormSubmit,  offersByType, allDestinations, onDeleteClick, onCloseClick}) {
+  constructor({point = BLANK_POINT, onFormSubmit, offersByType, allDestinations, onDeleteClick, onCloseClick}) {
     super();
     this._setState(FormView.parsePointToState(point));
     this.offers = offersByType;
@@ -264,6 +264,7 @@ export default class FormView extends AbstractStatefulView {
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({type: evt.target.value.toLowerCase(), offers: []});
+    this.setDatePicker();
   };
 
   #destinationChangeHandler = (evt) => {
@@ -271,11 +272,13 @@ export default class FormView extends AbstractStatefulView {
     const chosenDestinationId = chosenDestination ? chosenDestination.id : '';
 
     this.updateElement({destination: chosenDestinationId});
+    this.setDatePicker();
   };
 
   #priceChangeHandler = (evt) => {
     const newPrice = parseInt(he.encode(evt.target.value), 10);
     this.updateElement({basePrice: (Number.isNaN(newPrice) ? 0 : newPrice) });
+    this.setDatePicker();
   };
 
   #offersChangeHandler = (evt) => {

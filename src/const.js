@@ -11,6 +11,7 @@ export const BLANK_POINT = {
   type: 'flight'
 };
 
+// мы должны хранить типы точек в константе или можем брать их из данных сервера?
 export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
 export const FILTRATION_OPTIONS = [

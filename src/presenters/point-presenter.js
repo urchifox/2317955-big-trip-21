@@ -148,7 +148,7 @@ export default class PointPresenter {
   };
 
   #handleCloseClick = () => {
-    this.destroy();
+    this.#replaceFormToCard();
   };
 
   #escKeyDownHandler = (evt) => {
