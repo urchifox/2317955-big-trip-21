@@ -23,7 +23,7 @@ export default class FiltrationPresenter {
     const points = this.#pointsModel.points;
 
     return FILTRATION_OPTIONS.reduce((accumulator, option) => {
-      accumulator[option.name] = Boolean(option.filter(points).length);
+      accumulator[option.name] = Boolean(points.filter(option.filterCb).length);
       return accumulator;
     }, {});
   }

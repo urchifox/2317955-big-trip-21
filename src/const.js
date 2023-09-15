@@ -13,23 +13,22 @@ export const BLANK_POINT = {
 
 export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
-// TODO filterFn либо переписать на колбэк и сделать filterCb
 export const FILTRATION_OPTIONS = [
   {
     name: 'everything',
-    filter: showAll,
+    filterCb: showAll,
   },
   {
     name: 'future',
-    filter: showFuture,
+    filterCb: showFuture,
   },
   {
     name: 'present',
-    filter: showPresent,
+    filterCb: showPresent,
   },
   {
     name: 'past',
-    filter: showPast,
+    filterCb: showPast,
   },
 ];
 
