@@ -183,14 +183,16 @@ export default class FormView extends AbstractStatefulView {
   #datepickerTo = null;
   #datepickerFrom = null;
   #handleDeleteClick = null;
+  #handleCloseClick = null;
 
-  constructor({point = BLANK_POINT, onFormSubmit, offersByType, allDestinations, onDeleteClick}) {
+  constructor({point = BLANK_POINT, onFormSubmit,  offersByType, allDestinations, onDeleteClick, onCloseClick}) {
     super();
     this._setState(FormView.parsePointToState(point));
     this.offers = offersByType;
     this.#allDestinations = allDestinations;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleDeleteClick = onDeleteClick;
+    this.#handleCloseClick = onCloseClick;
     this._restoreHandlers();
   }
 
@@ -219,8 +221,7 @@ export default class FormView extends AbstractStatefulView {
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
     this.element.querySelector('.event__details').addEventListener('click', this.#offersChangeHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
-    // TODO по хорошему сетить календарь только в момент клика по полю даты
-    // this.#setDatePicker();
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formCloseClickHandler);
   }
 
   reset(point) {
@@ -254,6 +255,10 @@ export default class FormView extends AbstractStatefulView {
   #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleDeleteClick(FormView.parseStateToPoint(this._state));
+  };
+
+  #formCloseClickHandler = () => {
+    this.#handleCloseClick();
   };
 
   #typeChangeHandler = (evt) => {

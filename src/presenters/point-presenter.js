@@ -51,6 +51,7 @@ export default class PointPresenter {
       allDestinations: this.#destinationsModel.destinations,
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick,
+      onCloseClick: this.#handleCloseClick,
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -144,6 +145,10 @@ export default class PointPresenter {
       UpdateType.MINOR,
       point,
     );
+  };
+
+  #handleCloseClick = () => {
+    this.destroy();
   };
 
   #escKeyDownHandler = (evt) => {
