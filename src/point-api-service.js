@@ -42,6 +42,7 @@ export default class PointApiService extends ApiService {
     return response;
   }
 
+  // TODO вынести этот метод в отдельный класс адаптер
   #adaptToServer(point) {
     const adaptedPoint = {
       ...point,

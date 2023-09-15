@@ -16,8 +16,7 @@ export default class DestinationsModel {
 
   async init() {
     try {
-      const destinations = await this.#destinationsApiService.destinations;
-      this.#destinations = destinations;
+      this.#destinations = await this.#destinationsApiService.destinations;
     } catch(err) {
       this.#destinations = [];
     }

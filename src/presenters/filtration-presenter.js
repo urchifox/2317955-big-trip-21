@@ -19,7 +19,7 @@ export default class FiltrationPresenter {
   }
 
   // TODO переписать вывод данных в формат имя фильтра : булин в соответствии с которым дисэйблить
-  get filtrtationsInformation() {
+  get filtrationInformation() {
     const points = this.#pointsModel.points;
 
     return FILTRATION_OPTIONS.reduce((accumulator, option) => {
@@ -32,7 +32,7 @@ export default class FiltrationPresenter {
     const prevFilterComponent = this.#filtrationComponent;
 
     this.#filtrationComponent = new FiltrationView({
-      filtrtationsInformation: this.filtrtationsInformation,
+      filtrationInformation: this.filtrationInformation,
       currentFiltrationName: this.#filtrationModel.currentFiltration.name,
       onFilterTypeChange: this.#handleFilterTypeChange
     });

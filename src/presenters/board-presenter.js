@@ -25,7 +25,7 @@ export default class BoardPresenter {
   #newPointPresenter = null;
   #pointEditingId = null;
   #currentSortOption = DEFAULT_SORTING;
-  #isLoading = true;
+  #isLoading = false;
   #onNewPointDestroy = null;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
@@ -42,6 +42,8 @@ export default class BoardPresenter {
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filtrationModel.addObserver(this.#handleModelEvent);
     this.#onNewPointDestroy = onNewPointDestroy;
+
+    this.#isLoading = true;
   }
 
   get points() {

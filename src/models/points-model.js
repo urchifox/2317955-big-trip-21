@@ -76,6 +76,7 @@ export default class PointsModel extends Observable {
     }
   }
 
+  // TODO вынести этот метод в отдельный класс адаптер
   #adaptToClient(point) {
     const adaptedPoint = {
       ...point,

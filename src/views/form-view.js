@@ -76,7 +76,17 @@ function createDestinationTemplate(pointDestination) {
   `;
 }
 
+function getSubmitButtonName(point) {
+  if (!point.id) {
+    return 'Cancel';
+  } else {
+    return (point.isDeleting ? 'Deleting...' : 'Delete');
+  }
+}
+
 function createTemplate(point, allOffers, allDestinations) {
+  // TODO
+
   const pointDestination = allDestinations.find((destination) => destination.id === point.destination);
 
   const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
@@ -153,9 +163,7 @@ function createTemplate(point, allOffers, allDestinations) {
           <button class="event__reset-btn" type="reset"
             ${point.isDisabled ? 'disabled' : ''}
           >
-            ${point.id ? '' : 'Cancel'}
-            ${point.id && point.isDeleting ? 'Deleting...' : ''}
-            ${point.id && !point.isDeleting ? 'Delete' : ''}
+            ${getSubmitButtonName(point)}
            </button>
            ${point.id === 'template' ? '' : `<button class="event__rollup-btn" type="button">
               <span class="visually-hidden">Open event</span>

@@ -13,6 +13,7 @@ export const BLANK_POINT = {
 
 export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
+// TODO filterFn либо переписать на колбэк и сделать filterCb
 export const FILTRATION_OPTIONS = [
   {
     name: 'everything',
@@ -34,6 +35,7 @@ export const FILTRATION_OPTIONS = [
 
 export const DEFAULT_FILTRATION = FILTRATION_OPTIONS[0];
 
+// TODO sortCb
 export const SORTING_OPTIONS = [
   {
     name: 'day',
@@ -84,6 +86,7 @@ export const Method = {
   DELETE: 'DELETE',
 };
 
+// TODO adress? domen?
 export const ServerUrl = {
   POINTS: 'points',
   OFFERS: 'offers',

@@ -16,8 +16,7 @@ export default class OffersModel {
 
   async init() {
     try {
-      const offers = await this.#offersApiService.offers;
-      this.#offers = offers;
+      this.#offers = await this.#offersApiService.offers;
     } catch(err) {
       this.#offers = [];
     }
@@ -28,7 +27,7 @@ export default class OffersModel {
       return [];
     }
 
-    const result = offersIds.reduce((accumulator, offerId) => {
+    return offersIds.reduce((accumulator, offerId) => {
       const chosenOffer = this.allOffers.find((offer) => offer.id === offerId);
 
       if (chosenOffer) {
@@ -37,8 +36,6 @@ export default class OffersModel {
 
       return accumulator;
     }, []);
-
-    return result;
   }
 
   getOffersByType(type) {
