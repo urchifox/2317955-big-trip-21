@@ -18,7 +18,6 @@ export default class FiltrationPresenter {
     this.#filtrationModel.addObserver(this.#handleModelEvent);
   }
 
-  // TODO переписать вывод данных в формат имя фильтра : булин в соответствии с которым дисэйблить
   get filtrationInformation() {
     const points = this.#pointsModel.points;
 

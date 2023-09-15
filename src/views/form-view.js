@@ -85,8 +85,6 @@ function getSubmitButtonName(point) {
 }
 
 function createTemplate(point, allOffers, allDestinations) {
-  // TODO
-
   const pointDestination = allDestinations.find((destination) => destination.id === point.destination);
 
   const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
@@ -222,7 +220,7 @@ export default class FormView extends AbstractStatefulView {
     this.element.querySelector('.event__details').addEventListener('click', this.#offersChangeHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
     // TODO по хорошему сетить календарь только в момент клика по полю даты
-    this.#setDatePicker();
+    // this.#setDatePicker();
   }
 
   reset(point) {
@@ -303,8 +301,7 @@ export default class FormView extends AbstractStatefulView {
     this.#datepickerFrom.set({maxDate: this._state.dateTo});
   };
 
-  #setDatePicker() {
-    //TODO вынести флетпикер в отдельную абстракцию
+  setDatePicker() {
     const commonSettings = {
       dateFormat: 'd/m/y H:i',
       enableTime: true,

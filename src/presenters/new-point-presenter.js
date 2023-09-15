@@ -33,7 +33,7 @@ export default class NewPointPresenter {
     });
 
     render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
-
+    this.#pointEditComponent.setDatePicker();
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
@@ -46,7 +46,6 @@ export default class NewPointPresenter {
 
     remove(this.#pointEditComponent);
     this.#pointEditComponent = null;
-
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
