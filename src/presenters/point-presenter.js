@@ -1,6 +1,6 @@
 import { remove, render, replace } from '../framework/render';
-import { isEscapeKeydown } from '../utils/random-elements';
-import EditingView from '../views/editing-view';
+import { isEscapeKeydown } from '../utils/common.js';
+import FormView from '../views/form-view';
 import PointView from '../views/point-view';
 import {UserAction, UpdateType} from '../const.js';
 
@@ -45,7 +45,7 @@ export default class PointPresenter {
       onFavoriteClick: this.#handleFavoriteClick,
     });
 
-    this.#pointEditComponent = new EditingView({
+    this.#pointEditComponent = new FormView({
       point: this.#point,
       offersByType: this.#offersModel.offers,
       allDestinations: this.#destinationsModel.destinations,
@@ -88,16 +88,9 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = (point) => {
-    // Проверяем, поменялись ли в задаче данные, которые попадают под фильтрацию,
-    // а значит требуют перерисовки списка - если таких нет, это PATCH-обновление
-    // const isMinorUpdate =
-    //   !isDatesEqual(this.#task.dueDate, update.dueDate) ||
-    //   isTaskRepeating(this.#task.repeating) !== isTaskRepeating(update.repeating);
-
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
-      // isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       point,
     );
     this.#replaceFormToCard();

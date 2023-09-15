@@ -1,7 +1,10 @@
-import { offersMocks} from '../mocks/offer-mock.js';
-
 export default class OffersModel {
-  #offers = offersMocks.slice();
+  #offers = [];
+  #offersApiService = null;
+
+  constructor({offersApiService}) {
+    this.#offersApiService = offersApiService;
+  }
 
   get offers() {
     return this.#offers;
@@ -11,12 +14,21 @@ export default class OffersModel {
     return this.#offers.reduce((accumulator, offersByType) => [...accumulator, ...offersByType.offers], []);
   }
 
+  async init() {
+    try {
+      const offers = await this.#offersApiService.offers;
+      this.#offers = offers;
+    } catch(err) {
+      this.#offers = [];
+    }
+  }
+
   getOffersByIds(offersIds) {
     if (offersIds.length === 0) {
       return [];
     }
 
-    return offersIds.reduce((accumulator, offerId) => {
+    const result = offersIds.reduce((accumulator, offerId) => {
       const chosenOffer = this.allOffers.find((offer) => offer.id === offerId);
 
       if (chosenOffer) {
@@ -25,6 +37,8 @@ export default class OffersModel {
 
       return accumulator;
     }, []);
+
+    return result;
   }
 
   getOffersByType(type) {

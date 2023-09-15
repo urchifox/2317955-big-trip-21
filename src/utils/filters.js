@@ -19,7 +19,7 @@ function showPast(points) {
 
 function calculateFilters(points) {
   return FILTRATION_OPTIONS.reduce((accumulator, option) => {
-    accumulator[option.name] = option.method(points).length;
+    accumulator[option.name] = option.filter(points).length;
     return accumulator;
   }, {});
 }

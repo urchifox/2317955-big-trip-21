@@ -1,7 +1,7 @@
 import { BLANK_POINT, POINT_TYPES } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
-
+import he from 'he';
 import 'flatpickr/dist/flatpickr.min.css';
 import { isFormValid } from '../utils/common.js';
 
@@ -118,7 +118,7 @@ function createTemplate(point, allOffers, allDestinations) {
               ${point.type}
             </label>
             <input required class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" list="destination-list-1"
-              value="${pointDestination?.name ?? ''}"
+              value="${he.encode(pointDestination?.name ?? '')}"
             >
             <datalist id="destination-list-1">
               ${destinationsNamesTemplate}
@@ -164,7 +164,7 @@ function createTemplate(point, allOffers, allDestinations) {
   `;
 }
 
-export default class EditingView extends AbstractStatefulView {
+export default class FormView extends AbstractStatefulView {
   offers = [];
   #allDestinations = [];
   #handleFormSubmit = null;
@@ -174,7 +174,7 @@ export default class EditingView extends AbstractStatefulView {
 
   constructor({point = BLANK_POINT, onFormSubmit, offersByType, allDestinations, onDeleteClick}) {
     super();
-    this._setState(EditingView.pastePointToState(point));
+    this._setState(FormView.parsePointToState(point));
     this.offers = offersByType;
     this.#allDestinations = allDestinations;
     this.#handleFormSubmit = onFormSubmit;
@@ -207,19 +207,19 @@ export default class EditingView extends AbstractStatefulView {
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
     this.element.querySelector('.event__details').addEventListener('click', this.#offersChangeHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+    // TODO по хорошему сетить календарь только в момент клика по полю даты
     this.#setDatePicker();
   }
 
   reset(point) {
-    this.updateElement(EditingView.pastePointToState(point),);
+    this.updateElement(FormView.parsePointToState(point),);
   }
 
-  static pastePointToState(point) {
-    return {...point,
-    };
+  static parsePointToState(point) {
+    return {...point};
   }
 
-  static pasteStateToPoint(state) {
+  static parseStateToPoint(state) {
     const point = {...state};
 
     return point;
@@ -227,30 +227,28 @@ export default class EditingView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(EditingView.pasteStateToPoint(this._state));
+    this.#handleFormSubmit(FormView.parseStateToPoint(this._state));
   };
 
   #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleDeleteClick(EditingView.pasteStateToPoint(this._state));
+    this.#handleDeleteClick(FormView.parseStateToPoint(this._state));
   };
 
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
-    this.updateElement({type: evt.target.value, offers: []});
+    this.updateElement({type: evt.target.value.toLowerCase(), offers: []});
   };
 
   #destinationChangeHandler = (evt) => {
-    if (evt.target.value === '') {
-      this.updateElement({destination: ''});
-      return;
-    }
-    const chosenDestination = this.#allDestinations.find((destination) => destination.name === evt.target.value);
-    this.updateElement({destination: chosenDestination.id});
+    const chosenDestination = this.#allDestinations.find((destination) => destination.name === he.encode(evt.target.value));
+    const chosenDestinationId = chosenDestination ? chosenDestination.id : '';
+
+    this.updateElement({destination: chosenDestinationId});
   };
 
   #priceChangeHandler = (evt) => {
-    const newPrice = parseInt(evt.target.value, 10);
+    const newPrice = parseInt(he.encode(evt.target.value), 10);
     this.updateElement({basePrice: (Number.isNaN(newPrice) ? 0 : newPrice) });
   };
 
@@ -269,39 +267,45 @@ export default class EditingView extends AbstractStatefulView {
       chosenOffers.push(offerId);
     }
 
-    this.updateElement({offers: chosenOffers});
+    this._setState({offers: chosenOffers});
   };
 
-  #fromDateChangeHandler = ([userDate]) => {
-    this.updateElement({
-      dateFrom: userDate,
-    });
+  #dateFromChangeHandler = ([userDate]) => {
+    this._setState({dateFrom: userDate});
+    this.#datepickerTo.set({minDate: this._state.dateFrom});
   };
 
-  #toDateChangeHandler = ([userDate]) => {
-    this.updateElement({
-      dateTo: userDate,
-    });
+  #dateToChangeHandler = ([userDate]) => {
+    this._setState({dateTo: userDate});
+    this.#datepickerFrom.set({maxDate: this._state.dateTo});
   };
 
   #setDatePicker() {
+    //TODO вынести флетпикер в отдельную абстракцию
+    const commonSettings = {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      locale: {firstDayOfWeek: 1},
+      'time_24hr': true,
+    };
+
     this.#datepickerFrom = flatpickr(
       this.element.querySelector('#event-start-time-1'),
       {
-        dateFormat: 'd/m/y H:i',
-        enableTime: true,
+        ...commonSettings,
         defaultDate: this._state.dateFrom,
-        onChange: this.#fromDateChangeHandler,
+        onClose: this.#dateFromChangeHandler,
+        maxDate: this._state.dateTo,
       },
     );
 
     this.#datepickerTo = flatpickr(
       this.element.querySelector('#event-end-time-1'),
       {
-        dateFormat: 'd/m/y H:i',
-        enableTime: true,
+        ...commonSettings,
         defaultDate: this._state.dateTo,
-        onChange: this.#toDateChangeHandler,
+        onClose: this.#dateToChangeHandler,
+        minDate: this._state.dateFrom,
       },
     );
   }

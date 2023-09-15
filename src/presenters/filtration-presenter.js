@@ -1,6 +1,5 @@
 import {render, replace, remove} from '../framework/render.js';
 import FiltrationView from '../views/filtration-view.js';
-// import {filter} from '../utils/filter.js';
 import {FILTRATION_OPTIONS, UpdateType} from '../const.js';
 
 export default class FiltrationPresenter {
@@ -19,11 +18,12 @@ export default class FiltrationPresenter {
     this.#filtrationModel.addObserver(this.#handleModelEvent);
   }
 
-  get filtersInformation() {
+  // TODO переписать вывод данных в формат имя фильтра : булин в соответствии с которым дисэйблить
+  get filtrtationsInformation() {
     const points = this.#pointsModel.points;
 
     return FILTRATION_OPTIONS.reduce((accumulator, option) => {
-      accumulator[option.name] = option.method(points).length;
+      accumulator[option.name] = Boolean(option.filter(points).length);
       return accumulator;
     }, {});
   }
@@ -32,8 +32,8 @@ export default class FiltrationPresenter {
     const prevFilterComponent = this.#filtrationComponent;
 
     this.#filtrationComponent = new FiltrationView({
-      filtersInformation: this.filtersInformation,
-      currentFilterType: this.#filtrationModel.currentFilter.name,
+      filtrtationsInformation: this.filtrtationsInformation,
+      currentFiltrationName: this.#filtrationModel.currentFiltration.name,
       onFilterTypeChange: this.#handleFilterTypeChange
     });
 
@@ -55,6 +55,6 @@ export default class FiltrationPresenter {
       return;
     }
 
-    this.#filtrationModel.setFilter(UpdateType.MAJOR, filterType);
+    this.#filtrationModel.setFiltration(UpdateType.MAJOR, filterType);
   };
 }

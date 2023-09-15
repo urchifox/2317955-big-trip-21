@@ -1,7 +1,7 @@
 import { UpdateType, UserAction } from '../const';
 import { RenderPosition, remove, render } from '../framework/render';
-import { isEscapeKeydown } from '../utils/random-elements';
-import EditingView from '../views/editing-view';
+import { isEscapeKeydown } from '../utils/common.js';
+import FormView from '../views/form-view';
 import { nanoid } from 'nanoid';
 
 export default class NewPointPresenter {
@@ -26,7 +26,7 @@ export default class NewPointPresenter {
       return;
     }
 
-    this.#pointEditComponent = new EditingView({
+    this.#pointEditComponent = new FormView({
       offersByType: this.#offersByType,
       allDestinations: this.#allDestinations,
       onFormSubmit: this.#handleFormSubmit,
