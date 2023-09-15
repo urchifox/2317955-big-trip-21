@@ -34,7 +34,6 @@ export const FILTRATION_OPTIONS = [
 
 export const DEFAULT_FILTRATION = FILTRATION_OPTIONS[0];
 
-// TODO sortCb
 export const SORTING_OPTIONS = [
   {
     name: 'day',

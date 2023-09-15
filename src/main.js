@@ -7,9 +7,9 @@ import DestinationsModel from './models/destinations-model.js';
 import FiltrationModel from './models/filtration-model.js';
 import FiltrationPresenter from './presenters/filtration-presenter.js';
 import NewPointButtonView from './views/new-point-button-view.js';
-import PointApiService from './point-api-service.js';
-import OffersApiService from './offers-api-service.js';
-import DestinationsApiService from './destinations-api-service.js';
+import PointApiService from './api-services/point-api-service.js';
+import OffersApiService from './api-services/offers-api-service.js';
+import DestinationsApiService from './api-services/destinations-api-service.js';
 
 const AUTHORIZATION = 'Basic evtukhova';
 const END_POINT = 'https://21.objects.pages.academy/big-trip';

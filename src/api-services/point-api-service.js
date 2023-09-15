@@ -1,5 +1,6 @@
-import { Method, ServerUrl } from './const.js';
-import ApiService from './framework/api-service.js';
+import PointAdapter from '../adapters/point-adapter.js';
+import { Method, ServerUrl } from '../const.js';
+import ApiService from '../framework/api-service.js';
 
 export default class PointApiService extends ApiService {
   get points() {
@@ -11,7 +12,7 @@ export default class PointApiService extends ApiService {
     const response = await this._load({
       url: `${ServerUrl.POINTS}/${point.id}`,
       method: Method.PUT,
-      body: JSON.stringify(this.#adaptToServer(point)),
+      body: JSON.stringify(PointAdapter.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'})
     });
 
@@ -24,7 +25,7 @@ export default class PointApiService extends ApiService {
     const response = await this._load({
       url: ServerUrl.POINTS,
       method: Method.POST,
-      body: JSON.stringify(this.#adaptToServer(point)),
+      body: JSON.stringify(PointAdapter.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'})
     });
 
@@ -40,23 +41,5 @@ export default class PointApiService extends ApiService {
     });
 
     return response;
-  }
-
-  // TODO вынести этот метод в отдельный класс адаптер
-  #adaptToServer(point) {
-    const adaptedPoint = {
-      ...point,
-      'base_price' : point.basePrice,
-      'date_from'  : point.dateFrom instanceof Date ? point.dateFrom.toISOString() : null,
-      'date_to'    : point.dateTo instanceof Date ? point.dateTo.toISOString() : null,
-      'is_favorite': point.isFavorite,
-    };
-
-    delete adaptedPoint.basePrice;
-    delete adaptedPoint.dateFrom;
-    delete adaptedPoint.dateTo;
-    delete adaptedPoint.isFavorite;
-
-    return adaptedPoint;
   }
 }

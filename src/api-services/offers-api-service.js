@@ -1,5 +1,5 @@
-import { ServerUrl } from './const.js';
-import ApiService from './framework/api-service.js';
+import { ServerUrl } from '../const.js';
+import ApiService from '../framework/api-service.js';
 
 export default class OffersApiService extends ApiService {
   get offers() {
