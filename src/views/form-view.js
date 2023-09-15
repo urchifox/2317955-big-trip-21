@@ -146,10 +146,16 @@ function createTemplate(point, allOffers, allDestinations) {
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit"
-            ${isFormValid(point) ? '' : 'disabled'}
-          >Save</button>
-          <button class="event__reset-btn" type="reset">
-            ${point.id === '' ? 'Cancel' : 'Delete'}
+            ${isFormValid(point) && !point.isDisabled ? '' : 'disabled'}
+          >
+            ${point.isSaving ? 'Saving...' : 'Save'}
+          </button>
+          <button class="event__reset-btn" type="reset"
+            ${point.isDisabled ? 'disabled' : ''}
+          >
+            ${point.id ? '' : 'Cancel'}
+            ${point.id && point.isDeleting ? 'Deleting...' : ''}
+            ${point.id && !point.isDeleting ? 'Delete' : ''}
            </button>
            ${point.id === 'template' ? '' : `<button class="event__rollup-btn" type="button">
               <span class="visually-hidden">Open event</span>
@@ -216,11 +222,20 @@ export default class FormView extends AbstractStatefulView {
   }
 
   static parsePointToState(point) {
-    return {...point};
+    return {
+      ...point,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    };
   }
 
   static parseStateToPoint(state) {
     const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
 
     return point;
   }
