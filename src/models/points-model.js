@@ -5,6 +5,7 @@ import Observable from '../framework/observable.js';
 export default class PointsModel extends Observable {
   #points = [];
   #pointApiService = null;
+  #isFailed = false;
 
   constructor({pointApiService}) {
     super();
@@ -15,12 +16,18 @@ export default class PointsModel extends Observable {
     return this.#points;
   }
 
+  get isFailed() {
+    return this.#isFailed;
+  }
+
   async init() {
     try {
       const points = await this.#pointApiService.points;
       this.#points = points.map(PointAdapter.adaptToClient);
+      this.#isFailed = false;
     } catch(err) {
       this.#points = [];
+      this.#isFailed = true;
     }
 
     this._notify(UpdateType.INIT);

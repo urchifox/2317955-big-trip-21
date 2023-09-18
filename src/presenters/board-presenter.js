@@ -26,6 +26,7 @@ export default class BoardPresenter {
   #pointEditingId = null;
   #currentSortOption = DEFAULT_SORTING;
   #isLoading = false;
+  #isCreating = false;
   #onNewPointDestroy = null;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
@@ -59,8 +60,9 @@ export default class BoardPresenter {
   }
 
   createPoint() {
+    this.#isCreating = true;
     this.#handleSortTypeChange();
-    this.#filtrationModel. setFiltration(UpdateType.MAJOR, DEFAULT_FILTRATION.name);
+    this.#filtrationModel.setFiltration(UpdateType.MAJOR, DEFAULT_FILTRATION.name);
     this.#newPointPresenter.init();
   }
 
@@ -75,20 +77,29 @@ export default class BoardPresenter {
       offersByType: this.#offersModel.offers,
       allDestinations: this.#destinationsModel.destinations,
       onDataChange: this.#handleViewAction,
-      onDestroy: this.#onNewPointDestroy,
+      onDestroy: this.#handleNewPointDestroy,
     });
 
-    if (this.points.length === 0) {
+    render(this.#listComponent, this.#boardContainer);
+
+    if(this.#pointsModel.isFailed && !this.#isCreating) {
       this.#renderNoPoints();
       return;
     }
 
+    if (this.points.length === 0 && !this.#isCreating) {
+      const currentFiltration = this.#filtrationModel.currentFiltration;
+      this.#renderNoPoints(currentFiltration.noPointsMessage);
+      return;
+    }
+
     this.#renderSorting();
-    render(this.#listComponent, this.#boardContainer);
+
     this.points.forEach((point) => this.#renderPoint(point));
   }
 
-  #renderNoPoints() {
+  #renderNoPoints(message) {
+    this.#noPointsComponent.setMessage(message);
     render(this.#noPointsComponent, this.#boardContainer);
   }
 
@@ -97,7 +108,7 @@ export default class BoardPresenter {
       currentSortType: this.#currentSortOption.name,
       onSortTypeChange: this.#handleSortTypeChange
     });
-    render(this.#sortingComponent, this.#boardContainer);
+    render(this.#sortingComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
   }
 
   #renderLoading() {
@@ -192,6 +203,13 @@ export default class BoardPresenter {
     }
     this.#currentSortOption = sortingOption;
     this.#clearBoard({resetRenderedTaskCount: true});
+    this.#renderBoard();
+  };
+
+  #handleNewPointDestroy = () => {
+    this.#onNewPointDestroy();
+    this.#isCreating = false;
+    this.#clearBoard();
     this.#renderBoard();
   };
 

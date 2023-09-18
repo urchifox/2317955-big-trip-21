@@ -14,22 +14,28 @@ export const BLANK_POINT = {
 // мы должны хранить типы точек в константе или можем брать их из данных сервера?
 export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
+export const DEFAULT_NO_POINT_MESSAGE = 'Failed to load latest route information';
+
 export const FILTRATION_OPTIONS = [
   {
     name: 'everything',
     filterCb: showAll,
+    noPointsMessage: 'Click New Event to create your first point',
   },
   {
     name: 'future',
     filterCb: showFuture,
+    noPointsMessage: 'There are no future events now',
   },
   {
     name: 'present',
     filterCb: showPresent,
+    noPointsMessage: 'There are no present events now',
   },
   {
     name: 'past',
     filterCb: showPast,
+    noPointsMessage: 'There are no past events now',
   },
 ];
 

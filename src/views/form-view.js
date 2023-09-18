@@ -163,7 +163,7 @@ function createTemplate(point, allOffers, allDestinations) {
           >
             ${getSubmitButtonName(point)}
            </button>
-           ${point.id === 'template' ? '' : `<button class="event__rollup-btn" type="button">
+           ${!point.id ? '' : `<button class="event__rollup-btn" type="button">
               <span class="visually-hidden">Open event</span>
             </button>`}
         </header>
@@ -221,7 +221,7 @@ export default class FormView extends AbstractStatefulView {
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
     this.element.querySelector('.event__details').addEventListener('click', this.#offersChangeHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formCloseClickHandler);
+    this.element.querySelector('.event__rollup-btn')?.addEventListener('click', this.#formCloseClickHandler);
   }
 
   reset(point) {

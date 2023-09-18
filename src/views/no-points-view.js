@@ -1,6 +1,7 @@
+import { DEFAULT_NO_POINT_MESSAGE } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createTemplate() {
+function createTemplate(message) {
   /*
     Значение отображаемого текста зависит от выбранного фильтра:
       * Everthing – 'Click New Event to create your first point'
@@ -10,14 +11,19 @@ function createTemplate() {
   */
   return `
     <p class="trip-events__msg">
-      Click New Event to create your first point
+      ${message}
     </p>
   `;
 }
 
 export default class NoPointsView extends AbstractView {
+  #message = DEFAULT_NO_POINT_MESSAGE;
+
+  setMessage(message = DEFAULT_NO_POINT_MESSAGE) {
+    this.#message = message;
+  }
 
   get template() {
-    return createTemplate();
+    return createTemplate(this.#message);
   }
 }
