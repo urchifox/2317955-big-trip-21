@@ -1,5 +1,4 @@
-import {RenderPosition, render} from './framework/render.js';
-import TripSummaryView from './views/trip-summary-view.js';
+import {render} from './framework/render.js';
 import BoardPresenter from './presenters/board-presenter.js';
 import PointsModel from './models/points-model.js';
 import OffersModel from './models/offers-model.js';
@@ -10,6 +9,7 @@ import NewPointButtonView from './views/new-point-button-view.js';
 import PointApiService from './api-services/point-api-service.js';
 import OffersApiService from './api-services/offers-api-service.js';
 import DestinationsApiService from './api-services/destinations-api-service.js';
+import TripSummaryPresenter from './presenters/trip-summary-presenter.js';
 
 const AUTHORIZATION = 'Basic evtukhova';
 const END_POINT = 'https://21.objects.pages.academy/big-trip';
@@ -34,10 +34,17 @@ const boardPresenter = new BoardPresenter({
   onNewPointDestroy: handleNewPointFormClose,
 });
 
-const filterPresenter = new FiltrationPresenter({
+const filtrationPresenter = new FiltrationPresenter({
   filtrationContainer,
   filtrationModel,
-  pointsModel
+  pointsModel,
+});
+
+const summaryPresenter = new TripSummaryPresenter({
+  summaryContainer: tripSummaryContainer,
+  pointsModel,
+  offersModel,
+  destinationsModel
 });
 
 const newPointButton = new NewPointButtonView({onClick: handleNewTaskButtonClick});
@@ -51,13 +58,12 @@ function handleNewTaskButtonClick() {
   newPointButton.element.disabled = true;
 }
 
-render(new TripSummaryView(), tripSummaryContainer, RenderPosition.BEFOREBEGIN);
-
-filterPresenter.init();
+filtrationPresenter.init();
 boardPresenter.init();
 
 Promise.all([
   offersModel.init(),
   destinationsModel.init(),
 ]).then(() => pointsModel.init())
+  .then(() => summaryPresenter.init())
   .finally(() => render(newPointButton, headerContainer));
