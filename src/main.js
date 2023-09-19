@@ -24,6 +24,7 @@ const pointsModel = new PointsModel({pointApiService: new PointApiService(END_PO
 const offersModel = new OffersModel({offersApiService: new OffersApiService(END_POINT, AUTHORIZATION)});
 const destinationsModel = new DestinationsModel({destinationsApiService: new DestinationsApiService(END_POINT, AUTHORIZATION)});
 const filtrationModel = new FiltrationModel();
+const newPointButton = new NewPointButtonView({onClick: handleNewTaskButtonClick});
 
 const boardPresenter = new BoardPresenter({
   boardContainer: boardContainer,
@@ -32,6 +33,7 @@ const boardPresenter = new BoardPresenter({
   destinationsModel,
   filtrationModel,
   onNewPointDestroy: handleNewPointFormClose,
+  newPointButton: newPointButton,
 });
 
 const filtrationPresenter = new FiltrationPresenter({
@@ -47,7 +49,6 @@ const summaryPresenter = new TripSummaryPresenter({
   destinationsModel
 });
 
-const newPointButton = new NewPointButtonView({onClick: handleNewTaskButtonClick});
 
 function handleNewPointFormClose() {
   newPointButton.element.disabled = false;

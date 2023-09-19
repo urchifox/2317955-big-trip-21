@@ -20,6 +20,7 @@ export default class BoardPresenter {
   #noPointsComponent = new NoPointsView();
   #sortingComponent = null;
   #loadingComponent = new LoadingView();
+  #newPointButtonComponent = null;
 
   #pointsPresenters = new Map();
   #newPointPresenter = null;
@@ -33,12 +34,13 @@ export default class BoardPresenter {
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  constructor({boardContainer, pointsModel, offersModel, destinationsModel, filtrationModel, onNewPointDestroy}) {
+  constructor({boardContainer, pointsModel, offersModel, destinationsModel, filtrationModel, onNewPointDestroy, newPointButton}) {
     this.#boardContainer = boardContainer;
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
     this.#filtrationModel = filtrationModel;
+    this.#newPointButtonComponent = newPointButton;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filtrationModel.addObserver(this.#handleModelEvent);
@@ -82,7 +84,8 @@ export default class BoardPresenter {
 
     render(this.#listComponent, this.#boardContainer);
 
-    if(this.#pointsModel.isFailed && !this.#isCreating) {
+    if(this.#pointsModel.isFailed) {
+      this.#newPointButtonComponent.element.disabled = true;
       this.#renderNoPoints();
       return;
     }
