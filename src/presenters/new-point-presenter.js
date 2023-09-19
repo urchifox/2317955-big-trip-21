@@ -43,10 +43,10 @@ export default class NewPointPresenter {
       return;
     }
 
-    this.#handleDestroy();
 
     remove(this.#pointEditComponent);
     this.#pointEditComponent = null;
+    this.#handleDestroy();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
