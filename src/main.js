@@ -66,5 +66,7 @@ Promise.all([
   offersModel.init(),
   destinationsModel.init(),
 ]).then(() => pointsModel.init())
-  .then(() => summaryPresenter.init())
-  .finally(() => render(newPointButton, headerContainer));
+  .then(() => summaryPresenter.init());
+
+render(newPointButton, headerContainer);
+newPointButton.element.disabled = true;
