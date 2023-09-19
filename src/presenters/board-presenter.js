@@ -70,9 +70,12 @@ export default class BoardPresenter {
 
   #renderBoard() {
     if (this.#isLoading) {
+      this.#newPointButtonComponent.element.disabled = true;
       this.#renderLoading();
       return;
     }
+
+    this.#newPointButtonComponent.element.disabled = false;
 
     this.#newPointPresenter = new NewPointPresenter({
       pointListContainer: this.#listComponent.element,
