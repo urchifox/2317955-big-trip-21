@@ -20,6 +20,11 @@ export default class TripSummaryPresenter {
   }
 
   init() {
+    if (this.#pointsModel.points.length === 0) {
+      remove(this.#summaryComponent);
+      return;
+    }
+
     const prevSummaryComponent = this.#summaryComponent;
     this.#summaryComponent = new TripSummaryView({
       cities: this.#getCities(),
