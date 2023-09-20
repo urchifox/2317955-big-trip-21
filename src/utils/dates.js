@@ -14,7 +14,15 @@ function getDuration(date1, date2) {
   const hours = Math.floor(differenceInMinutes % 1440 / 60);
   const minutes = Math.floor(differenceInMinutes % 60 / 1);
 
-  return `${days}D ${hours}H ${minutes}M`;
+  if (days > 0) {
+    return `${days}D ${hours}H ${minutes}M`;
+  } else {
+    if (hours > 0) {
+      return `${hours}H ${minutes}M`;
+    }
+  }
+
+  return `${minutes}M`;
 }
 
 function getMinDate(date1, date2) {
