@@ -114,6 +114,7 @@ export default class PointPresenter {
         isSaving: false,
         isDeleting: false,
       });
+      this.#pointEditComponent.setDatePicker();
     };
 
     this.#pointEditComponent.shake(resetFormState);
@@ -148,6 +149,7 @@ export default class PointPresenter {
   };
 
   #handleCloseClick = () => {
+    this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToCard();
   };
 

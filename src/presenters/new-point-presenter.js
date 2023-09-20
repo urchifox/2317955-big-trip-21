@@ -64,6 +64,7 @@ export default class NewPointPresenter {
         isSaving: false,
         isDeleting: false,
       });
+      this.#pointEditComponent.setDatePicker();
     };
 
     this.#pointEditComponent.shake(resetFormState);

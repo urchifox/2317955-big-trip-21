@@ -4,6 +4,7 @@ import flatpickr from 'flatpickr';
 import he from 'he';
 import 'flatpickr/dist/flatpickr.min.css';
 import { isFormValid } from '../utils/common.js';
+import dayjs from 'dayjs';
 
 function createOffersTemplate(point, offers) {
   const offersByType = offers.find((offer) => offer.type === point.type).offers;
@@ -86,6 +87,8 @@ function getSubmitButtonName(point) {
 
 function createTemplate(point, allOffers, allDestinations) {
   const pointDestination = allDestinations.find((destination) => destination.id === point.destination);
+  const dateFromFormated = !point.dateFrom ? '' : dayjs(point.dateFrom).format('DD/MM/YY HH:mm');
+  const dateToFormated = !point.dateTo ? '' : dayjs(point.dateTo).format('DD/MM/YY HH:mm');
 
   const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
       <div class="event__type-item">
@@ -136,12 +139,12 @@ function createTemplate(point, allOffers, allDestinations) {
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
             <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time"
-              value="${point.dateFrom ?? ''}"
+              value="${dateFromFormated ?? ''}"
             >
             —
             <label class="visually-hidden" for="event-end-time-1">To</label>
             <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time"
-              value="${point.dateTo ?? ''}"
+              value="${dateToFormated ?? ''}"
             >
           </div>
 
