@@ -10,21 +10,11 @@ function getDuration(date1, date2) {
   const endDate = dayjs(date2);
   const differenceInMinutes = endDate.diff(startDate, 'minute');
 
-  const years = Math.floor(differenceInMinutes / 525960);
-  const months = Math.floor(differenceInMinutes % 525960 / 43800);
-  const days = Math.floor(differenceInMinutes % 43800 / 1440);
+  const days = Math.floor(differenceInMinutes / 1440);
   const hours = Math.floor(differenceInMinutes % 1440 / 60);
   const minutes = Math.floor(differenceInMinutes % 60 / 1);
 
-  // тз требует прописывать все данные, даже если они равны нулю, но это же очень некрасиво и я отступила от этого требования
-  let message = '';
-  message += (years > 0) ? `${years}Y ` : '';
-  message += (months > 0) ? `${months}M ` : '';
-  message += (days > 0) ? `${days}D ` : '';
-  message += (hours > 0) ? `${hours}H ` : '';
-  message += (minutes > 0) ? `${minutes}M` : '';
-
-  return message;
+  return `${days}D ${hours}H ${minutes}M`;
 }
 
 function getMinDate(date1, date2) {
