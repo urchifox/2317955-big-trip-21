@@ -20,7 +20,7 @@ export default class TripSummaryPresenter {
   }
 
   init() {
-    if (this.#pointsModel.points.length === 0) {
+    if (this.#pointsModel.points.length === 0 || this.#pointsModel.isFailed || this.#offersModel.isFailed || this.#destinationsModel.isFailed) {
       remove(this.#summaryComponent);
       return;
     }

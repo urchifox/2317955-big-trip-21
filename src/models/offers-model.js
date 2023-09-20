@@ -1,6 +1,7 @@
 export default class OffersModel {
   #offers = [];
   #offersApiService = null;
+  #isFailed = false;
 
   constructor({offersApiService}) {
     this.#offersApiService = offersApiService;
@@ -14,11 +15,17 @@ export default class OffersModel {
     return this.#offers.reduce((accumulator, offersByType) => [...accumulator, ...offersByType.offers], []);
   }
 
+  get isFailed() {
+    return this.#isFailed;
+  }
+
   async init() {
     try {
       this.#offers = await this.#offersApiService.offers;
+      this.#isFailed = false;
     } catch(err) {
       this.#offers = [];
+      this.#isFailed = true;
     }
   }
 

@@ -87,7 +87,7 @@ export default class BoardPresenter {
 
     render(this.#listComponent, this.#boardContainer);
 
-    if(this.#pointsModel.isFailed) {
+    if(this.#pointsModel.isFailed || this.#offersModel.isFailed || this.#destinationsModel.isFailed) {
       this.#newPointButtonComponent.element.disabled = true;
       this.#renderNoPoints();
       return;
