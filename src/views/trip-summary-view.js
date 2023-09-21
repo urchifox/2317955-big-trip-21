@@ -10,7 +10,7 @@ function createTemplate(cities, dates, wholePrice) {
       </div>
 
       <p class="trip-info__cost">
-        Total: €&nbsp;<span class="trip-info__cost-value">${wholePrice}</span>
+        Total: &euro;&nbsp;<span class="trip-info__cost-value">${wholePrice}</span>
       </p>
     </section>
   `;

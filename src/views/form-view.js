@@ -21,7 +21,7 @@ function createOffersTemplate(point, offers) {
         ${point.offers.includes(offer.id) ? 'checked' : ''} ">
       <label class="event__offer-label" for="event-offer-${point.id}-${offer.id}">
         <span class="event__offer-title">${offer.title}</span>
-        +€&nbsp;
+        +&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
       </label>
     </div>
@@ -151,7 +151,7 @@ function createTemplate(point, allOffers, allDestinations) {
           <div class="event__field-group  event__field-group--price">
             <label class="event__label" for="event-price-1">
               <span class="visually-hidden">Price</span>
-              €
+              &euro;
             </label>
             <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.basePrice}">
           </div>

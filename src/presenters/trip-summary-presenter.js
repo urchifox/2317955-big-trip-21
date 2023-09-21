@@ -52,10 +52,10 @@ export default class TripSummaryPresenter {
     const uniqueCities = [];
     uniqueIds.forEach((id) => uniqueCities.push(this.#destinationsModel.getDestinationById(id).name));
     if (uniqueCities.length > 3) {
-      return `${uniqueCities[0]} — ... — ${uniqueCities.at(-1)}`;
+      return `${uniqueCities[0]} &mdash; ... &mdash; ${uniqueCities.at(-1)}`;
     }
 
-    return uniqueCities.join(' — ');
+    return uniqueCities.join(' &mdash; ');
   }
 
   #getDates() {
@@ -66,7 +66,7 @@ export default class TripSummaryPresenter {
     const endDate = getMaxDate.apply(null, allEndDates);
     const endMonth = dayjs(endDate).get('month');
 
-    return `${dayjs(startDate).format('MMM DD')} — ${dayjs(endDate).format((startMonth === endMonth ? 'DD' : 'MMM DD'))}`;
+    return `${dayjs(startDate).format('DD MMM')}&nbsp;&mdash;&nbsp;${dayjs(endDate).format((startMonth === endMonth ? 'DD' : 'DD MMM'))}`;
   }
 
   #getWholePrice() {
