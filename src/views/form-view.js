@@ -231,6 +231,11 @@ export default class FormView extends AbstractStatefulView {
     this.updateElement(FormView.parsePointToState(point),);
   }
 
+  updateElement(update) {
+    super.updateElement(update);
+    this.setDatePicker();
+  }
+
   static parsePointToState(point) {
     return {
       ...point,
@@ -267,7 +272,6 @@ export default class FormView extends AbstractStatefulView {
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({type: evt.target.value.toLowerCase(), offers: []});
-    this.setDatePicker();
   };
 
   #destinationChangeHandler = (evt) => {
@@ -275,13 +279,11 @@ export default class FormView extends AbstractStatefulView {
     const chosenDestinationId = chosenDestination ? chosenDestination.id : '';
 
     this.updateElement({destination: chosenDestinationId});
-    this.setDatePicker();
   };
 
   #priceChangeHandler = (evt) => {
     const newPrice = parseInt(he.encode(evt.target.value), 10);
     this.updateElement({basePrice: (Number.isNaN(newPrice) ? 0 : newPrice) });
-    this.setDatePicker();
   };
 
   #offersChangeHandler = (evt) => {
