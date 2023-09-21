@@ -13,12 +13,16 @@ function createOffersTemplate(point, offers) {
     return '';
   }
 
+  const disableStatus = point.isDisabled ? 'disabled' : '';
+
   const offersTemplate = offersByType.map((offer) => /*html*/`
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" type="checkbox" name="event-offer-luggage"
         id="event-offer-${point.id ? he.encode(point.id) : ''}-${he.encode(offer.id)}"
         value="${he.encode(offer.id)}"
-        ${point.offers.includes(offer.id) ? 'checked' : ''} ">
+        ${point.offers.includes(offer.id) ? 'checked' : ''} "
+        ${disableStatus}
+      >
       <label class="event__offer-label" for="event-offer-${point.id ? he.encode(point.id) : ''}-${he.encode(offer.id)}">
         <span class="event__offer-title">${he.encode(offer.title)}</span>
         +&euro;&nbsp;
@@ -93,6 +97,8 @@ function createTemplate(point, allOffers, allDestinations) {
   const dateFromFormated = !point.dateFrom ? '' : dayjs(point.dateFrom).format('DD/MM/YY HH:mm');
   const dateToFormated = !point.dateTo ? '' : dayjs(point.dateTo).format('DD/MM/YY HH:mm');
 
+  const disableStatus = point.isDisabled ? 'disabled' : '';
+
   const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
       <div class="event__type-item">
         <input class="event__type-input  visually-hidden" type="radio" name="event-type"
@@ -117,7 +123,10 @@ function createTemplate(point, allOffers, allDestinations) {
               <span class="visually-hidden">Choose event type</span>
               <img class="event__type-icon" width="17" height="17" src="img/icons/${pointType}.png" alt="Event type icon">
             </label>
-            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${pointId}" type="checkbox">
+            <input class="event__type-toggle  visually-hidden" type="checkbox"
+              id="event-type-toggle-${pointId}"
+              ${disableStatus}
+            >
 
             <div class="event__type-list">
               <fieldset class="event__type-group">
@@ -133,6 +142,7 @@ function createTemplate(point, allOffers, allDestinations) {
             </label>
             <input required class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" list="destination-list-1"
               value="${he.encode(pointDestinationInfo?.name ?? '')}"
+              ${disableStatus}
             >
             <datalist id="destination-list-1">
               ${destinationsNamesTemplate}
@@ -143,11 +153,13 @@ function createTemplate(point, allOffers, allDestinations) {
             <label class="visually-hidden" for="event-start-time-1">From</label>
             <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time"
               value="${dateFromFormated ?? ''}"
+              ${disableStatus}
             >
             —
             <label class="visually-hidden" for="event-end-time-1">To</label>
             <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time"
               value="${dateToFormated ?? ''}"
+              ${disableStatus}
             >
           </div>
 
@@ -156,7 +168,10 @@ function createTemplate(point, allOffers, allDestinations) {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${pointPrice}">
+            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price"
+              value="${pointPrice}"
+              ${disableStatus}
+            >
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit"
@@ -165,7 +180,7 @@ function createTemplate(point, allOffers, allDestinations) {
             ${point.isSaving ? 'Saving...' : 'Save'}
           </button>
           <button class="event__reset-btn" type="reset"
-            ${point.isDisabled ? 'disabled' : ''}
+            ${disableStatus}
           >
             ${getSubmitButtonName(point)}
            </button>
