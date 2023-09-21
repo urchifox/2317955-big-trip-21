@@ -29,9 +29,15 @@ function getMinDate(date1, date2) {
   dayjs.extend(minMax);
   return dayjs.min(dayjs(date1), dayjs(date2));
 }
-function getMaxDate(date1, date2) {
+
+function getMaxDate(dates) {
   dayjs.extend(minMax);
-  return dayjs.max(dayjs(date1), dayjs(date2));
+  let maxDate = dates[0];
+  for (let i = 1; i < dates.length; i++) {
+    const newMaxDate = dayjs.max(dayjs(maxDate), dayjs(dates[i]));
+    maxDate = newMaxDate;
+  }
+  return maxDate;
 }
 
 function isFutureDate(date) {
