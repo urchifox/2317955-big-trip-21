@@ -16,10 +16,10 @@ function createOffersTemplate(point, offers) {
   const offersTemplate = offersByType.map((offer) => /*html*/`
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" type="checkbox" name="event-offer-luggage"
-        id="event-offer-${he.encode(point.id)}-${he.encode(offer.id)}"
+        id="event-offer-${point.id ? he.encode(point.id) : ''}-${he.encode(offer.id)}"
         value="${he.encode(offer.id)}"
         ${point.offers.includes(offer.id) ? 'checked' : ''} ">
-      <label class="event__offer-label" for="event-offer-${he.encode(point.id)}-${he.encode(offer.id)}">
+      <label class="event__offer-label" for="event-offer-${point.id ? he.encode(point.id) : ''}-${he.encode(offer.id)}">
         <span class="event__offer-title">${he.encode(offer.title)}</span>
         +&euro;&nbsp;
         <span class="event__offer-price">${he.encode(String(offer.price))}</span>
@@ -86,7 +86,7 @@ function getSubmitButtonName(point) {
 }
 
 function createTemplate(point, allOffers, allDestinations) {
-  const pointId = he.encode(point.id);
+  const pointId = point.id ? he.encode(point.id) : '';
   const pointType = he.encode(point.type);
   const pointPrice = he.encode(String(point.basePrice));
   const pointDestinationInfo = allDestinations.find((destination) => destination.id === point.destination);
