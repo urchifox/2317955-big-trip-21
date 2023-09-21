@@ -3,7 +3,9 @@ import he from 'he';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createTemplate(point, offers, destination) {
-  const {type, dateFrom, dateTo, basePrice, isFavorite} = point;
+  const {dateFrom, dateTo, isFavorite} = point;
+  const pointType = he.encode(point.type);
+  const pointPrice = he.encode(String(point.basePrice));
 
   const dateStart = getFormattedDate(dateFrom, 'MMM DD');
   const timeStart = getFormattedDate(dateFrom, 'HH:mm');
@@ -13,9 +15,9 @@ function createTemplate(point, offers, destination) {
 
   const offersTemplate = offers.reduce((markup, offer) => `${markup}
       <li class="event__offer">
-        <span class="event__offer-title">${offer.title}</span>
+        <span class="event__offer-title">${he.encode(offer.title)}</span>
         +&euro;&nbsp;
-        <span class="event__offer-price">${offer.price}</span>
+        <span class="event__offer-price">${he.encode(String(offer.price))}</span>
       </li>
     `, '');
 
@@ -24,9 +26,9 @@ function createTemplate(point, offers, destination) {
       <div class="event">
         <time class="event__date" datetime="2019-03-18">${dateStart}</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${pointType.toLowerCase()}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} ${he.encode(destination.name)}</h3>
+        <h3 class="event__title">${pointType} ${he.encode(destination.name)}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="2019-03-18T10:30">${timeStart}</time>
@@ -36,7 +38,7 @@ function createTemplate(point, offers, destination) {
           <p class="event__duration">${duration}</p>
         </div>
         <p class="event__price">
-          &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
+          &euro;&nbsp;<span class="event__price-value">${pointPrice}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">

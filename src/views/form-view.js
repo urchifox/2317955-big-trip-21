@@ -16,13 +16,13 @@ function createOffersTemplate(point, offers) {
   const offersTemplate = offersByType.map((offer) => /*html*/`
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" type="checkbox" name="event-offer-luggage"
-        id="event-offer-${point.id}-${offer.id}"
-        value="${offer.id}"
+        id="event-offer-${he.encode(point.id)}-${he.encode(offer.id)}"
+        value="${he.encode(offer.id)}"
         ${point.offers.includes(offer.id) ? 'checked' : ''} ">
-      <label class="event__offer-label" for="event-offer-${point.id}-${offer.id}">
-        <span class="event__offer-title">${offer.title}</span>
+      <label class="event__offer-label" for="event-offer-${he.encode(point.id)}-${he.encode(offer.id)}">
+        <span class="event__offer-title">${he.encode(offer.title)}</span>
         +&euro;&nbsp;
-        <span class="event__offer-price">${offer.price}</span>
+        <span class="event__offer-price">${he.encode(String(offer.price))}</span>
       </label>
     </div>
   `).join(' ');
@@ -43,7 +43,7 @@ function createPicturesTemplate(pictures) {
     return '';
   }
   const picturesTemplate = pictures.map(({src, description}) => /*html*/`
-    <img class="event__photo" src="${src}" alt="${description}"></img>
+    <img class="event__photo" src="${he.encode(src)}" alt="${he.encode(description)}"></img>
   `).join(' ');
 
   return /*html*/`
@@ -65,7 +65,7 @@ function createDestinationTemplate(pointDestination) {
 
   const descriptionTemplate = pointDestination.description.length === 0 ? '' :
     `<p class="event__destination-description">
-      ${pointDestination.description}
+      ${he.encode(pointDestination.description)}
     </p>`;
 
   return /*html*/`
@@ -86,23 +86,26 @@ function getSubmitButtonName(point) {
 }
 
 function createTemplate(point, allOffers, allDestinations) {
-  const pointDestination = allDestinations.find((destination) => destination.id === point.destination);
+  const pointId = he.encode(point.id);
+  const pointType = he.encode(point.type);
+  const pointPrice = he.encode(String(point.basePrice));
+  const pointDestinationInfo = allDestinations.find((destination) => destination.id === point.destination);
   const dateFromFormated = !point.dateFrom ? '' : dayjs(point.dateFrom).format('DD/MM/YY HH:mm');
   const dateToFormated = !point.dateTo ? '' : dayjs(point.dateTo).format('DD/MM/YY HH:mm');
 
   const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
       <div class="event__type-item">
         <input class="event__type-input  visually-hidden" type="radio" name="event-type"
-          id="event-type-${type.toLowerCase()}-${point.id}"
+          id="event-type-${type.toLowerCase()}-${pointId}"
           value="${type}"
-          ${point.type === type ? 'checked' : ''}
+          ${pointType === type ? 'checked' : ''}
         >
-        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${point.id}">${type}</label>
+        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${pointId}">${type}</label>
       </div>
     `).join(' ');
 
   const destinationsNamesTemplate = allDestinations.map((destination) => /*html*/`
-    <option value="${destination.name}"></option>
+    <option value="${he.encode(destination.name)}"></option>
     `).join(' ');
 
   return /*html*/`
@@ -110,11 +113,11 @@ function createTemplate(point, allOffers, allDestinations) {
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
           <div class="event__type-wrapper">
-            <label class="event__type  event__type-btn" for="event-type-toggle-${point.id}">
+            <label class="event__type  event__type-btn" for="event-type-toggle-${pointId}">
               <span class="visually-hidden">Choose event type</span>
-              <img class="event__type-icon" width="17" height="17" src="img/icons/${point.type}.png" alt="Event type icon">
+              <img class="event__type-icon" width="17" height="17" src="img/icons/${pointType}.png" alt="Event type icon">
             </label>
-            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${point.id}" type="checkbox">
+            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${pointId}" type="checkbox">
 
             <div class="event__type-list">
               <fieldset class="event__type-group">
@@ -126,10 +129,10 @@ function createTemplate(point, allOffers, allDestinations) {
 
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-1">
-              ${point.type}
+              ${pointType}
             </label>
             <input required class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" list="destination-list-1"
-              value="${he.encode(pointDestination?.name ?? '')}"
+              value="${he.encode(pointDestinationInfo?.name ?? '')}"
             >
             <datalist id="destination-list-1">
               ${destinationsNamesTemplate}
@@ -153,7 +156,7 @@ function createTemplate(point, allOffers, allDestinations) {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.basePrice}">
+            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${pointPrice}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit"
@@ -166,13 +169,13 @@ function createTemplate(point, allOffers, allDestinations) {
           >
             ${getSubmitButtonName(point)}
            </button>
-           ${!point.id ? '' : `<button class="event__rollup-btn" type="button">
+           ${!pointId ? '' : `<button class="event__rollup-btn" type="button">
               <span class="visually-hidden">Open event</span>
             </button>`}
         </header>
         <section class="event__details">
           ${createOffersTemplate(point, allOffers)}
-          ${createDestinationTemplate(pointDestination)}
+          ${createDestinationTemplate(pointDestinationInfo)}
         </section>
       </form>
     </li>
@@ -275,14 +278,14 @@ export default class FormView extends AbstractStatefulView {
   };
 
   #destinationChangeHandler = (evt) => {
-    const chosenDestination = this.#allDestinations.find((destination) => destination.name === he.encode(evt.target.value));
+    const chosenDestination = this.#allDestinations.find((destination) => destination.name === evt.target.value);
     const chosenDestinationId = chosenDestination ? chosenDestination.id : '';
 
     this.updateElement({destination: chosenDestinationId});
   };
 
   #priceChangeHandler = (evt) => {
-    const newPrice = parseInt(he.encode(evt.target.value), 10);
+    const newPrice = parseInt(evt.target.value, 10);
     this.updateElement({basePrice: (Number.isNaN(newPrice) ? 0 : newPrice) });
   };
 
