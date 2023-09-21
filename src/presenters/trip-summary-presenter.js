@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { RenderPosition, remove, render, replace } from '../framework/render';
-import { getMaxDate } from '../utils/dates';
+import { getMaxDate, getMinDate } from '../utils/dates';
 import TripSummaryView from '../views/trip-summary-view';
 
 export default class TripSummaryPresenter {
@@ -58,7 +58,8 @@ export default class TripSummaryPresenter {
 
   #getDates() {
     const points = this.#pointsModel.points;
-    const startDate = points[0].dateFrom;
+    const allStartDates = points.reduce((accumulator, point) => [...accumulator, point.dateFrom], []);
+    const startDate = getMinDate(allStartDates);
     const startMonth = dayjs(startDate).get('month');
     const allEndDates = points.reduce((accumulator, point) => [...accumulator, point.dateTo], []);
     const endDate = getMaxDate(allEndDates);

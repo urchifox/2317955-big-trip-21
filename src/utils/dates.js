@@ -25,9 +25,14 @@ function getDuration(date1, date2) {
   return `${minutes}M`;
 }
 
-function getMinDate(date1, date2) {
+function getMinDate(dates) {
   dayjs.extend(minMax);
-  return dayjs.min(dayjs(date1), dayjs(date2));
+  let minDate = dates[0];
+  for (let i = 1; i < dates.length; i++) {
+    const newMaxDate = dayjs.min(dayjs(minDate), dayjs(dates[i]));
+    minDate = newMaxDate;
+  }
+  return minDate;
 }
 
 function getMaxDate(dates) {
