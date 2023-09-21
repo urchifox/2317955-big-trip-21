@@ -47,15 +47,13 @@ export default class TripSummaryPresenter {
 
   #getCities() {
     const points = this.#pointsModel.points;
-    const allCitiesId = points.reduce((accumulator, point) => [...accumulator, point.destination], []);
-    const uniqueIds = new Set(allCitiesId);
-    const uniqueCities = [];
-    uniqueIds.forEach((id) => uniqueCities.push(this.#destinationsModel.getDestinationById(id).name));
-    if (uniqueCities.length > 3) {
-      return `${uniqueCities[0]} &mdash; ... &mdash; ${uniqueCities.at(-1)}`;
+    const allCities = points.reduce((accumulator, point) => [...accumulator, this.#destinationsModel.getDestinationById(point.destination).name], []);
+
+    if (allCities.length > 3) {
+      return `${allCities[0]} &mdash; ... &mdash; ${allCities.at(-1)}`;
     }
 
-    return uniqueCities.join(' &mdash; ');
+    return allCities.join(' &mdash; ');
   }
 
   #getDates() {
