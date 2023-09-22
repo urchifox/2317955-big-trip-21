@@ -60,12 +60,10 @@ export default class TripSummaryPresenter {
     const points = this.#pointsModel.points;
     const allStartDates = points.reduce((accumulator, point) => [...accumulator, point.dateFrom], []);
     const startDate = getMinDate(allStartDates);
-    const startMonth = dayjs(startDate).get('month');
     const allEndDates = points.reduce((accumulator, point) => [...accumulator, point.dateTo], []);
     const endDate = getMaxDate(allEndDates);
-    const endMonth = dayjs(endDate).get('month');
 
-    return `${dayjs(startDate).format('DD MMM')}&nbsp;&mdash;&nbsp;${dayjs(endDate).format((startMonth === endMonth ? 'DD' : 'DD MMM'))}`;
+    return `${dayjs(startDate).format('DD MMM')}&nbsp;&mdash;&nbsp;${dayjs(endDate).format('DD MMM')}`;
   }
 
   #getWholePrice() {
