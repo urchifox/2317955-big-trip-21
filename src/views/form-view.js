@@ -276,9 +276,6 @@ export default class FormView extends AbstractStatefulView {
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this.#handleFormSubmit(FormView.parseStateToPoint(this._state));
-
-    // const input = document.querySelector('.event__type-toggle');
-    // console.log(input?.hasAttribute('disabled'));
   };
 
   #formDeleteClickHandler = (evt) => {

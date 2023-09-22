@@ -194,6 +194,7 @@ export default class BoardPresenter {
 
   #handleModeChange = (id) => {
     this.#newPointPresenter.destroy();
+
     if (this.#pointEditingId !== null && this.#pointEditingId !== id) {
       this.#pointsPresenters.get(this.#pointEditingId)?.resetView();
     }
@@ -215,8 +216,10 @@ export default class BoardPresenter {
   #handleNewPointDestroy = () => {
     this.#onNewPointDestroy();
     this.#isCreating = false;
-    // this.#clearBoard();
-    // this.#renderBoard();
+    if (this.points.length === 0) {
+      this.#clearBoard();
+      this.#renderBoard();
+    }
   };
 
   #clearBoard({resetSortType = false} = {}) {

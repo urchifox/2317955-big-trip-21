@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { RenderPosition, remove, render, replace } from '../framework/render';
 import { getMaxDate, getMinDate } from '../utils/dates';
 import TripSummaryView from '../views/trip-summary-view';
+import { sortByDay } from '../utils/sorting';
 
 export default class TripSummaryPresenter {
   #summaryComponent = null;
@@ -46,7 +47,7 @@ export default class TripSummaryPresenter {
   };
 
   #getCities() {
-    const points = this.#pointsModel.points;
+    const points = this.#pointsModel.points.sort(sortByDay);
     const allCities = points.reduce((accumulator, point) => [...accumulator, this.#destinationsModel.getDestinationById(point.destination).name], []);
 
     if (allCities.length > 3) {
