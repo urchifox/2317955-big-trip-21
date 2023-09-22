@@ -84,9 +84,9 @@ function createDestinationTemplate(pointDestination) {
 function getSubmitButtonName(point) {
   if (!point.id) {
     return 'Cancel';
-  } else {
-    return (point.isDeleting ? 'Deleting...' : 'Delete');
   }
+
+  return (point.isDeleting ? 'Deleting...' : 'Delete');
 }
 
 function createTemplate(point, allOffers, allDestinations) {
@@ -168,7 +168,7 @@ function createTemplate(point, allOffers, allDestinations) {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price"
+            <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price"
               value="${pointPrice}"
               ${disableStatus}
             >
@@ -276,6 +276,9 @@ export default class FormView extends AbstractStatefulView {
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this.#handleFormSubmit(FormView.parseStateToPoint(this._state));
+
+    // const input = document.querySelector('.event__type-toggle');
+    // console.log(input?.hasAttribute('disabled'));
   };
 
   #formDeleteClickHandler = (evt) => {
@@ -301,7 +304,8 @@ export default class FormView extends AbstractStatefulView {
 
   #priceChangeHandler = (evt) => {
     const newPrice = parseInt(evt.target.value, 10);
-    this.updateElement({basePrice: (Number.isNaN(newPrice) ? 0 : newPrice) });
+    this._setState({basePrice: (Number.isNaN(newPrice) ? 0 : newPrice) });
+    this.element.querySelector('.event__save-btn').disabled = !isFormValid(this._state);
   };
 
   #offersChangeHandler = (evt) => {
@@ -325,11 +329,13 @@ export default class FormView extends AbstractStatefulView {
   #dateFromChangeHandler = ([userDate]) => {
     this._setState({dateFrom: userDate});
     this.#datepickerTo.set({minDate: this._state.dateFrom});
+    this.element.querySelector('.event__save-btn').disabled = !isFormValid(this._state);
   };
 
   #dateToChangeHandler = ([userDate]) => {
     this._setState({dateTo: userDate});
     this.#datepickerFrom.set({maxDate: this._state.dateTo});
+    this.element.querySelector('.event__save-btn').disabled = !isFormValid(this._state);
   };
 
   setDatePicker() {
