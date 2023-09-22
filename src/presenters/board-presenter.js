@@ -215,8 +215,8 @@ export default class BoardPresenter {
   #handleNewPointDestroy = () => {
     this.#onNewPointDestroy();
     this.#isCreating = false;
-    this.#clearBoard();
-    this.#renderBoard();
+    // this.#clearBoard();
+    // this.#renderBoard();
   };
 
   #clearBoard({resetSortType = false} = {}) {

@@ -16,10 +16,10 @@ function getDuration(date1, date2) {
 
   if (days > 0) {
     return `${days}D ${hours}H ${minutes}M`;
-  } else {
-    if (hours > 0) {
-      return `${hours}H ${minutes}M`;
-    }
+  }
+
+  if (hours > 0) {
+    return `${hours}H ${minutes}M`;
   }
 
   return `${minutes}M`;

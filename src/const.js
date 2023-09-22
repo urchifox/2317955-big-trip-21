@@ -91,8 +91,7 @@ export const Method = {
   DELETE: 'DELETE',
 };
 
-// TODO adress? domen?
-export const ServerUrl = {
+export const ServerPaths = {
   POINTS: 'points',
   OFFERS: 'offers',
   DESTINATIONS: 'destinations',
