@@ -104,7 +104,7 @@ function createTemplate(point, allOffers, allDestinations) {
         <input class="event__type-input  visually-hidden" type="radio" name="event-type"
           id="event-type-${type.toLowerCase()}-${pointId}"
           value="${type}"
-          ${pointType === type ? 'checked' : ''}
+          ${pointType === type.toLowerCase() ? 'checked' : ''}
         >
         <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${pointId}">${type}</label>
       </div>
@@ -140,7 +140,7 @@ function createTemplate(point, allOffers, allDestinations) {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${pointType}
             </label>
-            <input required class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" list="destination-list-1"
+            <input required class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" list="destination-list-1" required
               value="${he.encode(pointDestinationInfo?.name ?? '')}"
               ${disableStatus}
             >
@@ -151,13 +151,13 @@ function createTemplate(point, allOffers, allDestinations) {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time"
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" required
               value="${dateFromFormated ?? ''}"
               ${disableStatus}
             >
             —
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time"
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" required
               value="${dateToFormated ?? ''}"
               ${disableStatus}
             >
@@ -168,7 +168,7 @@ function createTemplate(point, allOffers, allDestinations) {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price"
+            <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" min="1" required
               value="${pointPrice}"
               ${disableStatus}
             >
