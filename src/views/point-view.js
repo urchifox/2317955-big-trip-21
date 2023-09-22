@@ -2,6 +2,22 @@ import { getFormattedDate, getDuration } from '../utils/dates.js';
 import he from 'he';
 import AbstractView from '../framework/view/abstract-view.js';
 
+function formateDuration(durationInMinutes) {
+  const days = Math.floor(durationInMinutes / 1440);
+  const hours = Math.floor(durationInMinutes % 1440 / 60);
+  const minutes = Math.floor(durationInMinutes % 60 / 1);
+
+  if (days > 0) {
+    return `${days}D ${hours}H ${minutes}M`;
+  }
+
+  if (hours > 0) {
+    return `${hours}H ${minutes}M`;
+  }
+
+  return `${minutes}M`;
+}
+
 function createTemplate(point, offers, destination) {
   const {dateFrom, dateTo, isFavorite} = point;
   const pointType = he.encode(point.type);
@@ -10,7 +26,7 @@ function createTemplate(point, offers, destination) {
   const dateStart = getFormattedDate(dateFrom, 'MMM DD');
   const timeStart = getFormattedDate(dateFrom, 'HH:mm');
   const timeEnd = getFormattedDate(dateTo, 'HH:mm');
-  const duration = getDuration(dateFrom, dateTo);
+  const duration = formateDuration(getDuration(dateFrom, dateTo));
   const favoriteClass = (isFavorite) ? 'event__favorite-btn--active' : '';
 
   const offersTemplate = offers.reduce((markup, offer) => `${markup}

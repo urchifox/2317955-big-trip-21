@@ -1,5 +1,5 @@
 import { showAll, showFuture, showPast, showPresent } from './utils/filters';
-import { sortByDay, sortByPrice, sortByTime } from './utils/sorting';
+import { compareByDayFrom, compareByPrice, compareByDuration } from './utils/comparing';
 
 export const BLANK_POINT = {
   basePrice: 0,
@@ -44,7 +44,7 @@ export const DEFAULT_FILTRATION = FILTRATION_OPTIONS[0];
 export const SORTING_OPTIONS = [
   {
     name: 'day',
-    sortCb: sortByDay,
+    sortCb: compareByDayFrom,
     isDisable: false,
   },
   {
@@ -54,12 +54,12 @@ export const SORTING_OPTIONS = [
   },
   {
     name: 'time',
-    sortCb: sortByTime,
+    sortCb: compareByDuration,
     isDisable: false,
   },
   {
     name: 'price',
-    sortCb: sortByPrice,
+    sortCb: compareByPrice,
     isDisable: false,
   },
   {

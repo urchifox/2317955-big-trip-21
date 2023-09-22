@@ -1,8 +1,7 @@
 import dayjs from 'dayjs';
 import { RenderPosition, remove, render, replace } from '../framework/render';
-import { getMaxDate, getMinDate } from '../utils/dates';
 import TripSummaryView from '../views/trip-summary-view';
-import { sortByDay } from '../utils/sorting';
+import { compareByDayFrom, compareByDayTo } from '../utils/comparing';
 
 export default class TripSummaryPresenter {
   #summaryComponent = null;
@@ -47,7 +46,7 @@ export default class TripSummaryPresenter {
   };
 
   #getCities() {
-    const points = this.#pointsModel.points.sort(sortByDay);
+    const points = this.#pointsModel.points.sort(compareByDayFrom);
     const allCities = points.reduce((accumulator, point) => [...accumulator, this.#destinationsModel.getDestinationById(point.destination).name], []);
 
     if (allCities.length > 3) {
@@ -59,10 +58,10 @@ export default class TripSummaryPresenter {
 
   #getDates() {
     const points = this.#pointsModel.points;
-    const allStartDates = points.reduce((accumulator, point) => [...accumulator, point.dateFrom], []);
-    const startDate = getMinDate(allStartDates);
-    const allEndDates = points.reduce((accumulator, point) => [...accumulator, point.dateTo], []);
-    const endDate = getMaxDate(allEndDates);
+    const allStartDates = points.reduce((accumulator, point) => [...accumulator, point.dateFrom], []).sort(compareByDayFrom);
+    const startDate = allStartDates[0];
+    const allEndDates = points.reduce((accumulator, point) => [...accumulator, point.dateTo], []).sort(compareByDayTo);
+    const endDate = allEndDates.at(-1);
 
     return `${dayjs(startDate).format('DD MMM')}&nbsp;&mdash;&nbsp;${dayjs(endDate).format('DD MMM')}`;
   }
