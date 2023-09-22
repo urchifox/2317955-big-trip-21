@@ -11,24 +11,31 @@ export const BLANK_POINT = {
   type: 'flight'
 };
 
+// мы должны хранить типы точек в константе или можем брать их из данных сервера?
 export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
+
+export const DEFAULT_NO_POINT_MESSAGE = 'Failed to load latest route information';
 
 export const FILTRATION_OPTIONS = [
   {
     name: 'everything',
-    filter: showAll,
+    filterCb: showAll,
+    noPointsMessage: 'Click New Event to create your first point',
   },
   {
     name: 'future',
-    filter: showFuture,
+    filterCb: showFuture,
+    noPointsMessage: 'There are no future events now',
   },
   {
     name: 'present',
-    filter: showPresent,
+    filterCb: showPresent,
+    noPointsMessage: 'There are no present events now',
   },
   {
     name: 'past',
-    filter: showPast,
+    filterCb: showPast,
+    noPointsMessage: 'There are no past events now',
   },
 ];
 
@@ -37,27 +44,27 @@ export const DEFAULT_FILTRATION = FILTRATION_OPTIONS[0];
 export const SORTING_OPTIONS = [
   {
     name: 'day',
-    sortingMethod: sortByDay,
+    sortCb: sortByDay,
     isDisable: false,
   },
   {
     name: 'event',
-    sortingMethod: null,
+    sortCb: null,
     isDisable: true,
   },
   {
     name: 'time',
-    sortingMethod: sortByTime,
+    sortCb: sortByTime,
     isDisable: false,
   },
   {
     name: 'price',
-    sortingMethod: sortByPrice,
+    sortCb: sortByPrice,
     isDisable: false,
   },
   {
     name: 'offers',
-    sortingMethod: null,
+    sortCb: null,
     isDisable: true,
   },
 ];
@@ -84,7 +91,7 @@ export const Method = {
   DELETE: 'DELETE',
 };
 
-export const ServerUrl = {
+export const ServerPaths = {
   POINTS: 'points',
   OFFERS: 'offers',
   DESTINATIONS: 'destinations',

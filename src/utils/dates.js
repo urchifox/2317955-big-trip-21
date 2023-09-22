@@ -10,29 +10,39 @@ function getDuration(date1, date2) {
   const endDate = dayjs(date2);
   const differenceInMinutes = endDate.diff(startDate, 'minute');
 
-  const years = Math.floor(differenceInMinutes / 525960);
-  const months = Math.floor(differenceInMinutes % 525960 / 43800);
-  const days = Math.floor(differenceInMinutes % 43800 / 1440);
+  const days = Math.floor(differenceInMinutes / 1440);
   const hours = Math.floor(differenceInMinutes % 1440 / 60);
   const minutes = Math.floor(differenceInMinutes % 60 / 1);
 
-  let message = '';
-  message += (years > 0) ? `${years}Y ` : '';
-  message += (months > 0) ? `${months}M ` : '';
-  message += (days > 0) ? `${days}D ` : '';
-  message += (hours > 0) ? `${hours}H ` : '';
-  message += (minutes > 0) ? `${minutes}M` : '';
+  if (days > 0) {
+    return `${days}D ${hours}H ${minutes}M`;
+  }
 
-  return message;
+  if (hours > 0) {
+    return `${hours}H ${minutes}M`;
+  }
+
+  return `${minutes}M`;
 }
 
-function getMinDate(date1, date2) {
+function getMinDate(dates) {
   dayjs.extend(minMax);
-  return dayjs.min(dayjs(date1), dayjs(date2));
+  let minDate = dates[0];
+  for (let i = 1; i < dates.length; i++) {
+    const newMaxDate = dayjs.min(dayjs(minDate), dayjs(dates[i]));
+    minDate = newMaxDate;
+  }
+  return minDate;
 }
-function getMaxDate(date1, date2) {
+
+function getMaxDate(dates) {
   dayjs.extend(minMax);
-  return dayjs.max(dayjs(date1), dayjs(date2));
+  let maxDate = dates[0];
+  for (let i = 1; i < dates.length; i++) {
+    const newMaxDate = dayjs.max(dayjs(maxDate), dayjs(dates[i]));
+    maxDate = newMaxDate;
+  }
+  return maxDate;
 }
 
 function isFutureDate(date) {

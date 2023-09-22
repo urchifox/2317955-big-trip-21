@@ -1,6 +1,7 @@
 export default class OffersModel {
   #offers = [];
   #offersApiService = null;
+  #isFailed = false;
 
   constructor({offersApiService}) {
     this.#offersApiService = offersApiService;
@@ -14,12 +15,17 @@ export default class OffersModel {
     return this.#offers.reduce((accumulator, offersByType) => [...accumulator, ...offersByType.offers], []);
   }
 
+  get isFailed() {
+    return this.#isFailed;
+  }
+
   async init() {
     try {
-      const offers = await this.#offersApiService.offers;
-      this.#offers = offers;
+      this.#offers = await this.#offersApiService.offers;
+      this.#isFailed = false;
     } catch(err) {
       this.#offers = [];
+      this.#isFailed = true;
     }
   }
 
@@ -28,7 +34,7 @@ export default class OffersModel {
       return [];
     }
 
-    const result = offersIds.reduce((accumulator, offerId) => {
+    return offersIds.reduce((accumulator, offerId) => {
       const chosenOffer = this.allOffers.find((offer) => offer.id === offerId);
 
       if (chosenOffer) {
@@ -37,8 +43,6 @@ export default class OffersModel {
 
       return accumulator;
     }, []);
-
-    return result;
   }
 
   getOffersByType(type) {

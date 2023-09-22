@@ -18,12 +18,11 @@ export default class FiltrationPresenter {
     this.#filtrationModel.addObserver(this.#handleModelEvent);
   }
 
-  // TODO переписать вывод данных в формат имя фильтра : булин в соответствии с которым дисэйблить
-  get filtrtationsInformation() {
+  get filtrationInformation() {
     const points = this.#pointsModel.points;
 
     return FILTRATION_OPTIONS.reduce((accumulator, option) => {
-      accumulator[option.name] = Boolean(option.filter(points).length);
+      accumulator[option.name] = Boolean(points.filter(option.filterCb).length);
       return accumulator;
     }, {});
   }
@@ -32,7 +31,7 @@ export default class FiltrationPresenter {
     const prevFilterComponent = this.#filtrationComponent;
 
     this.#filtrationComponent = new FiltrationView({
-      filtrtationsInformation: this.filtrtationsInformation,
+      filtrationInformation: this.filtrationInformation,
       currentFiltrationName: this.#filtrationModel.currentFiltration.name,
       onFilterTypeChange: this.#handleFilterTypeChange
     });

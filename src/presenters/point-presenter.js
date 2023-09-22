@@ -51,6 +51,7 @@ export default class PointPresenter {
       allDestinations: this.#destinationsModel.destinations,
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick,
+      onCloseClick: this.#handleCloseClick,
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -146,6 +147,11 @@ export default class PointPresenter {
     );
   };
 
+  #handleCloseClick = () => {
+    this.#pointEditComponent.reset(this.#point);
+    this.#replaceFormToCard();
+  };
+
   #escKeyDownHandler = (evt) => {
     if(!isEscapeKeydown(evt.key)) {
       return;
@@ -157,6 +163,7 @@ export default class PointPresenter {
 
   #replaceCardToForm() {
     replace(this.#pointEditComponent, this.#pointComponent);
+    this.#pointEditComponent.setDatePicker();
     document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#handleModeChange(this.#point.id);
     this.#mode = Mode.EDITING;

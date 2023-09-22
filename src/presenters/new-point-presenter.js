@@ -29,11 +29,12 @@ export default class NewPointPresenter {
       offersByType: this.#offersByType,
       allDestinations: this.#allDestinations,
       onFormSubmit: this.#handleFormSubmit,
-      onDeleteClick: this.#handleDeleteClick,
+      onDeleteClick: this.#handleCloseClick,
+      onCloseClick: this.#handleCloseClick,
     });
 
     render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
-
+    this.#pointEditComponent.setDatePicker();
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
@@ -42,11 +43,10 @@ export default class NewPointPresenter {
       return;
     }
 
-    this.#handleDestroy();
 
     remove(this.#pointEditComponent);
     this.#pointEditComponent = null;
-
+    this.#handleDestroy();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
@@ -77,12 +77,12 @@ export default class NewPointPresenter {
     );
   };
 
-  #handleDeleteClick = () => {
+  #handleCloseClick = () => {
     this.destroy();
   };
 
   #escKeyDownHandler = (evt) => {
-    if (isEscapeKeydown()) {
+    if (isEscapeKeydown(evt.key)) {
       evt.preventDefault();
       this.destroy();
     }
