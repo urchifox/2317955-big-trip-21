@@ -9,7 +9,7 @@ import SummaryPresenter from './presenters/summary-presenter.js';
 import FiltrationPresenter from './presenters/filtration-presenter.js';
 
 const headerContainer = document.querySelector('.trip-main');
-const tripSummaryContainer = headerContainer.querySelector('.trip-controls');
+const summaryContainer = headerContainer.querySelector('.trip-controls');
 const filtrationContainer = headerContainer.querySelector('.trip-controls__filters');
 const boardContainer = document.querySelector('.trip-events');
 
@@ -27,7 +27,7 @@ const destinationsModel = new DestinationsModel({
 const filtrationModel = new FiltrationModel();
 
 const boardPresenter = new BoardPresenter({
-  boardContainer: boardContainer,
+  boardContainer,
   newPointButtonContainer: headerContainer,
   pointsModel,
   offersModel,
@@ -37,7 +37,7 @@ const boardPresenter = new BoardPresenter({
 boardPresenter.init();
 
 const summaryPresenter = new SummaryPresenter({
-  summaryContainer: tripSummaryContainer,
+  summaryContainer,
   pointsModel,
   offersModel,
   destinationsModel

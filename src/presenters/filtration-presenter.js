@@ -32,8 +32,8 @@ export default class FiltrationPresenter {
 
     this.#filtrationComponent = new FiltrationView({
       filtrationInformation: this.filtrationInformation,
-      currentFiltrationName: this.#filtrationModel.currentMode.name,
-      onFilterTypeChange: this.#handleFilterTypeChange
+      currentModeName: this.#filtrationModel.currentMode.name,
+      onModeChange: this.#handleFiltrationModeChange
     });
 
     if (prevFilterComponent === null) {
@@ -49,11 +49,7 @@ export default class FiltrationPresenter {
     this.init();
   };
 
-  #handleFilterTypeChange = (filterType) => {
-    if (this.#filtrationModel.filter === filterType) {
-      return;
-    }
-
-    this.#filtrationModel.setMode(UpdateType.MAJOR, filterType);
+  #handleFiltrationModeChange = (modeName) => {
+    this.#filtrationModel.setMode(UpdateType.MAJOR, modeName);
   };
 }

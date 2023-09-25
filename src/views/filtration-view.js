@@ -28,24 +28,24 @@ function createTemplate(filtrationInformation, currentFiltrationName) {
 
 export default class FiltrationView extends AbstractView {
   #filtrationInformation = null;
-  #currentFiltrationName = null;
-  #handleFilterTypeChange = null;
+  #currentModeName = null;
+  #handleModeChange = null;
 
-  constructor ({filtrationInformation, currentFiltrationName, onFilterTypeChange}) {
+  constructor ({filtrationInformation, currentModeName, onModeChange}) {
     super();
     this.#filtrationInformation = filtrationInformation;
-    this.#currentFiltrationName = currentFiltrationName;
-    this.#handleFilterTypeChange = onFilterTypeChange;
+    this.#currentModeName = currentModeName;
+    this.#handleModeChange = onModeChange;
 
-    this.element.addEventListener('change', this.#filterTypeChangeHandler);
+    this.element.addEventListener('change', this.#modeChangeHandler);
   }
 
   get template() {
-    return createTemplate(this.#filtrationInformation, this.#currentFiltrationName);
+    return createTemplate(this.#filtrationInformation, this.#currentModeName);
   }
 
-  #filterTypeChangeHandler = (evt) => {
+  #modeChangeHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFilterTypeChange(evt.target.value);
+    this.#handleModeChange(evt.target.value);
   };
 }
