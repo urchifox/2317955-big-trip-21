@@ -5,7 +5,7 @@ import OffersModel from './models/offers-model.js';
 import DestinationsModel from './models/destinations-model.js';
 import FiltrationModel from './models/filtration-model.js';
 import BoardPresenter from './presenters/board-presenter.js';
-import TripSummaryPresenter from './presenters/trip-summary-presenter.js';
+import SummaryPresenter from './presenters/summary-presenter.js';
 import FiltrationPresenter from './presenters/filtration-presenter.js';
 
 const headerContainer = document.querySelector('.trip-main');
@@ -36,7 +36,7 @@ const boardPresenter = new BoardPresenter({
 });
 boardPresenter.init();
 
-const summaryPresenter = new TripSummaryPresenter({
+const summaryPresenter = new SummaryPresenter({
   summaryContainer: tripSummaryContainer,
   pointsModel,
   offersModel,

@@ -1,11 +1,12 @@
 import dayjs from 'dayjs';
-import { RenderPosition, remove, render, replace } from '../framework/render';
-import TripSummaryView from '../views/trip-summary-view';
-import { compareByDayFrom, compareByDayTo } from '../utils/comparing';
+import {RenderPosition, remove, render, replace} from '../framework/render';
+import {compareByDateFrom, compareByDateTo} from '../utils/comparing';
+import SummaryView from '../views/summary-view';
 
-export default class TripSummaryPresenter {
+export default class SummaryPresenter {
   #summaryComponent = null;
   #summaryContainer = null;
+
   #pointsModel = null;
   #offersModel = null;
   #destinationsModel = null;
@@ -26,7 +27,7 @@ export default class TripSummaryPresenter {
     }
 
     const prevSummaryComponent = this.#summaryComponent;
-    this.#summaryComponent = new TripSummaryView({
+    this.#summaryComponent = new SummaryView({
       cities: this.#getCities(),
       dates: this.#getDates(),
       wholePrice: this.#getWholePrice(),
@@ -46,7 +47,7 @@ export default class TripSummaryPresenter {
   };
 
   #getCities() {
-    const points = this.#pointsModel.points.sort(compareByDayFrom);
+    const points = this.#pointsModel.points.sort(compareByDateFrom);
     const allCities = points.reduce((accumulator, point) => [...accumulator, this.#destinationsModel.getDestinationById(point.destination).name], []);
 
     if (allCities.length > 3) {
@@ -58,17 +59,18 @@ export default class TripSummaryPresenter {
 
   #getDates() {
     const points = this.#pointsModel.points;
-    const allStartDates = points.reduce((accumulator, point) => [...accumulator, point.dateFrom], []).sort(compareByDayFrom);
-    const startDate = allStartDates[0];
-    const allEndDates = points.reduce((accumulator, point) => [...accumulator, point.dateTo], []).sort(compareByDayTo);
-    const endDate = allEndDates.at(-1);
+    const allDatesFrom = points.reduce((accumulator, point) => [...accumulator, point.dateFrom], []).sort(compareByDateFrom);
+    const firstDateFrom = allDatesFrom[0];
+    const allDatesTo = points.reduce((accumulator, point) => [...accumulator, point.dateTo], []).sort(compareByDateTo);
+    const lastDateTo = allDatesTo.at(-1);
 
-    return `${dayjs(startDate).format('DD MMM')}&nbsp;&mdash;&nbsp;${dayjs(endDate).format('DD MMM')}`;
+    return `${dayjs(firstDateFrom).format('DD MMM')}&nbsp;&mdash;&nbsp;${dayjs(lastDateTo).format('DD MMM')}`;
   }
 
   #getWholePrice() {
     const points = this.#pointsModel.points;
     const allPointsPrice = points.reduce((sum, point) => sum + point.basePrice, 0);
+
     const allOffersIds = points.reduce((accumulator, point) => [...accumulator, ...point.offers], []);
     const allOffers = this.#offersModel.getOffersByIds(allOffersIds);
     const allOffersSum = allOffers.reduce((sum, offer) => sum + offer.price, 0);

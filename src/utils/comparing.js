@@ -1,10 +1,10 @@
 import { getDuration } from './dates';
 
-function compareByDayFrom(pointA, pointB) {
+function compareByDateFrom(pointA, pointB) {
   return pointA.dateFrom - pointB.dateFrom;
 }
 
-function compareByDayTo(pointA, pointB) {
+function compareByDateTo(pointA, pointB) {
   return pointA.dateTo - pointB.dateTo;
 }
 
@@ -17,8 +17,8 @@ function compareByPrice(pointA, pointB) {
 }
 
 export {
-  compareByDayFrom,
-  compareByDayTo,
+  compareByDateFrom,
+  compareByDateTo,
   compareByDuration,
   compareByPrice,
 };

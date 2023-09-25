@@ -16,7 +16,7 @@ function createTemplate(cities, dates, wholePrice) {
   `;
 }
 
-export default class TripSummaryView extends AbstractView {
+export default class SummaryView extends AbstractView {
   #cities = '';
   #dates = '';
   #wholePrice = 0;

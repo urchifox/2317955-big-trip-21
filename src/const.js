@@ -1,5 +1,5 @@
 import { showAll, showFuture, showPast, showPresent } from './utils/filters';
-import { compareByDayFrom, compareByPrice, compareByDuration } from './utils/comparing';
+import { compareByDateFrom, compareByPrice, compareByDuration } from './utils/comparing';
 
 export const AUTHORIZATION = 'Basic evtukhova';
 export const END_POINT = 'https://21.objects.pages.academy/big-trip';
@@ -47,7 +47,7 @@ export const DEFAULT_FILTRATION_MODE = FILTRATION_MODES[0];
 export const SORTING_MODES = [
   {
     name: 'day',
-    sortCb: compareByDayFrom,
+    sortCb: compareByDateFrom,
     isDisable: false,
   },
   {
