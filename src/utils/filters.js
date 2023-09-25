@@ -1,4 +1,4 @@
-import { FILTRATION_OPTIONS } from '../const';
+import { FILTRATION_MODES } from '../const';
 import { isFutureDate, isPastDate, isTodayDate } from './dates';
 
 function showAll(point) {
@@ -18,7 +18,7 @@ function showPast(point) {
 }
 
 function calculateFilters(points) {
-  return FILTRATION_OPTIONS.reduce((accumulator, option) => {
+  return FILTRATION_MODES.reduce((accumulator, option) => {
     accumulator[option.name] = points.filter(option.filterCb).length;
     return accumulator;
   }, {});

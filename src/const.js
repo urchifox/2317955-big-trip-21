@@ -19,7 +19,7 @@ export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', '
 
 export const DEFAULT_NO_POINT_MESSAGE = 'Failed to load latest route information';
 
-export const FILTRATION_OPTIONS = [
+export const FILTRATION_MODES = [
   {
     name: 'everything',
     filterCb: showAll,
@@ -42,9 +42,9 @@ export const FILTRATION_OPTIONS = [
   },
 ];
 
-export const DEFAULT_FILTRATION = FILTRATION_OPTIONS[0];
+export const DEFAULT_FILTRATION_MODE = FILTRATION_MODES[0];
 
-export const SORTING_OPTIONS = [
+export const SORTING_MODES = [
   {
     name: 'day',
     sortCb: compareByDayFrom,
@@ -72,7 +72,7 @@ export const SORTING_OPTIONS = [
   },
 ];
 
-export const DEFAULT_SORTING = SORTING_OPTIONS[0];
+export const DEFAULT_SORTING_MODE = SORTING_MODES[0];
 
 export const UserAction = {
   UPDATE_POINT: 'UPDATE_POINT',

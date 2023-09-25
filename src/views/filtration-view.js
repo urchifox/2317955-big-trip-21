@@ -1,8 +1,8 @@
-import {FILTRATION_OPTIONS } from '../const.js';
+import {FILTRATION_MODES} from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createTemplate(filtrationInformation, currentFiltrationName) {
-  const filtrationTemplate = FILTRATION_OPTIONS.map((option) => {
+  const filtrationTemplate = FILTRATION_MODES.map((option) => {
     const filterName = option.name;
     return /*html*/`
       <div class="trip-filters__filter">

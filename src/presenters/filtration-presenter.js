@@ -1,6 +1,6 @@
 import {render, replace, remove} from '../framework/render.js';
 import FiltrationView from '../views/filtration-view.js';
-import {FILTRATION_OPTIONS, UpdateType} from '../const.js';
+import {FILTRATION_MODES, UpdateType} from '../const.js';
 
 export default class FiltrationPresenter {
   #filtrationContainer = null;
@@ -21,7 +21,7 @@ export default class FiltrationPresenter {
   get filtrationInformation() {
     const points = this.#pointsModel.points;
 
-    return FILTRATION_OPTIONS.reduce((accumulator, option) => {
+    return FILTRATION_MODES.reduce((accumulator, option) => {
       accumulator[option.name] = Boolean(points.filter(option.filterCb).length);
       return accumulator;
     }, {});
@@ -32,7 +32,7 @@ export default class FiltrationPresenter {
 
     this.#filtrationComponent = new FiltrationView({
       filtrationInformation: this.filtrationInformation,
-      currentFiltrationName: this.#filtrationModel.currentFiltration.name,
+      currentFiltrationName: this.#filtrationModel.currentMode.name,
       onFilterTypeChange: this.#handleFilterTypeChange
     });
 
@@ -54,6 +54,6 @@ export default class FiltrationPresenter {
       return;
     }
 
-    this.#filtrationModel.setFiltration(UpdateType.MAJOR, filterType);
+    this.#filtrationModel.setMode(UpdateType.MAJOR, filterType);
   };
 }

@@ -1,8 +1,8 @@
-import {SORTING_OPTIONS} from '../const.js';
+import {SORTING_MODES} from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createTemplate(currentSortType) {
-  const buttonsTemplate = SORTING_OPTIONS.map((option) => {
+  const buttonsTemplate = SORTING_MODES.map((option) => {
     const {name, isDisable} = option;
     return /*html*/`
       <div class="trip-sort__item  trip-sort__item--${name}">
@@ -28,26 +28,26 @@ function createTemplate(currentSortType) {
 }
 
 export default class SortingView extends AbstractView {
-  #handleSortTypeChange = null;
-  #currentSortType = null;
+  #handleModeChange = null;
+  #currentModeName = null;
 
-  constructor({onSortTypeChange, currentSortType}) {
+  constructor({currentModeName, onModeChange}) {
     super();
-    this.#currentSortType = currentSortType;
-    this.#handleSortTypeChange = onSortTypeChange;
+    this.#currentModeName = currentModeName;
+    this.#handleModeChange = onModeChange;
 
-    this.element.addEventListener('click', this.#sortTypeChangeHandler);
+    this.element.addEventListener('click', this.#modeChangeHandler);
   }
 
   get template() {
-    return createTemplate(this.#currentSortType);
+    return createTemplate(this.#currentModeName);
   }
 
-  #sortTypeChangeHandler = (evt) => {
+  #modeChangeHandler = (evt) => {
     if (evt.target.tagName !== 'INPUT') {
       return;
     }
 
-    this.#handleSortTypeChange(evt.target.dataset.sortName);
+    this.#handleModeChange(evt.target.dataset.sortName);
   };
 }
