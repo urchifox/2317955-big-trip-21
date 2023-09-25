@@ -4,7 +4,17 @@ import ApiService from '../framework/api-service.js';
 
 export default class PointApiService extends ApiService {
   get points() {
-    return this._load({url: 'points'})
+    return this._load({url: ServerPaths.POINTS})
+      .then(ApiService.parseResponse);
+  }
+
+  get destinations() {
+    return this._load({url: ServerPaths.DESTINATIONS})
+      .then(ApiService.parseResponse);
+  }
+
+  get offers() {
+    return this._load({url: ServerPaths.OFFERS})
       .then(ApiService.parseResponse);
   }
 
