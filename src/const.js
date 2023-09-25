@@ -1,6 +1,9 @@
 import { showAll, showFuture, showPast, showPresent } from './utils/filters';
 import { compareByDayFrom, compareByPrice, compareByDuration } from './utils/comparing';
 
+export const AUTHORIZATION = 'Basic evtukhova';
+export const END_POINT = 'https://21.objects.pages.academy/big-trip';
+
 export const BLANK_POINT = {
   basePrice: 0,
   dateFrom: '',

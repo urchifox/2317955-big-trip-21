@@ -7,9 +7,11 @@ import { DEFAULT_FILTRATION, DEFAULT_SORTING, SORTING_OPTIONS, TimeLimit, Update
 import NewPointPresenter from './new-point-presenter.js';
 import LoadingView from '../views/loading-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+import NewPointButtonView from '../views/new-point-button-view.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
+  #newPointButtonContainer = null;
 
   #pointsModel = null;
   #offersModel = null;
@@ -28,23 +30,22 @@ export default class BoardPresenter {
   #currentSortOption = DEFAULT_SORTING;
   #isLoading = false;
   #isCreating = false;
-  #onNewPointDestroy = null;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  constructor({boardContainer, pointsModel, offersModel, destinationsModel, filtrationModel, onNewPointDestroy, newPointButton}) {
+  constructor({boardContainer, pointsModel, offersModel, destinationsModel, filtrationModel, newPointButtonContainer}) {
     this.#boardContainer = boardContainer;
+    this.#newPointButtonContainer = newPointButtonContainer;
+
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
     this.#filtrationModel = filtrationModel;
-    this.#newPointButtonComponent = newPointButton;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filtrationModel.addObserver(this.#handleModelEvent);
-    this.#onNewPointDestroy = onNewPointDestroy;
 
     this.#isLoading = true;
   }
@@ -58,6 +59,11 @@ export default class BoardPresenter {
   }
 
   init() {
+    this.#newPointButtonComponent = new NewPointButtonView({
+      onClick: this.#handleNewTaskButtonClick
+    });
+    render(this.#newPointButtonComponent, this.#newPointButtonContainer);
+
     this.#renderBoard();
   }
 
@@ -214,12 +220,17 @@ export default class BoardPresenter {
   };
 
   #handleNewPointDestroy = () => {
-    this.#onNewPointDestroy();
+    this.#newPointButtonComponent.element.disabled = false;
     this.#isCreating = false;
     if (this.points.length === 0) {
       this.#clearBoard();
       this.#renderBoard();
     }
+  };
+
+  #handleNewTaskButtonClick = () => {
+    this.createPoint();
+    this.#newPointButtonComponent.element.disabled = true;
   };
 
   #clearBoard({resetSortType = false} = {}) {
