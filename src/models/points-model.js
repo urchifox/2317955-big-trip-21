@@ -1,5 +1,5 @@
+import {UpdateType} from '../const.js';
 import PointAdapter from '../adapters/point-adapter.js';
-import { UpdateType } from '../const.js';
 import Observable from '../framework/observable.js';
 
 export default class PointsModel extends Observable {
@@ -77,11 +77,10 @@ export default class PointsModel extends Observable {
 
     try {
       await this.#pointApiService.deletePoint(update);
-      this.#points = this.#points.filter((point, pointIndex) => pointIndex !== index);
+      this.#points = this.#points.filter((_, pointIndex) => pointIndex !== index);
       this._notify(updateType);
     } catch(err) {
       throw new Error('Can\'t delete task');
     }
   }
-
 }

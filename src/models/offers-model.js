@@ -11,10 +11,6 @@ export default class OffersModel {
     return this.#offers;
   }
 
-  get allOffers() {
-    return this.#offers.reduce((accumulator, offersByType) => [...accumulator, ...offersByType.offers], []);
-  }
-
   get isFailed() {
     return this.#isFailed;
   }
@@ -34,18 +30,12 @@ export default class OffersModel {
       return [];
     }
 
+    const allOffers = this.#offers.reduce((accumulator, offersByType) => [...accumulator, ...offersByType.offers], []);
+
     return offersIds.reduce((accumulator, offerId) => {
-      const chosenOffer = this.allOffers.find((offer) => offer.id === offerId);
+      const chosenOffer = allOffers.find((offer) => offer.id === offerId);
 
-      if (chosenOffer) {
-        return [...accumulator, chosenOffer];
-      }
-
-      return accumulator;
+      return (chosenOffer ? [...accumulator, chosenOffer] : accumulator);
     }, []);
-  }
-
-  getOffersByType(type) {
-    return this.#offers.find((offer) => offer.type === type).offers;
   }
 }

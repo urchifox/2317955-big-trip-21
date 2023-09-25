@@ -11,10 +11,6 @@ export default class DestinationsModel {
     return this.#destinations;
   }
 
-  get allDestinationsNames() {
-    return this.#destinations.map((destination) => destination.name);
-  }
-
   get isFailed() {
     return this.#isFailed;
   }
