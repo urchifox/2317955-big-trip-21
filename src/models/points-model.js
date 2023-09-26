@@ -4,12 +4,12 @@ import Observable from '../framework/observable.js';
 
 export default class PointsModel extends Observable {
   #points = [];
-  #pointApiService = null;
+  #tripApiService = null;
   #isFailed = false;
 
   constructor({tripApiService}) {
     super();
-    this.#pointApiService = tripApiService;
+    this.#tripApiService = tripApiService;
   }
 
   get points() {
@@ -22,7 +22,7 @@ export default class PointsModel extends Observable {
 
   async init() {
     try {
-      const points = await this.#pointApiService.points;
+      const points = await this.#tripApiService.points;
       this.#points = points.map(PointAdapter.adaptToClient);
       this.#isFailed = false;
     } catch(err) {
@@ -41,7 +41,7 @@ export default class PointsModel extends Observable {
     }
 
     try {
-      const response = await this.#pointApiService.updatePoint(update);
+      const response = await this.#tripApiService.updatePoint(update);
       const updatedPoint = PointAdapter.adaptToClient(response);
       this.#points = [
         ...this.#points.slice(0, index),
@@ -56,7 +56,7 @@ export default class PointsModel extends Observable {
 
   async addPoint(updateType, update) {
     try {
-      const response = await this.#pointApiService.addPoint(update);
+      const response = await this.#tripApiService.addPoint(update);
       const newPoint = PointAdapter.adaptToClient(response);
       this.#points = [
         newPoint,
@@ -76,7 +76,7 @@ export default class PointsModel extends Observable {
     }
 
     try {
-      await this.#pointApiService.deletePoint(update);
+      await this.#tripApiService.deletePoint(update);
       this.#points = this.#points.filter((point) => point.id !== update.id);
       this._notify(updateType);
     } catch(err) {

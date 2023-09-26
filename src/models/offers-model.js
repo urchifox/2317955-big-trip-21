@@ -1,10 +1,10 @@
 export default class OffersModel {
   #offers = [];
-  #offersApiService = null;
+  #tripApiService = null;
   #isFailed = false;
 
   constructor({tripApiService}) {
-    this.#offersApiService = tripApiService;
+    this.#tripApiService = tripApiService;
   }
 
   get offers() {
@@ -17,7 +17,7 @@ export default class OffersModel {
 
   async init() {
     try {
-      this.#offers = await this.#offersApiService.offers;
+      this.#offers = await this.#tripApiService.offers;
       this.#isFailed = false;
     } catch(err) {
       this.#offers = [];
