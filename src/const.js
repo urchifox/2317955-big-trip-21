@@ -1,4 +1,4 @@
-import { showAll, showFuture, showPast, showPresent } from './utils/filters';
+import { showAll, showFuture, showPast, showPresent } from './utils/filtration-callbacks';
 import { compareByDateFrom, compareByPrice, compareByDuration } from './utils/sorting-callbacks';
 
 export const AUTHORIZATION = 'Basic id2317955';
