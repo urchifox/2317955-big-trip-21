@@ -64,28 +64,26 @@ export default class BoardPresenter {
     this.#newPointButtonComponent = new NewPointButtonView({
       onClick: this.#handleNewTaskButtonClick
     });
-    // this.#renderNewPointButton();
     render(this.#newPointButtonComponent, this.#headerContainer);
     this.#renderBoard();
   }
 
   #renderBoard() {
     if (this.#isLoading) {
-      this.#switchNewPointButton(true);
-      // this.#renderLoading();
+      this.#disableNewPointButton(true);
       render(this.#loadingComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
 
       return;
     }
 
     if(this.#pointsModel.isFailed || this.#offersModel.isFailed || this.#destinationsModel.isFailed) {
-      this.#switchNewPointButton(true);
+      this.#disableNewPointButton(true);
       this.#renderNoPoints();
 
       return;
     }
 
-    this.#switchNewPointButton(false);
+    this.#disableNewPointButton(false);
     render(this.#listComponent, this.#boardContainer);
     this.#newPointPresenter = new NewPointPresenter({
       pointListContainer: this.#listComponent.element,
@@ -96,8 +94,8 @@ export default class BoardPresenter {
     });
 
     if (this.points.length === 0 && !this.#isCreating) {
-      const currentFiltrationOption = this.#filtrationModel.currentOption;
-      this.#renderNoPoints(currentFiltrationOption.noPointsMessage);
+      const filtrationOption = this.#filtrationModel.currentOption;
+      this.#renderNoPoints(filtrationOption.noPointsMessage);
 
       return;
     }
@@ -106,14 +104,7 @@ export default class BoardPresenter {
     this.points.forEach((point) => this.#renderPoint(point));
   }
 
-  // #renderNewPointButton() {
-  //   render(this.#newPointButtonComponent, this.#headerContainer);
-  // }
-
-  // #renderLoading() {
-  //   render(this.#loadingComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
-  // }
-  #switchNewPointButton(isDisable) {
+  #disableNewPointButton(isDisable) {
     this.#newPointButtonComponent.element.disabled = isDisable;
   }
 
@@ -242,7 +233,7 @@ export default class BoardPresenter {
   };
 
   #handleNewPointDestroy = () => {
-    this.#switchNewPointButton(false);
+    this.#disableNewPointButton(false);
     this.#isCreating = false;
 
     if (this.points.length === 0) {
@@ -253,6 +244,6 @@ export default class BoardPresenter {
 
   #handleNewTaskButtonClick = () => {
     this.#createPoint();
-    this.#switchNewPointButton(true);
+    this.#disableNewPointButton(true);
   };
 }
