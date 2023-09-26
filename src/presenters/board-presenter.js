@@ -96,8 +96,8 @@ export default class BoardPresenter {
     });
 
     if (this.points.length === 0 && !this.#isCreating) {
-      const currentFiltration = this.#filtrationModel.currentOption;
-      this.#renderNoPoints(currentFiltration.noPointsMessage);
+      const currentFiltrationOption = this.#filtrationModel.currentOption;
+      this.#renderNoPoints(currentFiltrationOption.noPointsMessage);
 
       return;
     }

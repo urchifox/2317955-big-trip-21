@@ -3,14 +3,14 @@ import FiltrationView from '../views/filtration-view.js';
 import {FILTRATION_OPTIONS, UpdateType} from '../const.js';
 
 export default class FiltrationPresenter {
-  #filtrationContainer = null;
+  #container = null;
   #filtrationModel = null;
   #pointsModel = null;
 
-  #filtrationComponent = null;
+  #component = null;
 
   constructor({filtrationContainer, filtrationModel, pointsModel}) {
-    this.#filtrationContainer = filtrationContainer;
+    this.#container = filtrationContainer;
     this.#filtrationModel = filtrationModel;
     this.#pointsModel = pointsModel;
 
@@ -28,28 +28,28 @@ export default class FiltrationPresenter {
   }
 
   init() {
-    const prevFilterComponent = this.#filtrationComponent;
+    const prevComponent = this.#component;
 
-    this.#filtrationComponent = new FiltrationView({
+    this.#component = new FiltrationView({
       info: this.info,
       currentOptionName: this.#filtrationModel.currentOption.name,
-      onOptionChange: this.#handleFiltrationOptionChange
+      onOptionChange: this.#handleOptionChange
     });
 
-    if (prevFilterComponent === null) {
-      render(this.#filtrationComponent, this.#filtrationContainer);
+    if (prevComponent === null) {
+      render(this.#component, this.#container);
       return;
     }
 
-    replace(this.#filtrationComponent, prevFilterComponent);
-    remove(prevFilterComponent);
+    replace(this.#component, prevComponent);
+    remove(prevComponent);
   }
 
   #handleModelEvent = () => {
     this.init();
   };
 
-  #handleFiltrationOptionChange = (optionName) => {
+  #handleOptionChange = (optionName) => {
     this.#filtrationModel.setOption(UpdateType.MAJOR, optionName);
   };
 }
