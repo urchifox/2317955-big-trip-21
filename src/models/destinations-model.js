@@ -3,8 +3,8 @@ export default class DestinationsModel {
   #destinationsApiService = null;
   #isFailed = false;
 
-  constructor({destinationsApiService}) {
-    this.#destinationsApiService = destinationsApiService;
+  constructor({tripApiService}) {
+    this.#destinationsApiService = tripApiService;
   }
 
   get destinations() {

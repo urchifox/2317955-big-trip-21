@@ -10,7 +10,7 @@ export default class NewPointPresenter {
   #offersByType = null;
   #allDestinations = null;
 
-  #pointCreatingComponent = null;
+  #formComponent = null;
 
   constructor({pointListContainer, onDataChange, onDestroy, offersByType, allDestinations}) {
     this.#pointListContainer = pointListContainer;
@@ -21,11 +21,11 @@ export default class NewPointPresenter {
   }
 
   init() {
-    if (this.#pointCreatingComponent !== null) {
+    if (this.#formComponent !== null) {
       return;
     }
 
-    this.#pointCreatingComponent = new FormView({
+    this.#formComponent = new FormView({
       offersByType: this.#offersByType,
       allDestinations: this.#allDestinations,
       onFormSubmit: this.#handleFormSubmit,
@@ -33,25 +33,25 @@ export default class NewPointPresenter {
       onCloseClick: this.#handleCloseClick,
     });
 
-    render(this.#pointCreatingComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
-    this.#pointCreatingComponent.setDatePicker();
+    render(this.#formComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
+    this.#formComponent.setDatePicker();
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
   destroy() {
-    if (this.#pointCreatingComponent === null) {
+    if (this.#formComponent === null) {
       return;
     }
 
 
-    remove(this.#pointCreatingComponent);
-    this.#pointCreatingComponent = null;
+    remove(this.#formComponent);
+    this.#formComponent = null;
     this.#handleDestroy();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
   setSaving() {
-    this.#pointCreatingComponent.updateElement({
+    this.#formComponent.updateElement({
       isDisabled: true,
       isSaving: true,
     });
@@ -59,14 +59,14 @@ export default class NewPointPresenter {
 
   setAborting() {
     const resetFormState = () => {
-      this.#pointCreatingComponent.updateElement({
+      this.#formComponent.updateElement({
         isDisabled: false,
         isSaving: false,
         isDeleting: false,
       });
     };
 
-    this.#pointCreatingComponent.shake(resetFormState);
+    this.#formComponent.shake(resetFormState);
   }
 
   #handleFormSubmit = (point) => {

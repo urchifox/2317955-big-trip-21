@@ -2,7 +2,7 @@ import PointAdapter from '../adapters/point-adapter.js';
 import { Method, ServerPaths } from '../const.js';
 import ApiService from '../framework/api-service.js';
 
-export default class PointApiService extends ApiService {
+export default class TripApiService extends ApiService {
   get points() {
     return this._load({url: ServerPaths.POINTS})
       .then(ApiService.parseResponse);

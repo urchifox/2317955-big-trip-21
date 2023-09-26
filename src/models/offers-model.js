@@ -3,8 +3,8 @@ export default class OffersModel {
   #offersApiService = null;
   #isFailed = false;
 
-  constructor({offersApiService}) {
-    this.#offersApiService = offersApiService;
+  constructor({tripApiService}) {
+    this.#offersApiService = tripApiService;
   }
 
   get offers() {

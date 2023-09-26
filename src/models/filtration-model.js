@@ -1,15 +1,15 @@
 import Observable from '../framework/observable.js';
-import {DEFAULT_FILTRATION_MODE, FILTRATION_MODES} from '../const.js';
+import {DEFAULT_FILTRATION_OPTION, FILTRATION_OPTIONS} from '../const.js';
 
 export default class FiltrationModel extends Observable {
-  #currentMode = DEFAULT_FILTRATION_MODE;
+  #currentOption = DEFAULT_FILTRATION_OPTION;
 
-  get currentMode() {
-    return this.#currentMode;
+  get currentOption() {
+    return this.#currentOption;
   }
 
-  setMode(updateType, filtrationName) {
-    this.#currentMode = FILTRATION_MODES.find((option) => option.name === filtrationName);
+  setOption(updateType, filtrationName) {
+    this.#currentOption = FILTRATION_OPTIONS.find((option) => option.name === filtrationName);
     this._notify(updateType, filtrationName);
   }
 }

@@ -7,9 +7,9 @@ export default class PointsModel extends Observable {
   #pointApiService = null;
   #isFailed = false;
 
-  constructor({pointApiService}) {
+  constructor({tripApiService}) {
     super();
-    this.#pointApiService = pointApiService;
+    this.#pointApiService = tripApiService;
   }
 
   get points() {
@@ -77,7 +77,7 @@ export default class PointsModel extends Observable {
 
     try {
       await this.#pointApiService.deletePoint(update);
-      this.#points = this.#points.filter((_, pointIndex) => pointIndex !== index);
+      this.#points = this.#points.filter((point) => point.id !== update.id);
       this._notify(updateType);
     } catch(err) {
       throw new Error('Can\'t delete task');

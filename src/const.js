@@ -1,7 +1,7 @@
 import { showAll, showFuture, showPast, showPresent } from './utils/filters';
-import { compareByDateFrom, compareByPrice, compareByDuration } from './utils/comparing';
+import { compareByDateFrom, compareByPrice, compareByDuration } from './utils/sorting-callbacks';
 
-export const AUTHORIZATION = 'Basic evtukhova';
+export const AUTHORIZATION = 'Basic id2317955';
 export const END_POINT = 'https://21.objects.pages.academy/big-trip';
 
 export const BLANK_POINT = {
@@ -19,7 +19,7 @@ export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', '
 
 export const DEFAULT_NO_POINT_MESSAGE = 'Failed to load latest route information';
 
-export const FILTRATION_MODES = [
+export const FILTRATION_OPTIONS = [
   {
     name: 'everything',
     filterCb: showAll,
@@ -42,9 +42,9 @@ export const FILTRATION_MODES = [
   },
 ];
 
-export const DEFAULT_FILTRATION_MODE = FILTRATION_MODES[0];
+export const DEFAULT_FILTRATION_OPTION = FILTRATION_OPTIONS[0];
 
-export const SORTING_MODES = [
+export const SORTING_OPTIONS = [
   {
     name: 'day',
     sortCb: compareByDateFrom,
@@ -72,7 +72,7 @@ export const SORTING_MODES = [
   },
 ];
 
-export const DEFAULT_SORTING_MODE = SORTING_MODES[0];
+export const DEFAULT_SORTING_OPTION = SORTING_OPTIONS[0];
 
 export const UserAction = {
   UPDATE_POINT: 'UPDATE_POINT',

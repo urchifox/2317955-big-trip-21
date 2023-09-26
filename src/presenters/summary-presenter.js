@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import {RenderPosition, remove, render, replace} from '../framework/render';
-import {compareByDateFrom, compareByDateTo} from '../utils/comparing';
+import {compareByDateFrom, compareByDateTo} from '../utils/sorting-callbacks';
 import SummaryView from '../views/summary-view';
 
 export default class SummaryPresenter {

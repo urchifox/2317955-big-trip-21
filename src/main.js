@@ -1,6 +1,6 @@
 import {AUTHORIZATION, END_POINT} from './const.js';
 import PointsModel from './models/points-model.js';
-import PointApiService from './api-services/point-api-service.js';
+import TripApiService from './api-services/trip-api-service.js';
 import OffersModel from './models/offers-model.js';
 import DestinationsModel from './models/destinations-model.js';
 import FiltrationModel from './models/filtration-model.js';
@@ -13,22 +13,22 @@ const summaryContainer = headerContainer.querySelector('.trip-controls');
 const filtrationContainer = headerContainer.querySelector('.trip-controls__filters');
 const boardContainer = document.querySelector('.trip-events');
 
-const pointApiService = new PointApiService(END_POINT, AUTHORIZATION);
+const tripApiService = new TripApiService(END_POINT, AUTHORIZATION);
 
 const pointsModel = new PointsModel({
-  pointApiService: pointApiService
+  tripApiService
 });
 const offersModel = new OffersModel({
-  offersApiService: pointApiService
+  tripApiService
 });
 const destinationsModel = new DestinationsModel({
-  destinationsApiService: pointApiService
+  tripApiService
 });
 const filtrationModel = new FiltrationModel();
 
 const boardPresenter = new BoardPresenter({
   boardContainer,
-  newPointButtonContainer: headerContainer,
+  headerContainer,
   pointsModel,
   offersModel,
   destinationsModel,
