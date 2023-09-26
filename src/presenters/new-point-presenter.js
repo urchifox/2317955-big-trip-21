@@ -1,57 +1,56 @@
-import { UpdateType, UserAction } from '../const';
-import { RenderPosition, remove, render } from '../framework/render';
-import { isEscapeKeydown } from '../utils/common.js';
+import {RenderPosition, remove, render} from '../framework/render';
+import {UpdateType, UserAction} from '../const';
+import {isEscapeKeydown} from '../utils/common.js';
 import FormView from '../views/form-view';
 
 export default class NewPointPresenter {
-  #pointListContainer = null;
+  #container = null;
+  #component = null;
+
+  #offers = null;
+  #destinations = null;
+
   #handleDataChange = null;
   #handleDestroy = null;
-  #offersByType = null;
-  #allDestinations = null;
 
-  #formComponent = null;
-
-  constructor({pointListContainer, onDataChange, onDestroy, offersByType, allDestinations}) {
-    this.#pointListContainer = pointListContainer;
-    this.#offersByType = offersByType;
-    this.#allDestinations = allDestinations;
+  constructor({container, offers, destinations, onDataChange, onDestroy}) {
+    this.#container = container;
+    this.#offers = offers;
+    this.#destinations = destinations;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
   }
 
   init() {
-    if (this.#formComponent !== null) {
+    if (this.#component !== null) {
       return;
     }
 
-    this.#formComponent = new FormView({
-      offersByType: this.#offersByType,
-      allDestinations: this.#allDestinations,
+    this.#component = new FormView({
+      offers: this.#offers,
+      destinations: this.#destinations,
       onFormSubmit: this.#handleFormSubmit,
-      onDeleteClick: this.#handleCloseClick,
-      onCloseClick: this.#handleCloseClick,
+      onAbolishClick: this.#handleAbolishClick,
     });
 
-    render(this.#formComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
-    this.#formComponent.setDatePicker();
+    render(this.#component, this.#container, RenderPosition.AFTERBEGIN);
+    this.#component.setDatePicker();
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
   destroy() {
-    if (this.#formComponent === null) {
+    if (this.#component === null) {
       return;
     }
 
-
-    remove(this.#formComponent);
-    this.#formComponent = null;
-    this.#handleDestroy();
+    remove(this.#component);
+    this.#component = null;
     document.removeEventListener('keydown', this.#escKeyDownHandler);
+    this.#handleDestroy();
   }
 
   setSaving() {
-    this.#formComponent.updateElement({
+    this.#component.updateElement({
       isDisabled: true,
       isSaving: true,
     });
@@ -59,14 +58,14 @@ export default class NewPointPresenter {
 
   setAborting() {
     const resetFormState = () => {
-      this.#formComponent.updateElement({
+      this.#component.updateElement({
         isDisabled: false,
         isSaving: false,
         isDeleting: false,
       });
     };
 
-    this.#formComponent.shake(resetFormState);
+    this.#component.shake(resetFormState);
   }
 
   #handleFormSubmit = (point) => {
@@ -77,7 +76,7 @@ export default class NewPointPresenter {
     );
   };
 
-  #handleCloseClick = () => {
+  #handleAbolishClick = () => {
     this.destroy();
   };
 

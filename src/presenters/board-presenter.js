@@ -86,9 +86,9 @@ export default class BoardPresenter {
     this.#disableNewPointButton(false);
     render(this.#listComponent, this.#boardContainer);
     this.#newPointPresenter = new NewPointPresenter({
-      pointListContainer: this.#listComponent.element,
-      offersByType: this.#offersModel.offers,
-      allDestinations: this.#destinationsModel.destinations,
+      container: this.#listComponent.element,
+      offers: this.#offersModel.offers,
+      destinations: this.#destinationsModel.destinations,
       onDataChange: this.#handleViewAction,
       onDestroy: this.#handleNewPointDestroy,
     });

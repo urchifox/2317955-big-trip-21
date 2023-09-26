@@ -47,10 +47,10 @@ export default class PointPresenter {
 
     this.#formComponent = new FormView({
       point: this.#point,
-      offersByType: this.#offersModel.offers,
-      allDestinations: this.#destinationsModel.destinations,
+      offers: this.#offersModel.offers,
+      destinations: this.#destinationsModel.destinations,
       onFormSubmit: this.#handleFormSubmit,
-      onDeleteClick: this.#handleDeleteClick,
+      onAbolishClick: this.#handleAbolishClick,
       onCloseClick: this.#handleCloseClick,
     });
 
@@ -139,7 +139,7 @@ export default class PointPresenter {
     );
   };
 
-  #handleDeleteClick = (point) => {
+  #handleAbolishClick = (point) => {
     this.#handleDataChange(
       UserAction.DELETE_POINT,
       UpdateType.MINOR,
