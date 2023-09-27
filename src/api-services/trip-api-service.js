@@ -1,6 +1,6 @@
-import PointAdapter from '../adapters/point-adapter.js';
-import { Method, ServerPaths } from '../const.js';
+import {Method, ServerPaths} from '../const.js';
 import ApiService from '../framework/api-service.js';
+import PointAdapter from '../adapters/point-adapter.js';
 
 export default class TripApiService extends ApiService {
   get points() {
@@ -26,9 +26,7 @@ export default class TripApiService extends ApiService {
       headers: new Headers({'Content-Type': 'application/json'})
     });
 
-    const parsedResponse = await ApiService.parseResponse(response);
-
-    return parsedResponse;
+    return await ApiService.parseResponse(response);
   }
 
   async addPoint(point) {
@@ -39,9 +37,7 @@ export default class TripApiService extends ApiService {
       headers: new Headers({'Content-Type': 'application/json'})
     });
 
-    const parsedResponse = await ApiService.parseResponse(response);
-
-    return parsedResponse;
+    return await ApiService.parseResponse(response);
   }
 
   async deletePoint(point) {
