@@ -4,15 +4,15 @@ import {compareByDateFrom, compareByDateTo} from '../utils/sorting-callbacks';
 import SummaryView from '../views/summary-view';
 
 export default class SummaryPresenter {
-  #summaryComponent = null;
-  #summaryContainer = null;
+  #component = null;
+  #container = null;
 
   #pointsModel = null;
   #offersModel = null;
   #destinationsModel = null;
 
-  constructor({summaryContainer, pointsModel, offersModel, destinationsModel}) {
-    this.#summaryContainer = summaryContainer;
+  constructor({container, pointsModel, offersModel, destinationsModel}) {
+    this.#container = container;
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
@@ -22,24 +22,24 @@ export default class SummaryPresenter {
 
   init() {
     if (this.#pointsModel.points.length === 0 || this.#pointsModel.isFailed || this.#offersModel.isFailed || this.#destinationsModel.isFailed) {
-      remove(this.#summaryComponent);
+      remove(this.#component);
       return;
     }
 
-    const prevSummaryComponent = this.#summaryComponent;
-    this.#summaryComponent = new SummaryView({
+    const prevComponent = this.#component;
+    this.#component = new SummaryView({
       cities: this.#getCities(),
       dates: this.#getDates(),
       wholePrice: this.#getWholePrice(),
     });
 
-    if (prevSummaryComponent === null) {
-      render(this.#summaryComponent, this.#summaryContainer, RenderPosition.BEFOREBEGIN);
+    if (prevComponent === null) {
+      render(this.#component, this.#container, RenderPosition.BEFOREBEGIN);
       return;
     }
 
-    replace(this.#summaryComponent, prevSummaryComponent);
-    remove(prevSummaryComponent);
+    replace(this.#component, prevComponent);
+    remove(prevComponent);
   }
 
   #handleModelEvent = () => {
@@ -59,10 +59,8 @@ export default class SummaryPresenter {
 
   #getDates() {
     const points = this.#pointsModel.points;
-    const allDatesFrom = points.reduce((accumulator, point) => [...accumulator, point.dateFrom], []).sort(compareByDateFrom);
-    const firstDateFrom = allDatesFrom[0];
-    const allDatesTo = points.reduce((accumulator, point) => [...accumulator, point.dateTo], []).sort(compareByDateTo);
-    const lastDateTo = allDatesTo.at(-1);
+    const firstDateFrom = points.sort(compareByDateFrom)[0].dateFrom;
+    const lastDateTo = points.sort(compareByDateTo).at(-1).dateTo;
 
     return `${dayjs(firstDateFrom).format('DD MMM')}&nbsp;&mdash;&nbsp;${dayjs(lastDateTo).format('DD MMM')}`;
   }

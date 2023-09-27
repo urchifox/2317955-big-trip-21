@@ -37,7 +37,7 @@ const boardPresenter = new BoardPresenter({
 boardPresenter.init();
 
 const summaryPresenter = new SummaryPresenter({
-  summaryContainer,
+  container: summaryContainer,
   pointsModel,
   offersModel,
   destinationsModel
