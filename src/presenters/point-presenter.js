@@ -1,16 +1,11 @@
-import { remove, render, replace } from '../framework/render';
-import { isEscapeKeydown } from '../utils/common.js';
+import {remove, render, replace} from '../framework/render';
+import {UserAction, UpdateType, Mode} from '../const.js';
+import {isEscapeKeydown} from '../utils/common.js';
 import FormView from '../views/form-view';
 import PointView from '../views/point-view';
-import {UserAction, UpdateType} from '../const.js';
-
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
 
 export default class PointPresenter {
-  #pointsListContainer = null;
+  #container = null;
   #point = null;
   #pointComponent = null;
   #formComponent = null;
@@ -18,16 +13,16 @@ export default class PointPresenter {
   #offersModel = null;
   #destinationsModel = null;
 
-  #handleDataChange = null;
+  #handlePointChange = null;
   #handleModeChange = null;
 
   #mode = Mode.DEFAULT;
 
-  constructor ({pointListContainer, offersModel, destinationsModel, onDataChange, onModeChange}) {
-    this.#pointsListContainer = pointListContainer;
+  constructor ({container, offersModel, destinationsModel, onPointChange, onModeChange}) {
+    this.#container = container;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
-    this.#handleDataChange = onDataChange;
+    this.#handlePointChange = onPointChange;
     this.#handleModeChange = onModeChange;
   }
 
@@ -55,7 +50,7 @@ export default class PointPresenter {
     });
 
     if (prevPointComponent === null || prevFormComponent === null) {
-      render(this.#pointComponent, this.#pointsListContainer);
+      render(this.#pointComponent, this.#container);
       return;
     }
 
@@ -77,11 +72,9 @@ export default class PointPresenter {
     remove(this.#formComponent);
   }
 
-  resetView() {
-    if (this.#mode !== Mode.DEFAULT) {
-      this.#formComponent.reset(this.#point);
-      this.#replaceFormToCard();
-    }
+  closeForm() {
+    this.#formComponent.reset(this.#point);
+    this.#replaceFormToCard();
   }
 
   setSaving() {
@@ -119,12 +112,28 @@ export default class PointPresenter {
     this.#formComponent.shake(resetFormState);
   }
 
+  // оба этих метода используются только один раз, имеет ли смысл их оставлять или вынести этот код в те места, где он используется?
+  #replaceCardToForm() {
+    replace(this.#formComponent, this.#pointComponent);
+    this.#formComponent.setDatePicker();
+    document.addEventListener('keydown', this.#escKeyDownHandler);
+    this.#mode = Mode.EDITING;
+    this.#handleModeChange(this.#point.id, this.#mode);
+  }
+
+  #replaceFormToCard() {
+    replace(this.#pointComponent, this.#formComponent);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+    this.#mode = Mode.DEFAULT;
+    this.#handleModeChange(this.#point.id, this.#mode);
+  }
+
   #handleEditClick = () => {
     this.#replaceCardToForm();
   };
 
   #handleFormSubmit = (point) => {
-    this.#handleDataChange(
+    this.#handlePointChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       point,
@@ -132,7 +141,7 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange(
+    this.#handlePointChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       {...this.#point, isFavorite: !this.#point.isFavorite},
@@ -140,7 +149,7 @@ export default class PointPresenter {
   };
 
   #handleAbolishClick = (point) => {
-    this.#handleDataChange(
+    this.#handlePointChange(
       UserAction.DELETE_POINT,
       UpdateType.MINOR,
       point,
@@ -148,8 +157,7 @@ export default class PointPresenter {
   };
 
   #handleCloseClick = () => {
-    this.#formComponent.reset(this.#point);
-    this.#replaceFormToCard();
+    this.closeForm();
   };
 
   #escKeyDownHandler = (evt) => {
@@ -157,23 +165,6 @@ export default class PointPresenter {
       return;
     }
     evt.preventDefault();
-    this.#formComponent.reset(this.#point);
-    this.#replaceFormToCard();
+    this.closeForm();
   };
-
-  #replaceCardToForm() {
-    replace(this.#formComponent, this.#pointComponent);
-    this.#formComponent.setDatePicker();
-    document.addEventListener('keydown', this.#escKeyDownHandler);
-    this.#handleModeChange(this.#point.id);
-    this.#mode = Mode.EDITING;
-  }
-
-  #replaceFormToCard() {
-    replace(this.#pointComponent, this.#formComponent);
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
-    this.#mode = Mode.DEFAULT;
-  }
-
-
 }

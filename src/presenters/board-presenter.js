@@ -1,5 +1,5 @@
 import {RenderPosition, remove, render} from '../framework/render.js';
-import {DEFAULT_FILTRATION_OPTION, DEFAULT_SORTING_OPTION, SORTING_OPTIONS, TimeLimit, UpdateType, UserAction} from '../const.js';
+import {DEFAULT_FILTRATION_OPTION, DEFAULT_SORTING_OPTION, Mode, SORTING_OPTIONS, TimeLimit, UpdateType, UserAction} from '../const.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import ListView from '../views/list-view.js';
 import NoPointsView from '../views/no-points-view.js';
@@ -123,10 +123,10 @@ export default class BoardPresenter {
 
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
-      pointListContainer: this.#listComponent.element,
+      container: this.#listComponent.element,
       offersModel: this.#offersModel,
       destinationsModel: this.#destinationsModel,
-      onDataChange: this.#handleViewAction,
+      onPointChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange,
     });
     pointPresenter.init(point);
@@ -161,6 +161,7 @@ export default class BoardPresenter {
         this.#pointsPresenters.get(update.id).setSaving();
         try {
           await this.#pointsModel.updatePoint(updateType, update);
+          this.#pointEditingId = null;
         } catch(err) {
           this.#pointsPresenters.get(update.id).setAborting();
         }
@@ -169,6 +170,7 @@ export default class BoardPresenter {
         this.#newPointPresenter.setSaving();
         try {
           await this.#pointsModel.addPoint(updateType, update);
+          this.#pointEditingId = null;
         } catch(err) {
           this.#newPointPresenter.setAborting();
         }
@@ -177,6 +179,7 @@ export default class BoardPresenter {
         this.#pointsPresenters.get(update.id).setDeleting();
         try {
           await this.#pointsModel.deletePoint(updateType, update);
+          this.#pointEditingId = null;
         } catch(err) {
           this.#pointsPresenters.get(update.id).setAborting();
         }
@@ -210,11 +213,16 @@ export default class BoardPresenter {
     }
   };
 
-  #handleModeChange = (id) => {
+  #handleModeChange = (id, mode) => {
+    if (mode === Mode.DEFAULT) {
+      this.#pointEditingId = null;
+      return;
+    }
+
     this.#newPointPresenter.destroy();
 
-    if (this.#pointEditingId !== null && this.#pointEditingId !== id) {
-      this.#pointsPresenters.get(this.#pointEditingId)?.resetView();
+    if (this.#pointEditingId !== null) {
+      this.#pointsPresenters.get(this.#pointEditingId).closeForm();
     }
 
     this.#pointEditingId = id;
@@ -245,5 +253,6 @@ export default class BoardPresenter {
   #handleNewTaskButtonClick = () => {
     this.#createPoint();
     this.#disableNewPointButton(true);
+    this.#pointEditingId = null;
   };
 }

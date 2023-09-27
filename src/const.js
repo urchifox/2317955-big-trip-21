@@ -104,3 +104,8 @@ export const TimeLimit = {
   LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000,
 };
+
+export const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
