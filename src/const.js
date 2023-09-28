@@ -1,5 +1,5 @@
-import { showAll, showFuture, showPast, showPresent } from './utils/filtration-callbacks';
-import { compareByDateFrom, compareByPrice, compareByDuration } from './utils/sorting-callbacks';
+import {showAll, showFuture, showPast, showPresent} from './utils/filtration-callbacks';
+import {compareByDateFrom, compareByPrice, compareByDuration} from './utils/sorting-callbacks';
 
 export const AUTHORIZATION = 'Basic id2317955';
 export const END_POINT = 'https://21.objects.pages.academy/big-trip';
@@ -14,7 +14,6 @@ export const BLANK_POINT = {
   type: 'flight'
 };
 
-// мы должны хранить типы точек в константе или можем брать их из данных сервера?
 export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
 export const DEFAULT_NO_POINT_MESSAGE = 'Failed to load latest route information';
@@ -48,27 +47,22 @@ export const SORTING_OPTIONS = [
   {
     name: 'day',
     sortCb: compareByDateFrom,
-    isDisable: false,
   },
   {
     name: 'event',
     sortCb: null,
-    isDisable: true,
   },
   {
     name: 'time',
     sortCb: compareByDuration,
-    isDisable: false,
   },
   {
     name: 'price',
     sortCb: compareByPrice,
-    isDisable: false,
   },
   {
     name: 'offers',
     sortCb: null,
-    isDisable: true,
   },
 ];
 
