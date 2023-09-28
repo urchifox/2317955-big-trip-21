@@ -3,7 +3,6 @@ import PointsModel from './models/points-model.js';
 import TripApiService from './api-services/trip-api-service.js';
 import OffersModel from './models/offers-model.js';
 import DestinationsModel from './models/destinations-model.js';
-import FiltrationModel from './models/filtration-model.js';
 import BoardPresenter from './presenters/board-presenter.js';
 import SummaryPresenter from './presenters/summary-presenter.js';
 import FiltrationPresenter from './presenters/filtration-presenter.js';
@@ -24,7 +23,12 @@ const offersModel = new OffersModel({
 const destinationsModel = new DestinationsModel({
   tripApiService
 });
-const filtrationModel = new FiltrationModel();
+
+const filtrationPresenter = new FiltrationPresenter({
+  filtrationContainer,
+  pointsModel,
+});
+filtrationPresenter.init();
 
 const boardPresenter = new BoardPresenter({
   boardContainer,
@@ -32,7 +36,7 @@ const boardPresenter = new BoardPresenter({
   pointsModel,
   offersModel,
   destinationsModel,
-  filtrationModel,
+  filtrationPresenter,
 });
 boardPresenter.init();
 
@@ -43,13 +47,6 @@ const summaryPresenter = new SummaryPresenter({
   destinationsModel
 });
 summaryPresenter.init();
-
-const filtrationPresenter = new FiltrationPresenter({
-  filtrationContainer,
-  filtrationModel,
-  pointsModel,
-});
-filtrationPresenter.init();
 
 Promise.all([
   offersModel.init(),

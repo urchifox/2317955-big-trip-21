@@ -1,21 +1,22 @@
 import {render, replace, remove} from '../framework/render.js';
 import FiltrationView from '../views/filtration-view.js';
-import {FILTRATION_OPTIONS, UpdateType} from '../const.js';
+import {DEFAULT_FILTRATION_OPTION, FILTRATION_OPTIONS, UpdateType} from '../const.js';
+import Observable from '../framework/observable.js';
 
-export default class FiltrationPresenter {
+export default class FiltrationPresenter extends Observable {
   #container = null;
-  #filtrationModel = null;
-  #pointsModel = null;
-
   #component = null;
 
-  constructor({filtrationContainer, filtrationModel, pointsModel}) {
+  #pointsModel = null;
+
+  #currentOption = DEFAULT_FILTRATION_OPTION;
+
+  constructor({filtrationContainer, pointsModel}) {
+    super();
     this.#container = filtrationContainer;
-    this.#filtrationModel = filtrationModel;
     this.#pointsModel = pointsModel;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
-    this.#filtrationModel.addObserver(this.#handleModelEvent);
   }
 
   get info() {
@@ -27,12 +28,21 @@ export default class FiltrationPresenter {
     }, {});
   }
 
+  get currentOption() {
+    return this.#currentOption;
+  }
+
+  set currentOption(filtrationName) {
+    this.#currentOption = FILTRATION_OPTIONS.find((option) => option.name === filtrationName);
+    this._notify(UpdateType.MAJOR);
+  }
+
   init() {
     const prevComponent = this.#component;
 
     this.#component = new FiltrationView({
       info: this.info,
-      currentOptionName: this.#filtrationModel.currentOption.name,
+      currentOptionName: this.currentOption.name,
       onOptionChange: this.#handleOptionChange
     });
 
@@ -50,6 +60,6 @@ export default class FiltrationPresenter {
   };
 
   #handleOptionChange = (optionName) => {
-    this.#filtrationModel.setOption(UpdateType.MAJOR, optionName);
+    this.currentOption = optionName;
   };
 }

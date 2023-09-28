@@ -16,7 +16,6 @@ export default class BoardPresenter {
   #pointsModel = null;
   #offersModel = null;
   #destinationsModel = null;
-  #filtrationModel = null;
 
   #listComponent = new ListView();
   #noPointsComponent = new NoPointsView();
@@ -26,6 +25,7 @@ export default class BoardPresenter {
 
   #pointsPresenters = new Map();
   #newPointPresenter = null;
+  #filtrationPresenter = null;
 
   #currentSortingOption = DEFAULT_SORTING_OPTION;
   #pointEditingId = null;
@@ -37,24 +37,24 @@ export default class BoardPresenter {
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  constructor({boardContainer, headerContainer, pointsModel, offersModel, destinationsModel, filtrationModel}) {
+  constructor({boardContainer, headerContainer, pointsModel, offersModel, destinationsModel, filtrationPresenter}) {
     this.#boardContainer = boardContainer;
     this.#headerContainer = headerContainer;
 
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
-    this.#filtrationModel = filtrationModel;
+    this.#filtrationPresenter = filtrationPresenter;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
-    this.#filtrationModel.addObserver(this.#handleModelEvent);
+    this.#filtrationPresenter.addObserver(this.#handleModelEvent);
 
     this.#isLoading = true;
   }
 
   get points() {
     const points = this.#pointsModel.points;
-    const filtrationOption = this.#filtrationModel.currentOption;
+    const filtrationOption = this.#filtrationPresenter.currentOption;
     const filteredPoints = points.filter(filtrationOption.filterCb);
 
     return filteredPoints.sort(this.#currentSortingOption.sortCb);
@@ -94,7 +94,7 @@ export default class BoardPresenter {
     });
 
     if (this.points.length === 0 && !this.#isCreating) {
-      const filtrationOption = this.#filtrationModel.currentOption;
+      const filtrationOption = this.#filtrationPresenter.currentOption;
       this.#renderNoPoints(filtrationOption.noPointsMessage);
 
       return;
@@ -150,7 +150,8 @@ export default class BoardPresenter {
   #createPoint() {
     this.#isCreating = true;
     this.#handleSortingOptionChange();
-    this.#filtrationModel.setOption(UpdateType.MAJOR, DEFAULT_FILTRATION_OPTION.name);
+    this.#filtrationPresenter.currentOption = DEFAULT_FILTRATION_OPTION.name;
+    this.#filtrationPresenter.init();
     this.#newPointPresenter.init();
   }
 
