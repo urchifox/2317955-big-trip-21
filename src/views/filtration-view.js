@@ -1,18 +1,18 @@
 import {FILTRATION_OPTIONS} from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createTemplate(info, currentFiltrationName) {
+function createTemplate(info, currentOptionName) {
   const filtrationTemplate = FILTRATION_OPTIONS.map((option) => {
-    const filterName = option.name;
+    const optionName = option.name;
     return /*html*/`
       <div class="trip-filters__filter">
         <input class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter"
-          id="filter-${filterName}"
-          value="${filterName}"
-          ${info[filterName] ? '' : 'disabled'}
-          ${option.name === currentFiltrationName ? 'checked' : ''}>
-        <label class="trip-filters__filter-label" for="filter-${filterName}">
-          ${filterName}
+          id="filter-${optionName}"
+          value="${optionName}"
+          ${info[optionName] ? '' : 'disabled'}
+          ${option.name === currentOptionName ? 'checked' : ''}>
+        <label class="trip-filters__filter-label" for="filter-${optionName}">
+          ${optionName}
         </label>
       </div>
     `;
