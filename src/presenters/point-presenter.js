@@ -68,6 +68,7 @@ export default class PointPresenter {
   }
 
   destroy() {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
     remove(this.#pointComponent);
     remove(this.#formComponent);
   }
@@ -87,6 +88,7 @@ export default class PointPresenter {
   }
 
   setDeleting() {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
     if (this.#mode === Mode.EDITING) {
       this.#formComponent.updateElement({
         isDisabled: true,
