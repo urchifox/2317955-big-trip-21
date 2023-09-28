@@ -1,4 +1,4 @@
-import { getDuration } from './dates';
+import {getDuration} from './dates';
 
 function compareByDateFrom(pointA, pointB) {
   return pointA.dateFrom - pointB.dateFrom;
