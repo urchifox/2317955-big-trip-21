@@ -3,18 +3,18 @@ import ApiService from '../framework/api-service.js';
 import PointAdapter from '../adapters/point-adapter.js';
 
 export default class TripApiService extends ApiService {
-  get points() {
-    return this._load({url: ServerPaths.POINTS})
+  async getPoints() {
+    return await this._load({url: ServerPaths.POINTS})
       .then(ApiService.parseResponse);
   }
 
-  get destinations() {
-    return this._load({url: ServerPaths.DESTINATIONS})
+  async getDestinations() {
+    return await this._load({url: ServerPaths.DESTINATIONS})
       .then(ApiService.parseResponse);
   }
 
-  get offers() {
-    return this._load({url: ServerPaths.OFFERS})
+  async getOffers() {
+    return await this._load({url: ServerPaths.OFFERS})
       .then(ApiService.parseResponse);
   }
 

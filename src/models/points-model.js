@@ -22,7 +22,7 @@ export default class PointsModel extends Observable {
 
   async init() {
     try {
-      const points = await this.#tripApiService.points;
+      const points = await this.#tripApiService.getPoints();
       this.#points = points.map(PointAdapter.adaptToClient);
       this.#isFailed = false;
     } catch(err) {

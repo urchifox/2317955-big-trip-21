@@ -17,7 +17,7 @@ export default class DestinationsModel {
 
   async init() {
     try {
-      this.#destinations = await this.#tripApiService.destinations;
+      this.#destinations = await this.#tripApiService.getDestinations();
       this.#isFailed = false;
     } catch(err) {
       this.#destinations = [];

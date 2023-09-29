@@ -30,7 +30,7 @@ export default class NewPointPresenter {
       offers: this.#offers,
       destinations: this.#destinations,
       onFormSubmit: this.#handleFormSubmit,
-      onAbolishClick: this.#handleAbolishClick,
+      onDiscardClick: this.#handleDiscardClick,
     });
 
     render(this.#component, this.#container, RenderPosition.AFTERBEGIN);
@@ -76,7 +76,7 @@ export default class NewPointPresenter {
     );
   };
 
-  #handleAbolishClick = () => {
+  #handleDiscardClick = () => {
     this.destroy();
   };
 

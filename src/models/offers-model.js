@@ -17,7 +17,7 @@ export default class OffersModel {
 
   async init() {
     try {
-      this.#offers = await this.#tripApiService.offers;
+      this.#offers = await this.#tripApiService.getOffers();
       this.#isFailed = false;
     } catch(err) {
       this.#offers = [];

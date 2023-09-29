@@ -45,7 +45,7 @@ export default class PointPresenter {
       offers: this.#offersModel.offers,
       destinations: this.#destinationsModel.destinations,
       onFormSubmit: this.#handleFormSubmit,
-      onAbolishClick: this.#handleAbolishClick,
+      onDiscardClick: this.#handleDiscardClick,
       onCloseClick: this.#handleCloseClick,
     });
 
@@ -75,7 +75,10 @@ export default class PointPresenter {
 
   closeForm() {
     this.#formComponent.reset(this.#point);
-    this.#replaceFormToCard();
+    replace(this.#pointComponent, this.#formComponent);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+    this.#mode = Mode.DEFAULT;
+    this.#handleModeChange(this.#point.id, this.#mode);
   }
 
   setSaving() {
@@ -114,24 +117,12 @@ export default class PointPresenter {
     this.#formComponent.shake(resetFormState);
   }
 
-  // оба этих метода используются только один раз, имеет ли смысл их оставлять или вынести этот код в те места, где он используется?
-  #replaceCardToForm() {
+  #handleEditClick = () => {
     replace(this.#formComponent, this.#pointComponent);
     this.#formComponent.setDatePicker();
     document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#mode = Mode.EDITING;
     this.#handleModeChange(this.#point.id, this.#mode);
-  }
-
-  #replaceFormToCard() {
-    replace(this.#pointComponent, this.#formComponent);
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
-    this.#mode = Mode.DEFAULT;
-    this.#handleModeChange(this.#point.id, this.#mode);
-  }
-
-  #handleEditClick = () => {
-    this.#replaceCardToForm();
   };
 
   #handleFormSubmit = (point) => {
@@ -150,7 +141,7 @@ export default class PointPresenter {
     );
   };
 
-  #handleAbolishClick = (point) => {
+  #handleDiscardClick = (point) => {
     this.#handlePointChange(
       UserAction.DELETE_POINT,
       UpdateType.MINOR,

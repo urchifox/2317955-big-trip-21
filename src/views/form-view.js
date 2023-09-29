@@ -6,6 +6,13 @@ import 'flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
+const BASIC_DATEPICKER_SETTINGS = {
+  dateFormat: 'd/m/y H:i',
+  enableTime: true,
+  locale: {firstDayOfWeek: 1},
+  'time_24hr': true,
+};
+
 function createOffersTemplate(point, offers) {
   const offersByType = offers.find((offer) => offer.type === point.type).offers;
 
@@ -205,16 +212,16 @@ export default class FormView extends AbstractStatefulView {
   #datepickerFrom = null;
 
   #handleFormSubmit = null;
-  #handleAbolishClick = null;
+  #handleDiscardClick = null;
   #handleCloseClick = null;
 
-  constructor({point = BLANK_POINT, offers, destinations, onFormSubmit, onAbolishClick, onCloseClick = null}) {
+  constructor({point = BLANK_POINT, offers, destinations, onFormSubmit, onDiscardClick, onCloseClick = null}) {
     super();
     this._setState(FormView.parsePointToState(point));
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleFormSubmit = onFormSubmit;
-    this.#handleAbolishClick = onAbolishClick;
+    this.#handleDiscardClick = onDiscardClick;
     this.#handleCloseClick = onCloseClick;
 
     this._restoreHandlers();
@@ -245,7 +252,7 @@ export default class FormView extends AbstractStatefulView {
 
   _restoreHandlers() {
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formAbolishClickHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDiscardClickHandler);
     this.element.querySelector('.event__rollup-btn')?.addEventListener('click', this.#formCloseClickHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
@@ -258,17 +265,10 @@ export default class FormView extends AbstractStatefulView {
   }
 
   setDatePicker() {
-    const commonSettings = {
-      dateFormat: 'd/m/y H:i',
-      enableTime: true,
-      locale: {firstDayOfWeek: 1},
-      'time_24hr': true,
-    };
-
     this.#datepickerFrom = flatpickr(
       this.element.querySelector('#event-start-time-1'),
       {
-        ...commonSettings,
+        ...BASIC_DATEPICKER_SETTINGS,
         defaultDate: this._state.dateFrom,
         onClose: this.#dateFromChangeHandler,
         maxDate: this._state.dateTo,
@@ -278,7 +278,7 @@ export default class FormView extends AbstractStatefulView {
     this.#datepickerTo = flatpickr(
       this.element.querySelector('#event-end-time-1'),
       {
-        ...commonSettings,
+        ...BASIC_DATEPICKER_SETTINGS,
         defaultDate: this._state.dateTo,
         onClose: this.#dateToChangeHandler,
         minDate: this._state.dateFrom,
@@ -295,15 +295,15 @@ export default class FormView extends AbstractStatefulView {
     this.#handleFormSubmit(FormView.parseStateToPoint(this._state));
   };
 
-  #formAbolishClickHandler = (evt) => {
+  #formDiscardClickHandler = (evt) => {
     evt.preventDefault();
 
     if (this._state.id) {
-      this.#handleAbolishClick(FormView.parseStateToPoint(this._state));
+      this.#handleDiscardClick(FormView.parseStateToPoint(this._state));
       return;
     }
 
-    this.#handleAbolishClick();
+    this.#handleDiscardClick();
   };
 
   #formCloseClickHandler = (evt) => {
