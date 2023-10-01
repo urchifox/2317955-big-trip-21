@@ -4,6 +4,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 function createTemplate(info, currentOptionName) {
   const filtrationTemplate = FILTRATION_OPTIONS.map((option) => {
     const optionName = option.name;
+
     return /*html*/`
       <div class="trip-filters__filter">
         <input class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter"

@@ -1,10 +1,10 @@
-export default class PointAdapter {
+export default class Adapter {
   static adaptToServer(point) {
     const adaptedPoint = {
       ...point,
-      'base_price' : point.basePrice,
-      'date_from'  : point.dateFrom instanceof Date ? point.dateFrom.toISOString() : null,
-      'date_to'    : point.dateTo instanceof Date ? point.dateTo.toISOString() : null,
+      'base_price': point.basePrice,
+      'date_from': point.dateFrom instanceof Date ? point.dateFrom.toISOString() : null,
+      'date_to': point.dateTo instanceof Date ? point.dateTo.toISOString() : null,
       'is_favorite': point.isFavorite,
     };
 
@@ -19,9 +19,9 @@ export default class PointAdapter {
   static adaptToClient(point) {
     const adaptedPoint = {
       ...point,
-      basePrice : point['base_price'],
-      dateFrom  : point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
-      dateTo    : point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
+      basePrice: point['base_price'],
+      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
+      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
       isFavorite: point['is_favorite'],
     };
 

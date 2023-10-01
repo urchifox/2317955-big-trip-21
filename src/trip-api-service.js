@@ -1,6 +1,6 @@
-import {Method, ServerPaths} from '../const.js';
-import ApiService from '../framework/api-service.js';
-import PointAdapter from '../adapters/point-adapter.js';
+import {Method, ServerPaths} from './const.js';
+import ApiService from './framework/api-service.js';
+import Adapter from './point-adapter.js';
 
 export default class TripApiService extends ApiService {
   async getPoints() {
@@ -22,7 +22,7 @@ export default class TripApiService extends ApiService {
     const response = await this._load({
       url: `${ServerPaths.POINTS}/${point.id}`,
       method: Method.PUT,
-      body: JSON.stringify(PointAdapter.adaptToServer(point)),
+      body: JSON.stringify(Adapter.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'})
     });
 
@@ -33,7 +33,7 @@ export default class TripApiService extends ApiService {
     const response = await this._load({
       url: ServerPaths.POINTS,
       method: Method.POST,
-      body: JSON.stringify(PointAdapter.adaptToServer(point)),
+      body: JSON.stringify(Adapter.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'})
     });
 
@@ -41,11 +41,9 @@ export default class TripApiService extends ApiService {
   }
 
   async deletePoint(point) {
-    const response = await this._load({
+    return await this._load({
       url: `${ServerPaths.POINTS}/${point.id}`,
       method: Method.DELETE,
     });
-
-    return response;
   }
 }

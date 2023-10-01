@@ -5,6 +5,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+import { addMinutes } from '../utils/dates.js';
 
 const BASIC_DATEPICKER_SETTINGS = {
   dateFormat: 'd/m/y H:i',
@@ -66,11 +67,9 @@ function createPicturesTemplate(pictures) {
 }
 
 function createDestinationTemplate(pointDestination) {
-  if (!pointDestination) {
-    return '';
-  }
-
-  if (pointDestination.description.length === 0 && pointDestination.pictures.length === 0) {
+  if (!pointDestination
+    || (pointDestination.description.length === 0 && pointDestination.pictures.length === 0)
+  ) {
     return '';
   }
 
@@ -265,13 +264,16 @@ export default class FormView extends AbstractStatefulView {
   }
 
   setDatePicker() {
+    const dateFrom = this._state.dateFrom;
+    const dateTo = this._state.dateTo;
+
     this.#datepickerFrom = flatpickr(
       this.element.querySelector('#event-start-time-1'),
       {
         ...BASIC_DATEPICKER_SETTINGS,
-        defaultDate: this._state.dateFrom,
+        defaultDate: dateFrom,
         onClose: this.#dateFromChangeHandler,
-        maxDate: this._state.dateTo,
+        maxDate: dateTo === '' ? '' : addMinutes(dateTo, -1),
       },
     );
 
@@ -279,9 +281,9 @@ export default class FormView extends AbstractStatefulView {
       this.element.querySelector('#event-end-time-1'),
       {
         ...BASIC_DATEPICKER_SETTINGS,
-        defaultDate: this._state.dateTo,
+        defaultDate: dateTo,
         onClose: this.#dateToChangeHandler,
-        minDate: this._state.dateFrom,
+        minDate: dateFrom === '' ? '' : addMinutes(dateFrom, 1),
       },
     );
   }
@@ -349,13 +351,13 @@ export default class FormView extends AbstractStatefulView {
 
   #dateFromChangeHandler = ([userDate]) => {
     this._setState({dateFrom: userDate});
-    this.#datepickerTo.set({minDate: this._state.dateFrom});
+    this.#datepickerTo.set({minDate: addMinutes(this._state.dateFrom, 1)});
     this.#validateForm();
   };
 
   #dateToChangeHandler = ([userDate]) => {
     this._setState({dateTo: userDate});
-    this.#datepickerFrom.set({maxDate: this._state.dateTo});
+    this.#datepickerFrom.set({maxDate: addMinutes(this._state.dateTo, -1)});
     this.#validateForm();
   };
 

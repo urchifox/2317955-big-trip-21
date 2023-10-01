@@ -21,7 +21,11 @@ export default class SummaryPresenter {
   }
 
   init() {
-    if (this.#pointsModel.points.length === 0 || this.#pointsModel.isFailed || this.#offersModel.isFailed || this.#destinationsModel.isFailed) {
+    if (this.#pointsModel.points.length === 0
+      || this.#pointsModel.isFailed
+      || this.#offersModel.isFailed
+      || this.#destinationsModel.isFailed
+    ) {
       remove(this.#component);
       return;
     }

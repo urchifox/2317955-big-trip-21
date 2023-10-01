@@ -73,7 +73,7 @@ export default class PointPresenter {
     remove(this.#formComponent);
   }
 
-  closeForm() {
+  close() {
     this.#formComponent.reset(this.#point);
     replace(this.#pointComponent, this.#formComponent);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
@@ -92,6 +92,7 @@ export default class PointPresenter {
 
   setDeleting() {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
+
     if (this.#mode === Mode.EDITING) {
       this.#formComponent.updateElement({
         isDisabled: true,
@@ -150,14 +151,15 @@ export default class PointPresenter {
   };
 
   #handleCloseClick = () => {
-    this.closeForm();
+    this.close();
   };
 
   #escKeyDownHandler = (evt) => {
     if(!isEscapeKeydown(evt.key)) {
       return;
     }
+
     evt.preventDefault();
-    this.closeForm();
+    this.close();
   };
 }

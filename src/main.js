@@ -1,6 +1,6 @@
 import {AUTHORIZATION, END_POINT} from './const.js';
 import PointsModel from './models/points-model.js';
-import TripApiService from './api-services/trip-api-service.js';
+import TripApiService from './trip-api-service.js';
 import OffersModel from './models/offers-model.js';
 import DestinationsModel from './models/destinations-model.js';
 import FiltrationModel from './models/filtration-model.js';

@@ -4,6 +4,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 function createTemplate(currentOptionName) {
   const buttonsTemplate = SORTING_OPTIONS.map((option) => {
     const {name, sortCb} = option;
+
     return /*html*/`
       <div class="trip-sort__item  trip-sort__item--${name}">
         <input class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"

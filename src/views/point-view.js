@@ -1,25 +1,7 @@
-import {getFormattedDate, getDuration} from '../utils/dates.js';
+import {getFormattedDate, getDuration, formateDuration} from '../utils/dates.js';
 import he from 'he';
 import AbstractView from '../framework/view/abstract-view.js';
 
-const MINUTES_IN_HOUR = 60;
-const MINUTES_IN_DAY = 1440;
-
-function formateDuration(durationInMinutes) {
-  const days = Math.floor(durationInMinutes / MINUTES_IN_DAY);
-  const hours = Math.floor(durationInMinutes % MINUTES_IN_DAY / MINUTES_IN_HOUR);
-  const minutes = Math.floor(durationInMinutes % MINUTES_IN_HOUR);
-
-  if (days > 0) {
-    return `${days}D ${hours}H ${minutes}M`;
-  }
-
-  if (hours > 0) {
-    return `${hours}H ${minutes}M`;
-  }
-
-  return `${minutes}M`;
-}
 
 function createTemplate(point, offers, destination) {
   const {dateFrom, dateTo, isFavorite} = point;

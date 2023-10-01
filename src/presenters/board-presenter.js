@@ -70,14 +70,17 @@ export default class BoardPresenter {
 
   #renderBoard() {
     if (this.#isLoading) {
-      this.#disableNewPointButton(true);
+      this.#disableNewPointButton();
       render(this.#loadingComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
 
       return;
     }
 
-    if(this.#pointsModel.isFailed || this.#offersModel.isFailed || this.#destinationsModel.isFailed) {
-      this.#disableNewPointButton(true);
+    if (this.#pointsModel.isFailed
+      || this.#offersModel.isFailed
+      || this.#destinationsModel.isFailed
+    ) {
+      this.#disableNewPointButton();
       this.#renderNoPoints();
 
       return;
@@ -104,7 +107,7 @@ export default class BoardPresenter {
     this.points.forEach((point) => this.#renderPoint(point));
   }
 
-  #disableNewPointButton(isDisable) {
+  #disableNewPointButton(isDisable = true) {
     this.#newPointButtonComponent.element.disabled = isDisable;
   }
 
@@ -156,16 +159,19 @@ export default class BoardPresenter {
 
   #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
+    const pointPresenter = this.#pointsPresenters.get(update.id);
+
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointsPresenters.get(update.id).setSaving();
+        pointPresenter.setSaving();
         try {
           await this.#pointsModel.updatePoint(updateType, update);
           this.#pointEditingId = null;
         } catch(err) {
-          this.#pointsPresenters.get(update.id).setAborting();
+          pointPresenter.setAborting();
         }
         break;
+
       case UserAction.ADD_POINT:
         this.#newPointPresenter.setSaving();
         try {
@@ -175,15 +181,17 @@ export default class BoardPresenter {
           this.#newPointPresenter.setAborting();
         }
         break;
+
       case UserAction.DELETE_POINT:
-        this.#pointsPresenters.get(update.id).setDeleting();
+        pointPresenter.setDeleting();
         try {
           await this.#pointsModel.deletePoint(updateType, update);
           this.#pointEditingId = null;
         } catch(err) {
-          this.#pointsPresenters.get(update.id).setAborting();
+          pointPresenter.setAborting();
         }
         break;
+
       default:
         throw new Error('There are no such actionType');
     }
@@ -195,19 +203,23 @@ export default class BoardPresenter {
       case UpdateType.PATCH:
         this.#pointsPresenters.get(point.id).init(point);
         break;
+
       case UpdateType.MINOR:
         this.#clearBoard();
         this.#renderBoard();
         break;
+
       case UpdateType.MAJOR:
         this.#clearBoard(true);
         this.#renderBoard();
         break;
+
       case UpdateType.INIT:
         this.#isLoading = false;
         remove(this.#loadingComponent);
         this.#renderBoard();
         break;
+
       default:
         throw new Error('There are no such updateType');
     }
@@ -222,7 +234,7 @@ export default class BoardPresenter {
     this.#newPointPresenter.destroy();
 
     if (this.#pointEditingId !== null) {
-      this.#pointsPresenters.get(this.#pointEditingId).closeForm();
+      this.#pointsPresenters.get(this.#pointEditingId).close();
     }
 
     this.#pointEditingId = id;
@@ -252,7 +264,7 @@ export default class BoardPresenter {
 
   #handleNewTaskButtonClick = () => {
     this.#createPoint();
-    this.#disableNewPointButton(true);
+    this.#disableNewPointButton();
     this.#pointEditingId = null;
   };
 }
