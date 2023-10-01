@@ -14,8 +14,6 @@ export const BLANK_POINT = {
   type: 'flight'
 };
 
-export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
-
 export const DEFAULT_NO_POINT_MESSAGE = 'Failed to load latest route information';
 
 export const FILTRATION_OPTIONS = [

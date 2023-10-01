@@ -1,5 +1,5 @@
-import {BLANK_POINT, POINT_TYPES} from '../const.js';
-import {isFormValid} from '../utils/common.js';
+import {BLANK_POINT} from '../const.js';
+import {isFormValid, makeFirstLetterCaptital} from '../utils/common.js';
 import he from 'he';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -95,7 +95,7 @@ function getSubmitButtonName(point) {
   return (point.isDeleting ? 'Deleting...' : 'Delete');
 }
 
-function createTemplate(point, allOffers, allDestinations) {
+function createTemplate(point, offers, allDestinations) {
   const pointId = point.id ? he.encode(point.id) : '';
   const pointType = he.encode(point.type);
   const pointPrice = he.encode(String(point.basePrice));
@@ -105,14 +105,16 @@ function createTemplate(point, allOffers, allDestinations) {
 
   const disableStatus = point.isDisabled ? 'disabled' : '';
 
-  const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
+  const types = offers.map((offersByType) => offersByType.type);
+
+  const pointIconTemplate = types.map((type) => /*html*/`
       <div class="event__type-item">
         <input class="event__type-input  visually-hidden" type="radio" name="event-type"
-          id="event-type-${type.toLowerCase()}-${pointId}"
+          id="event-type-${type}-${pointId}"
           value="${type}"
-          ${pointType === type.toLowerCase() ? 'checked' : ''}
+          ${pointType === type ? 'checked' : ''}
         >
-        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${pointId}">${type}</label>
+        <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${pointId}">${makeFirstLetterCaptital(type)}</label>
       </div>
     `).join(' ');
 
@@ -195,7 +197,7 @@ function createTemplate(point, allOffers, allDestinations) {
             </button>`}
         </header>
         <section class="event__details">
-          ${createOffersTemplate(point, allOffers)}
+          ${createOffersTemplate(point, offers)}
           ${createDestinationTemplate(pointDestinationInfo)}
         </section>
       </form>

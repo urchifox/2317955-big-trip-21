@@ -9,7 +9,16 @@ function isEscapeKeydown(key) {
   return key === 'Escape';
 }
 
+function makeFirstLetterCaptital(str) {
+  if (!str) {
+    return str;
+  }
+
+  return str[0].toUpperCase() + str.slice(1);
+}
+
 export {
   isFormValid,
-  isEscapeKeydown
+  isEscapeKeydown,
+  makeFirstLetterCaptital,
 };
