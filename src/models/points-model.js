@@ -1,5 +1,5 @@
 import {UpdateType} from '../const.js';
-import Adapter from '../point-adapter.js';
+import Adapter from '../adapter.js';
 import Observable from '../framework/observable.js';
 
 export default class PointsModel extends Observable {

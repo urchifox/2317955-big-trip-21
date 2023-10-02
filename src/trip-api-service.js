@@ -1,6 +1,6 @@
 import {Method, ServerPaths} from './const.js';
 import ApiService from './framework/api-service.js';
-import Adapter from './point-adapter.js';
+import Adapter from './adapter.js';
 
 export default class TripApiService extends ApiService {
   async getPoints() {
