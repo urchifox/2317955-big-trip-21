@@ -15,15 +15,15 @@ const BASIC_DATEPICKER_SETTINGS = {
 };
 
 function createOffersTemplate(point, offers) {
-  const offersByTypes = offers.find((offer) => offer.type === point.type).offers;
+  const offersByType = offers.find((offer) => offer.type === point.type).offers;
 
-  if (offersByTypes.length === 0) {
+  if (offersByType.length === 0) {
     return '';
   }
 
   const disableStatus = point.isDisabled ? 'disabled' : '';
 
-  const offersTemplate = offersByTypes.map((offer) => /*html*/`
+  const offersTemplate = offersByType.map((offer) => /*html*/`
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" type="checkbox" name="event-offer-luggage"
         id="event-offer-${point.id ? he.encode(point.id) : ''}-${he.encode(offer.id)}"
