@@ -2,7 +2,7 @@ import {showAll, showFuture, showPast, showPresent} from './utils/filtration-cal
 import {compareByDateFrom, compareByPrice, compareByDuration} from './utils/sorting-callbacks';
 
 export const AUTHORIZATION = 'Basic id2317955';
-export const END_POINT = 'https://21.objects.pages.academy/big-trip';
+export const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
 
 export const BLANK_POINT = {
   basePrice: 0,
